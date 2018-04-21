@@ -1,0 +1,9 @@
+dist/
+build/
+private/
+ASStore-war/build/
+ASStore-war/dist/
+ASStore-war/nbproject/private
+ASStore-ejb/build/
+ASStore-ejb/dist/
+ASStore-ejb/nbproject/private
