@@ -7,3 +7,6 @@ ASStore-war/nbproject/private
 ASStore-ejb/build/
 ASStore-ejb/dist/
 ASStore-ejb/nbproject/private
+nbproject/*
+!nbproject/project.properties
+!nbproject/project.xml
