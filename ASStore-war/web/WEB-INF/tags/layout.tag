@@ -9,7 +9,7 @@
 <html lang="en">
   <head>
     <title>asd</title>
-    <jsp:include page="partials/head.jsp"></jsp:include>
+    <jsp:include page="WEB-INF/tags/partials/head.jsp"></jsp:include>
   </head>
   <body class="animsition">
 
@@ -25,7 +25,7 @@
     <!-- Container Selection1 -->
     <div id="dropDownSelect1"></div>
 
-    <jsp:include page="partials/script.jsp"></jsp:include>
+    <jsp:include page="WEB-INF/tags/partials/script.jsp"></jsp:include>
 
   </body>
 </html>
