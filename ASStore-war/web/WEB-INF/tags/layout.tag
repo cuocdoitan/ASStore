@@ -10,10 +10,10 @@
   <head>
     <title>asd</title>
     <jsp:include page="WEB-INF/tags/partials/head.jsp"></jsp:include>
-  </head>
-  <body class="animsition">
+    </head>
+    <body class="animsition">
 
-    
+    <jsp:include page="WEB-INF/tags/components/header.jsp"></jsp:include>
     <jsp:doBody/>
     <!-- Back to top -->
     <div class="btn-back-to-top bg0-hov" id="myBtn">
@@ -26,6 +26,12 @@
     <div id="dropDownSelect1"></div>
 
     <jsp:include page="WEB-INF/tags/partials/script.jsp"></jsp:include>
+    <script type="text/javascript">
+        $(".selection-1").select2({
+            minimumResultsForSearch: 20,
+            dropdownParent: $('#dropDownSelect1')
+        });
+    </script>
 
   </body>
 </html>
