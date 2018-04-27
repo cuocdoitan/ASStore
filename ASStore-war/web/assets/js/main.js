@@ -82,14 +82,14 @@
 
      /*[ Fixed Header ]
     ===========================================================*/
-    var posWrapHeader = $('.topbar').height();
+    var posWrapHeader = $('.container-menu-header').height() + 10;
     var header = $('.container-menu-header');
 
     $(window).on('scroll',function(){
 
         if($(this).scrollTop() >= posWrapHeader) {
             $('.header1').addClass('fixed-header');
-            $(header).css('top',-posWrapHeader); 
+            $(header).css('top', 0); 
 
         }  
         else {

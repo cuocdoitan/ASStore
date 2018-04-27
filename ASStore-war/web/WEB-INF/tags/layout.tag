@@ -13,7 +13,7 @@
     </head>
     <body class="animsition">
 
-    <jsp:include page="WEB-INF/tags/components/header.jsp"></jsp:include>
+    <jsp:include page="components/layout/header.jsp"></jsp:include>
     <jsp:doBody/>
     <!-- Back to top -->
     <div class="btn-back-to-top bg0-hov" id="myBtn">
@@ -24,13 +24,19 @@
 
     <!-- Container Selection1 -->
     <div id="dropDownSelect1"></div>
+    <div id="dropDownSelect2"></div>
 
     <jsp:include page="WEB-INF/tags/partials/script.jsp"></jsp:include>
     <script type="text/javascript">
-        $(".selection-1").select2({
-            minimumResultsForSearch: 20,
-            dropdownParent: $('#dropDownSelect1')
-        });
+      $(".selection-1").select2({
+        minimumResultsForSearch: 20,
+        dropdownParent: $('#dropDownSelect1')
+      });
+
+      $(".selection-2").select2({
+        minimumResultsForSearch: 20,
+        dropdownParent: $('#dropDownSelect2')
+      });
     </script>
 
   </body>

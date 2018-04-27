@@ -11,7 +11,7 @@
   <div class="container-menu-header">
     <div class="wrap_header">
       <!-- Logo -->
-      <a href="index.html" class="logo">
+      <a href="index" class="logo">
         <img src="assets/img/asstore-logo.png" alt="IMG-LOGO">
       </a>
 
@@ -26,8 +26,12 @@
             <li>
               <a href="product">Products</a>
             </li>
+            
+            <li>
+              <a href="category">Categories</a>
+            </li>
 
-            <li class="sale-noti">
+            <li>
               <a href="anime">Anime</a>
             </li>
 
@@ -68,38 +72,6 @@
                   </span>
                 </div>
               </li>
-
-              <li class="header-cart-item">
-                <div class="header-cart-item-img">
-                  <img src="assets/img/item-cart-02.jpg" alt="IMG">
-                </div>
-
-                <div class="header-cart-item-txt">
-                  <a href="#" class="header-cart-item-name">
-                    Converse All Star Hi Black Canvas
-                  </a>
-
-                  <span class="header-cart-item-info">
-                    1 x $39.00
-                  </span>
-                </div>
-              </li>
-
-              <li class="header-cart-item">
-                <div class="header-cart-item-img">
-                  <img src="assets/img/item-cart-03.jpg" alt="IMG">
-                </div>
-
-                <div class="header-cart-item-txt">
-                  <a href="#" class="header-cart-item-name">
-                    Nixon Porter Leather Watch In Tan
-                  </a>
-
-                  <span class="header-cart-item-info">
-                    1 x $17.00
-                  </span>
-                </div>
-              </li>
             </ul>
 
             <div class="header-cart-total">
@@ -130,7 +102,7 @@
   <!-- Header Mobile -->
   <div class="wrap_header_mobile">
     <!-- Logo moblie -->
-    <a href="index.html" class="logo-mobile">
+    <a href="index" class="logo-mobile">
       <img src="assets/img/asstore-logo.png" alt="IMG-LOGO">
     </a>
 
@@ -167,37 +139,6 @@
                 </div>
               </li>
 
-              <li class="header-cart-item">
-                <div class="header-cart-item-img">
-                  <img src="assets/img/item-cart-02.jpg" alt="IMG">
-                </div>
-
-                <div class="header-cart-item-txt">
-                  <a href="#" class="header-cart-item-name">
-                    Converse All Star Hi Black Canvas
-                  </a>
-
-                  <span class="header-cart-item-info">
-                    1 x $39.00
-                  </span>
-                </div>
-              </li>
-
-              <li class="header-cart-item">
-                <div class="header-cart-item-img">
-                  <img src="assets/img/item-cart-03.jpg" alt="IMG">
-                </div>
-
-                <div class="header-cart-item-txt">
-                  <a href="#" class="header-cart-item-name">
-                    Nixon Porter Leather Watch In Tan
-                  </a>
-
-                  <span class="header-cart-item-info">
-                    1 x $17.00
-                  </span>
-                </div>
-              </li>
             </ul>
 
             <div class="header-cart-total">
@@ -242,6 +183,10 @@
 
         <li class="item-menu-mobile">
           <a href="product">Products</a>
+        </li>
+        
+        <li class="item-menu-mobile">
+          <a href="category">Categories</a>
         </li>
 
         <li class="item-menu-mobile">

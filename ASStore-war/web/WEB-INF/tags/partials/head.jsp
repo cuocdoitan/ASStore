@@ -34,6 +34,10 @@
 <!--===============================================================================================-->
 <link rel="stylesheet" type="text/css" href="assets/vendor/lightbox2/css/lightbox.min.css">
 <!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="assets/vendor/noui/nouislider.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="assets/vendor/jqueryui/jquery-ui.min.css">
+<!--===============================================================================================-->
 <link rel="stylesheet" type="text/css" href="assets/css/util.css">
 <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 <!--===============================================================================================-->
