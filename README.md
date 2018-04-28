@@ -30,3 +30,10 @@ git push origin <branch_name>
 ```
 
 4. Open an PR
+
+## Update new code
+
+```
+git fetch upstream
+git merge upstream/master
+```

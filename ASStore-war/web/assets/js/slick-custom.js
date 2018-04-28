@@ -37,7 +37,7 @@
         });
 
 
-        $('.slick1').slick({
+        $('.slick1').not('.slick-initialized').slick({
             slidesToShow: 1,
             slidesToScroll: 1,
             fade: true,
@@ -84,7 +84,7 @@
         
         /*[ Slick2 ]
         ===========================================================*/
-        $('.slick2').slick({
+        $('.slick2').not('.slick-initialized').slick({
             slidesToShow: 4,
             slidesToScroll: 4,
             infinite: true,
@@ -129,7 +129,8 @@
 
         /*[ Slick3 ]
         ===========================================================*/
-        $('.slick3').slick({
+
+        $('.slick3').not('.slick-initialized').slick({
             slidesToShow: 1,
             slidesToScroll: 1,
             fade: true,
