@@ -48,7 +48,7 @@ public class animeApi extends HttpServlet {
     JSONArray animesJSON = new JSONArray();
 
     if (request.getParameterMap().containsKey("name")) {
-      final String name = request.getParameter("name");
+      final String name = request.getParameter("name").trim();
       Collections.sort(animes, new Comparator<Anime>() {
         @Override
         public int compare(Anime o1, Anime o2) {
