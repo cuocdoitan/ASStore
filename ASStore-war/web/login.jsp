@@ -8,11 +8,10 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/" %>
 
 <t:pureLayout>
-  <section class="bgwhite p-t-150 p-b-60">
+  <section class="p-t-150 p-b-60" style="background: url(assets/img/login_banner.jpg); height: 100vh; background-size: cover;">
     <div class="container">
       <div class="row">
-
-        <div class="col-md-6 p-b-30 m-l-r-auto">
+        <div class="col-md-6 p-b-30 p-t-30 p-l-30 p-r-30 bgwhite">
           <form>
             <h4 class="m-text26 p-b-36 p-t-15">
               Login to AS Store
