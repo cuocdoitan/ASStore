@@ -38,6 +38,8 @@
 <!--===============================================================================================-->
 <link rel="stylesheet" type="text/css" href="assets/vendor/jqueryui/jquery-ui.min.css">
 <!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="assets/css/dropzone.css">
+<link rel="stylesheet" type="text/css" href="assets/css/basic.css">
 <link rel="stylesheet" type="text/css" href="assets/css/util.css">
 <link rel="stylesheet" type="text/css" href="assets/css/main.css">
 <!--===============================================================================================-->

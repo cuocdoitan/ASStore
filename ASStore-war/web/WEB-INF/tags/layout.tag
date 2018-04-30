@@ -9,7 +9,7 @@
 <html lang="en">
   <head>
     <title>asd</title>
-    <jsp:include page="WEB-INF/tags/partials/head.jsp"></jsp:include>
+    <jsp:include page="../WEB-INF/tags/partials/head.jsp"></jsp:include>
     </head>
     <body class="animsition">
 
@@ -26,7 +26,7 @@
     <div id="dropDownSelect1"></div>
     <div id="dropDownSelect2"></div>
 
-    <jsp:include page="WEB-INF/tags/partials/script.jsp"></jsp:include>
+    <jsp:include page="../WEB-INF/tags/partials/script.jsp"></jsp:include>
     <script type="text/javascript">
       $(".selection-1").select2({
         minimumResultsForSearch: 20,

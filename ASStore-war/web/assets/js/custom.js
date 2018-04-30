@@ -103,3 +103,4 @@ $.getJSON('animeApi', function (data) {
   };
 
 });
+
