@@ -93,9 +93,14 @@ $.getJSON('animeApi', function (data) {
       "margin": "0"
     });
     
+    a.hover(function() {
+      a.css("border", "none");
+    })
+    
     a.append(img).append("<span style='margin-left: 20px'>" + item.name + "</span>");
 
     return li.appendTo(ul);
   };
 
 });
+

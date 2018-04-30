@@ -36,5 +36,6 @@
 <script type="text/javascript" src="assets/vendor/sweetalert/sweetalert.min.js"></script>
 <!--===============================================================================================-->
 <script type="text/javascript" src="assets/vendor/noui/nouislider.min.js"></script>
+<script src="assets/js/dropzone.js"></script>
 <script src="assets/js/main.js"></script>
 <script src="assets/js/custom.js"></script>
