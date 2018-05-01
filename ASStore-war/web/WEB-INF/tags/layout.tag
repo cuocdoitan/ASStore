@@ -9,11 +9,11 @@
 <html lang="en">
   <head>
     <title>asd</title>
-    <jsp:include page="../WEB-INF/tags/partials/head.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/tags/partials/head.jsp"></jsp:include>
     </head>
     <body class="animsition">
-
-    <jsp:include page="components/layout/header.jsp"></jsp:include>
+        
+    <jsp:include page="/user/components/layout/header.jsp"></jsp:include>
     <jsp:doBody/>
     <!-- Back to top -->
     <div class="btn-back-to-top bg0-hov" id="myBtn">
@@ -26,7 +26,7 @@
     <div id="dropDownSelect1"></div>
     <div id="dropDownSelect2"></div>
 
-    <jsp:include page="../WEB-INF/tags/partials/script.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/tags/partials/script.jsp"></jsp:include>
     <script type="text/javascript">
       $(".selection-1").select2({
         minimumResultsForSearch: 20,
