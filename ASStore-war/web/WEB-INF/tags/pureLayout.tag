@@ -10,11 +10,11 @@
 <html lang="en">
   <head>
     <title>${title}</title>
-    <jsp:include page="WEB-INF/tags/partials/head.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/tags/partials/head.jsp"></jsp:include>
     </head>
     <body class="animsition">
     <jsp:doBody/>
     
-    <jsp:include page="WEB-INF/tags/partials/script.jsp"></jsp:include>
+    <jsp:include page="/WEB-INF/tags/partials/script.jsp"></jsp:include>
   </body>
 </html>

@@ -5,11 +5,12 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="col-sm-12 col-md-6 col-lg-4 p-b-50">
   <!-- Block2 -->
   <div class="block2">
     <div class="block2-img wrap-pic-w of-hidden pos-relative">
-      <img src="assets/img/products/${param.image}" alt="IMG-PRODUCT">
+        <img src="<c:url value='/assets/img/products/${param.image}'/>" alt="IMG-PRODUCT">
 
       <div class="block2-overlay trans-0-4">
         <div class="block2-btn-addcart w-size1 trans-0-4">

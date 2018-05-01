@@ -6,11 +6,11 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:layout>
-  <section class="bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(assets/img/product_list_banner.jpg);">
+    <section class="bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(<c:url value='/assets/img/product_list_banner.jpg'/>);">
     <div class="mask">
-
+        
     </div>
     <h2 class="l-text2 t-center" style="z-index: 10">
       Products
@@ -119,17 +119,17 @@
 
           <!-- Product -->
           <div class="row">
-            <jsp:include page="components/productList/productItem.jsp">
+            <jsp:include page="/user/components/productList/productItem.jsp">
               <jsp:param name="image" value="kakashi_cup.jpg" />
               <jsp:param name="name" value="Kakashi Hatake coffee cup" />
               <jsp:param name="price" value="22.00" />
             </jsp:include>
-            <jsp:include page="components/productList/productItem.jsp">
+            <jsp:include page="/user/components/productList/productItem.jsp">
               <jsp:param name="image" value="kakashi_cup.jpg" />
               <jsp:param name="name" value="Kakashi Hatake coffee cup" />
               <jsp:param name="price" value="22.00" />
             </jsp:include>
-            <jsp:include page="components/productList/productItem.jsp">
+            <jsp:include page="/user/components/productList/productItem.jsp">
               <jsp:param name="image" value="kakashi_cup.jpg" />
               <jsp:param name="name" value="Kakashi Hatake coffee cup" />
               <jsp:param name="price" value="22.00" />

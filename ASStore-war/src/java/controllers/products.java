@@ -17,23 +17,10 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author zerox
  */
-@WebServlet(name = "products", urlPatterns = {"/products"})
+@WebServlet(name = "products", urlPatterns = {"/products/*"})
 public class products extends HttpServlet {
+    
 
-  /**
-   * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-   * methods.
-   *
-   * @param request servlet request
-   * @param response servlet response
-   * @throws ServletException if a servlet-specific error occurs
-   * @throws IOException if an I/O error occurs
-   */
-  protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    request.getRequestDispatcher("user/productList.jsp").forward(request, response);
-  }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
   /**
@@ -47,7 +34,25 @@ public class products extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    processRequest(request, response);
+    response.setContentType("text/html;charset=UTF-8");
+    String clientRequest = request.getPathInfo();
+    switch(clientRequest){
+            case "/list":
+                request.getRequestDispatcher("/user/productList.jsp").forward(request, response);
+                break;
+            case "/create":
+                request.getRequestDispatcher("/user/newProduct.jsp").forward(request, response);
+                break;
+            case "/details":
+                request.getRequestDispatcher("/user/productDetails.jsp").forward(request, response);
+                break;
+            case "/edit":
+                request.getRequestDispatcher("/user/productList.jsp").forward(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                break;
+        }
   }
 
   /**
@@ -61,7 +66,9 @@ public class products extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    processRequest(request, response);
+    response.setContentType("text/html;charset=UTF-8");
+    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    
   }
 
   /**
