@@ -32,7 +32,8 @@ public class index extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("/user/index.jsp").forward(request, response);
+       // cai head la cai hien tai, cai upstream la cai moi o day anh muon lay cai moi nen xoa cai head
+        request.getRequestDispatcher("user/index.jsp").forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
