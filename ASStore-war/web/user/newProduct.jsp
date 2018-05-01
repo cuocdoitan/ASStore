@@ -40,7 +40,10 @@
           <input name="file" type="file" multiple />
         </div>
       </form>
-
+      <hr>
+      <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
+        Sell product
+      </button>
     </div>
   </section>
 </t:layout>

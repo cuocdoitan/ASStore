@@ -24,7 +24,7 @@
             </li>
 
             <li>
-              <a href="product">Products</a>
+              <a href="products">Products</a>
             </li>
             
             <li>
@@ -182,7 +182,7 @@
         </li>
 
         <li class="item-menu-mobile">
-          <a href="product">Products</a>
+          <a href="products">Products</a>
         </li>
         
         <li class="item-menu-mobile">
