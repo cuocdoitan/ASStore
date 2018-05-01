@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Header -->
 <header class="header1">
   <!-- Header desktop -->
@@ -12,7 +13,7 @@
     <div class="wrap_header">
       <!-- Logo -->
       <a href="index" class="logo">
-        <img src="assets/img/asstore-logo.png" alt="IMG-LOGO">
+          <img src="<c:url value='/assets/img/asstore-logo.png'/>" alt="IMG-LOGO">
       </a>
 
       <!-- Menu -->
@@ -20,23 +21,23 @@
         <nav class="menu">
           <ul class="main_menu">
             <li>
-              <a href="index">Home</a>
+                <a href="<c:url value="/index"/>">Home</a>
             </li>
 
             <li>
-              <a href="products">Products</a>
+                <a href="<c:url value="/products/list"/>">Products</a>
             </li>
             
             <li>
-              <a href="category">Categories</a>
+              <a href="<c:url value="/category"/>">Categories</a>
             </li>
 
             <li>
-              <a href="anime">Anime</a>
+                <a href="<c:url value="/anime"/>">Anime</a>
             </li>
 
             <li>
-              <a href="feedback">Feedback</a>
+                <a href="<c:url value="/feedback"/>">Feedback</a>
             </li>
           </ul>
         </nav>
@@ -45,13 +46,13 @@
       <!-- Header Icon -->
       <div class="header-icons">
         <a href="#" class="header-wrapicon1 dis-block">
-          <img src="assets/img/icons/icon-header-01.png" class="header-icon1" alt="ICON">
+            <img src="<c:url value='/assets/img/icons/icon-header-01.png'/>" class="header-icon1" alt="ICON">
         </a>
 
         <span class="linedivide1"></span>
 
         <div class="header-wrapicon2">
-          <img src="assets/img/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+          <img src="<c:url value='/assets/img/icons/icon-header-02.png'/>" class="header-icon1 js-show-header-dropdown" alt="ICON">
           <span class="header-icons-noti">0</span>
 
           <!-- Header cart noti -->
@@ -59,7 +60,7 @@
             <ul class="header-cart-wrapitem">
               <li class="header-cart-item">
                 <div class="header-cart-item-img">
-                  <img src="assets/img/item-cart-01.jpg" alt="IMG">
+                  <img src="<c:url value='/assets/img/item-cart-01.jpg'/>" alt="IMG">
                 </div>
 
                 <div class="header-cart-item-txt">
@@ -103,7 +104,7 @@
   <div class="wrap_header_mobile">
     <!-- Logo moblie -->
     <a href="index" class="logo-mobile">
-      <img src="assets/img/asstore-logo.png" alt="IMG-LOGO">
+      <img src="<c:url value='/assets/img/asstore-logo.png'/>" alt="IMG-LOGO">
     </a>
 
     <!-- Button show menu -->
@@ -111,13 +112,13 @@
       <!-- Header Icon mobile -->
       <div class="header-icons-mobile">
         <a href="#" class="header-wrapicon1 dis-block">
-          <img src="assets/img/icons/icon-header-01.png" class="header-icon1" alt="ICON">
+          <img src="<c:url value='/assets/img/icons/icon-header-01.png'/>" class="header-icon1" alt="ICON">
         </a>
 
         <span class="linedivide2"></span>
 
         <div class="header-wrapicon2">
-          <img src="assets/img/icons/icon-header-02.png" class="header-icon1 js-show-header-dropdown" alt="ICON">
+          <img src="<c:url value='/assets/img/icons/icon-header-02.png'/>" class="header-icon1 js-show-header-dropdown" alt="ICON">
           <span class="header-icons-noti">0</span>
 
           <!-- Header cart noti -->
@@ -125,7 +126,7 @@
             <ul class="header-cart-wrapitem">
               <li class="header-cart-item">
                 <div class="header-cart-item-img">
-                  <img src="assets/img/item-cart-01.jpg" alt="IMG">
+                  <img src="<c:url value='/assets/img/item-cart-01.jpg'/>" alt="IMG">
                 </div>
 
                 <div class="header-cart-item-txt">
