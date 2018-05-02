@@ -13,7 +13,12 @@
     <jsp:include page="/WEB-INF/tags/partials/head.jsp"></jsp:include>
     </head>
     <body class="animsition">
-    <jsp:doBody/>
+      <div class="row" style="margin-right: 0">
+        <jsp:include page="/admin/components/layout/left-nav.jsp"></jsp:include>
+        <div class="col-10">
+          <jsp:doBody/>
+        </div>
+      </div>
     
     <jsp:include page="/WEB-INF/tags/partials/script.jsp"></jsp:include>
   </body>

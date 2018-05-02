@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author zerox
+ * @author Tien Phat
  */
-@WebServlet(name = "index", urlPatterns = {"/index"})
-public class index extends HttpServlet {
+@WebServlet(name = "products_admin", urlPatterns = {"/admin/products/*"})
+public class products_admin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,10 +32,7 @@ public class index extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        // xong
-        // lan sau bi loi conflict thi sua nhu vay nha a ...ok
-       // cai head la cai hien tai, cai upstream la cai moi o day anh muon lay cai moi nen xoa cai head
-        request.getRequestDispatcher("user/index.jsp").forward(request, response);
+    
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -50,7 +47,27 @@ public class index extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String clientRequest = request.getPathInfo();
+        switch(clientRequest){
+            case "/list":
+                request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
+                break;
+            case "/approving-list":
+                request.getRequestDispatcher("/admin/products-approving-list.jsp").forward(request, response);
+                break;
+            case "/deny":
+                request.getRequestDispatcher("/admin/products-deny.jsp").forward(request, response);
+                break;
+            case "/detail":
+                request.getRequestDispatcher("/admin/products-details.jsp").forward(request, response);
+                break;
+            case "/search":
+                request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
+                break;   
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                break;
+        }
     }
 
     /**
@@ -64,7 +81,8 @@ public class index extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
     }
 
     /**
