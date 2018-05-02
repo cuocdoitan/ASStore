@@ -13,10 +13,10 @@
   <div class="nav p-l-10">
     <ul>
       <li class="m-b-5">
-        <a href="<c:url value="/admin/product/list"></c:url>" style="font-size: 1.1rem">Product list</a>
+        <a href="<c:url value="/admin/products/list"></c:url>" style="font-size: 1.1rem">Product list</a>
       </li>
       <li class="m-b-5">
-        <a href="<c:url value="/admin/product/approving-list"></c:url>" style="font-size: 1.1rem">Product approving list</a>
+        <a href="<c:url value="/admin/products/approving-list"></c:url>" style="font-size: 1.1rem">Product approving list</a>
       </li>
       <li class="m-b-5">
         <a href="#" style="font-size: 1.1rem">Anime list</a>

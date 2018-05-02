@@ -40,7 +40,7 @@ public class products extends HttpServlet {
             case "/list":
                 request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
                 break;
-            case "/new-product":
+            case "/new":
                 request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
                 break;
             case "/details":
@@ -49,7 +49,7 @@ public class products extends HttpServlet {
             case "/edit":
                 request.getRequestDispatcher("/user/products-edit.jsp").forward(request, response);
                 break;
-            case "/repair-product":
+            case "/repair":
                 request.getRequestDispatcher("/user/products-repair.jsp").forward(request, response);
                 break;
             default:

@@ -15,7 +15,7 @@
     <body class="animsition">
       <div class="row" style="margin-right: 0">
         <jsp:include page="/admin/components/layout/left-nav.jsp"></jsp:include>
-        <div class="col-10">
+        <div class="col-10" style="overflow-y: scroll; height: 100vh">
           <jsp:doBody/>
         </div>
       </div>
