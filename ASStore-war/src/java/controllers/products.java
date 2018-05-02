@@ -38,16 +38,19 @@ public class products extends HttpServlet {
     String clientRequest = request.getPathInfo();
     switch(clientRequest){
             case "/list":
-                request.getRequestDispatcher("/user/productList.jsp").forward(request, response);
+                request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
                 break;
-            case "/create":
-                request.getRequestDispatcher("/user/newProduct.jsp").forward(request, response);
+            case "/new-product":
+                request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
                 break;
             case "/details":
-                request.getRequestDispatcher("/user/productDetails.jsp").forward(request, response);
+                request.getRequestDispatcher("/user/products-details.jsp").forward(request, response);
                 break;
             case "/edit":
-                request.getRequestDispatcher("/user/productList.jsp").forward(request, response);
+                request.getRequestDispatcher("/user/products-edit.jsp").forward(request, response);
+                break;
+            case "/repair-product":
+                request.getRequestDispatcher("/user/products-repair.jsp").forward(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -71,14 +74,6 @@ public class products extends HttpServlet {
     
   }
 
-  /**
-   * Returns a short description of the servlet.
-   *
-   * @return a String containing servlet description
-   */
-  @Override
-  public String getServletInfo() {
-    return "Short description";
-  }// </editor-fold>
+
 
 }
