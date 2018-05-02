@@ -14,7 +14,7 @@
       <c:forEach items="${param.images}" var="image">
       <div class="item-slick3" data-thumb="${image}">
         <div class="wrap-pic-w">
-            <img src="<c:url value='/assets/img/products/${image}'/>" alt="IMG-PRODUCT">
+          <img src="${image}" alt="IMG-PRODUCT">
         </div>
       </div>
       </c:forEach>
