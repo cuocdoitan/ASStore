@@ -32,9 +32,6 @@ public class index extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        // xong
-        // lan sau bi loi conflict thi sua nhu vay nha a ...ok
-       // cai head la cai hien tai, cai upstream la cai moi o day anh muon lay cai moi nen xoa cai head
         request.getRequestDispatcher("user/index.jsp").forward(request, response);
     }
 
