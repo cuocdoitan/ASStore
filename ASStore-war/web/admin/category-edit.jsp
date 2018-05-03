@@ -1,6 +1,6 @@
 <%-- 
-    Document   : category-create.jsp
-    Created on : May 2, 2018, 4:33:07 PM
+    Document   : category-edit
+    Created on : May 3, 2018, 8:29:49 PM
     Author     : TRAN HO QUANG
 --%>
 
@@ -10,12 +10,23 @@
 <t:adminLayout>
   <section class="bgwhite p-t-70 p-b-100">
     <div class="container">
-      <h2>NEW CATEGORY</h2><br><br>
+      <h2>EDIT CATEGORY</h2><br><br>
       <label>Category Name</label>
       <div class="bo4 of-hidden size15 m-b-20">
-        <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" placeholder="Category Name">
+          <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" value="Shoes">
       </div>
       <label>Category image</label>
+        <!----------------------------------->
+      <div class="banner bgwhite p-t-40 p-b-40">
+        <div class="container">
+            <div class="row">
+                <jsp:include page="/admin/components/categoryItem.jsp">
+                    <jsp:param name="image" value="shoe.jpg"/>
+                </jsp:include>
+            </div>
+        </div>
+    </div>
+        <!------------------------>
       <p>
         <input type="file" name="image" accept="image/*"/>
         <br/>
@@ -26,9 +37,9 @@
         Cancel
       </button>
       <button style="width: 200px;" class="size1 bg4 bo-rad-23 s-text1 trans-0-4">
-        Add Category
+        Edit Category
       </button>
 
     </div>
   </section>
-</t:adminLayout>>
+</t:adminLayout>
