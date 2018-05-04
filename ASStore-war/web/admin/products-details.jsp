@@ -9,52 +9,47 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <t:adminLayout>
     <div class="container">
+        <a href="javascript:history.back()" class="s-text2">&lt; Back</a>
     <div>
-        <p style="font-weight: bold">User Id</p>
-        <p>5</p>
+        <p style="font-weight: bold">Seller phone number</p>
+        <p>${product.usersId.phoneNumber}</p>
     </div>
     <div>
         <p style="font-weight: bold">Product Id</p>
-        <p>2</p>
+        <p>${product.id}</p>
     </div>
     <div>
         <p style="font-weight: bold">Product Name</p>
-        <p>FairyTail Shoes</p>
+        <p>${product.name}</p>
     </div>
     <div>
         <p style="font-weight: bold">Category</p>
-        <p>Shoes</p>
+        <p>${product.categoryId.name}</p>
     </div>
     <div>
         <p style="font-weight: bold">Anime</p>
-        <p>FairyTai</p>
+        <p>${product.animeId.name}</p>
     </div>
     <div>
         <p style="font-weight: bold">Image</p>
-        <p>
-            <img src="<c:url value="/assets/img/products/fairytail_shoe.jpg"/>"  height="100px" width="100px"/>
-            <img src="<c:url value="/assets/img/products/fairytail_shoe.jpg"/>"  height="100px" width="100px"/>
-            <img src="<c:url value="/assets/img/products/fairytail_shoe.jpg"/>"  height="100px" width="100px"/>
-            <img src="<c:url value="/assets/img/products/kakashi_cup3.jpg"/>"  height="100px" width="100px"/>
-        </p>
+        <div>
+          <c:forEach items="${images}" var="image">
+                <img src="<c:url value="/assets/img/products/${image}"/>" height="150px" width="150px"/>
+           </c:forEach>
+        </div>
     </div>
     <div>
         <p style="font-weight: bold">Price</p>
-        <p>55.40 $</p>
+        <p>${product.price}</p>
     </div>
     <div>
         <p style="font-weight: bold">Quantity</p>
-        <p>49</p>
+        <p>${product.quantity}</p>
     </div>
     <div>
         <p style="font-weight: bold">Description</p>
-        <textarea style="width: 200px; height: 100px">dsj
-d is ds s;jsf jog wg
-nlel fn ln lj adf lad nflad fn</textarea>
+        <textarea style="width: 200px; height: 100px">${product.description}</textarea>
     </div>
-        <button>
-            << Back
-        </button>
 </div>    
 </t:adminLayout>
 

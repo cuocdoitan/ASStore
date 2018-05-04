@@ -86,6 +86,7 @@ public class Products_admin extends HttpServlet {
             case "/detail":
                 int productId_detail = Integer.parseInt(request.getParameter("id"));
                 request.setAttribute("product", productFacade.find(productId_detail));
+                request.setAttribute("images", mediaFacade.getImagesFromProduct(productFacade.find(productId_detail)));
                 request.getRequestDispatcher("/admin/products-details.jsp").forward(request, response);
                 break;
             case "/search":

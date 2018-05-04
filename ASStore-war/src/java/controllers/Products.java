@@ -5,6 +5,8 @@
  */
 package controllers;
 
+import SB.MediaFacadeLocal;
+import SB.ProductFacadeLocal;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.ejb.EJB;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -26,12 +29,16 @@ import javax.servlet.http.Part;
  * @author zerox
  */
 @WebServlet(name = "products", urlPatterns = {"/products/*"})
-@MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
-                 maxFileSize=1024*1024*10,      // 10MB
-                 maxRequestSize=1024*1024*50)   // 50MB
 public class Products extends HttpServlet {
-    
 
+    @EJB
+    private MediaFacadeLocal mediaFacade;
+
+    @EJB
+    private ProductFacadeLocal productFacade;
+    
+    
+    
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
   /**
@@ -49,6 +56,7 @@ public class Products extends HttpServlet {
     String clientRequest = request.getPathInfo();
     switch(clientRequest){
             case "/list":
+                
                 request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
                 break;
             case "/new-product":
@@ -85,7 +93,6 @@ public class Products extends HttpServlet {
     String clientRequest = request.getPathInfo();
     switch(clientRequest){
             case "/insert":
-                uploadImages(request, response);
                 break;
             case "/repair-product":
                 
@@ -101,57 +108,6 @@ public class Products extends HttpServlet {
                 break;
         }
     
-  }
-
-  protected void uploadImages(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException {
-      String imageResourceAbsolutePath = getImageResourceAbsolutePath(request);
-        for(Part part : request.getParts()){
-            String imageName = extractFileName(part);
-            imageName = new File(imageName).getName();
-            if(!imageName.equals("")){
-                try {
-                    InputStream inputStream = part.getInputStream();
-                    String fileName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + imageName;
-                    String imageAbsolutePath = imageResourceAbsolutePath + fileName;
-                    File fileSaveDir = new File(imageAbsolutePath);
-                    
-                    BufferedImage e = ImageIO.read(inputStream);
-                    ImageIO.write(e, "png", fileSaveDir);
-                } catch (IOException e) {
-                    
-                }
-                
-            }
-        }
-  }
-  
-  
-    private String getImageResourceAbsolutePath(HttpServletRequest request){
-        String appPath = request.getServletContext().getRealPath("");
-        String dist = "dist"+File.separator+"gfdeploy";
-        int distPosition = appPath.indexOf(dist);
-        String projectPath = appPath.substring(0, distPosition - 1);
-        String contextPath = request.getContextPath();
-        String imageResourcePath = File.separator + "web" + File.separator + "assets" + File.separator + "img" + File.separator + "products" + File.separator;
-        String imageResourceAbsolutePath = projectPath + contextPath + imageResourcePath;
-        return imageResourceAbsolutePath;
-    }
-  
-    private String extractFileName(Part part) {
-    String contentDisp = part.getHeader("content-disposition");
-    String[] items = contentDisp.split(";");
-        System.out.println("number of items : "+items.length);
-    for (String s : items) {
-        System.out.println("extracted string : "+s);
-        
-        if (s.trim().startsWith("filename")) {
-            return s.substring(s.indexOf("=") + 2, s.length()-1);
-        }
-    }
-    return "";
-  }
-  
-  
+  } 
   
 }
