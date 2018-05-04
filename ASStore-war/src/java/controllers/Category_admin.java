@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author TRAN HO QUANG
  */
 @WebServlet(name = "category_admin", urlPatterns = {"/admin/category/*"})
-public class category_admin extends HttpServlet {
+public class Category_admin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
