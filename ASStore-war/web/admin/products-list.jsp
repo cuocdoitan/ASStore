@@ -14,7 +14,7 @@
       <div class="col-12 m-l-r-auto">
         <form class="m-b-20 m-t-20" method="get" action="#">
           <div class="search-product pos-relative bo4 m-t-5 m-b-5 m-r-10" style="width: 100%">
-            <input class="s-text7 size6 p-l-23 p-r-50" type="text" name="productId" placeholder="Search products by ID...">
+            <input class="s-text7 size6 p-l-23 p-r-50" type="text" name="productId" placeholder="Search products by name...">
 
             <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4" type="submit">
               <i class="fs-12 fa fa-search" aria-hidden="true"></i>
