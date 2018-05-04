@@ -17,6 +17,7 @@
             <table border="1" cellspacing="0" cellpadding="5">
                 <caption>List Of Account</caption>
                 <thead>
+                    
                     <tr>
                         <th>PhoneNumber </th>
                         <th>PassWord</th>
@@ -26,7 +27,9 @@
                         <th>Address</th>
                         <th>Action</th>
                     </tr>
-                <td>
+                </thead>
+                <tbody>
+                     <td>
                     <div>
                         <input value="01232559989">
                     </div>
@@ -82,9 +85,8 @@
                     <a href="DetailsServlet?code=${book.code}">Detail</a>
                     <a href="DeleteServlet?code=${book.code}" onclick="return confirm('Are you sure ?')">Delete</a>
                 </td>
-
-                </thead>
-
+                </tbody>
+               
             </table>
         </form>
     </body>
