@@ -78,12 +78,12 @@
                     </div>
                 </td>
                 <td>
-                    <a href="DetailsServlet?code=${book.code}">Detail</a>
-                    <a href="DeleteServlet?code=${book.code}" onclick="return confirm('Are you sure ?')">Delete</a>
+                    <a href="">Detail</a>
+                    <a href="" onclick="return confirm('Are you sure ?')">Delete</a>
                 </td>
                 <td>
-                    <a href="DetailsServlet?code=${book.code}">Detail</a>
-                    <a href="DeleteServlet?code=${book.code}" onclick="return confirm('Are you sure ?')">Delete</a>
+                    <a href="">Detail</a>
+                    <a href="" onclick="return confirm('Are you sure ?')">Delete</a>
                 </td>
                 </tbody>
                
