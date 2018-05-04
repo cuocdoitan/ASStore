@@ -5,6 +5,8 @@
  */
 package controllers;
 
+import SB.MediaFacadeLocal;
+import SB.ProductFacadeLocal;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +14,7 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.ejb.EJB;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -27,8 +30,15 @@ import javax.servlet.http.Part;
  */
 @WebServlet(name = "products", urlPatterns = {"/products/*"})
 public class Products extends HttpServlet {
-    
 
+    @EJB
+    private MediaFacadeLocal mediaFacade;
+
+    @EJB
+    private ProductFacadeLocal productFacade;
+    
+    
+    
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
   /**
@@ -46,6 +56,7 @@ public class Products extends HttpServlet {
     String clientRequest = request.getPathInfo();
     switch(clientRequest){
             case "/list":
+                
                 request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
                 break;
             case "/new-product":

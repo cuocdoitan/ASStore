@@ -26,9 +26,7 @@
 
         <div class="col-sm-6 col-md-4 col-lg-3 p-b-50">
           <div class="leftbar p-r-20 p-r-0-sm">
-
-            <!--  -->
-
+              
             <h4 class="m-text14 p-b-7">
               Categories
             </h4>
@@ -119,6 +117,9 @@
 
           <!-- Product -->
           <div class="row">
+              <c:forEach items="listProduct">
+                  
+              </c:forEach>
             <jsp:include page="/user/components/productList/productItem.jsp">
               <jsp:param name="image" value="kakashi_cup.jpg" />
               <jsp:param name="name" value="Kakashi Hatake coffee cup" />

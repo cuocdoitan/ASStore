@@ -15,10 +15,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author zerox
+ * @author TRAN HO QUANG
  */
-@WebServlet(name = "index", urlPatterns = {"/index"})
-public class index extends HttpServlet {
+@WebServlet(name = "category_admin", urlPatterns = {"/admin/category/*"})
+public class Category_admin extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,7 +32,18 @@ public class index extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("user/index.jsp").forward(request, response);
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet category_admin</title>");            
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Servlet category_admin at " + request.getContextPath() + "</h1>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -47,7 +58,22 @@ public class index extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String clientRequest = request.getPathInfo();
+        switch(clientRequest){
+            case "/list":
+                request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
+                break;
+            case "/create":
+                request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
+                break;
+            case "/edit":
+                request.getRequestDispatcher("/admin/category-edit.jsp").forward(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                break;
+        }
+        
     }
 
     /**

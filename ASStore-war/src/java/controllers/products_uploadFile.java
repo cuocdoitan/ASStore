@@ -29,7 +29,7 @@ import javax.servlet.http.Part;
  */
 @WebServlet(name = "UploadFile", urlPatterns = {"/UploadFile"})
 @MultipartConfig
-public class UploadFile extends HttpServlet {
+public class products_uploadFile extends HttpServlet {
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,7 +44,7 @@ public class UploadFile extends HttpServlet {
           throws ServletException, IOException {
     response.setContentType("text/json;charset=UTF-8");
     // Create path components to save the file
-    final String path = getServletContext().getRealPath("../../web/assets/img/products");
+    final String path = getServletContext().getRealPath("assets/img");
     final Part filePart = request.getPart("file");
     final String fileName = getFileName(filePart);
 
@@ -88,9 +88,7 @@ public class UploadFile extends HttpServlet {
     final String partHeader = part.getHeader("content-disposition");
     for (String content : part.getHeader("content-disposition").split(";")) {
       if (content.trim().startsWith("filename")) {
-        String fileName = content.substring(
-                content.indexOf('=') + 1).trim().replace("\"", "");
-
+        String fileName = content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
         if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
           String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
           String rFileName = "n_" + (new Date()).getTime() + "." + extension;
@@ -102,6 +100,8 @@ public class UploadFile extends HttpServlet {
     }
     return null;
   }
+  
+  
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
   /**

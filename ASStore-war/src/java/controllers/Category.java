@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author zerox
  */
 @WebServlet(name = "category", urlPatterns = {"/category"})
-public class category extends HttpServlet {
+public class Category extends HttpServlet {
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
