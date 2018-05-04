@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author TRAN HO QUANG
  */
-@WebServlet(name = "category_admin", urlPatterns = {"/admin/category/list"})
+@WebServlet(name = "category_admin", urlPatterns = {"/admin/category/*"})
 public class category_admin extends HttpServlet {
 
     /**
@@ -58,8 +58,22 @@ public class category_admin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
+        String clientRequest = request.getPathInfo();
+        switch(clientRequest){
+            case "/list":
+                request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
+                break;
+            case "/create":
+                request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
+                break;
+            case "/edit":
+                request.getRequestDispatcher("/admin/category-edit.jsp").forward(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                break;
+        }
+        
     }
 
     /**
