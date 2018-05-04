@@ -19,7 +19,7 @@
         <a href="<c:url value="/admin/products/approving-list"></c:url>" style="font-size: 1.1rem">Product approving list</a>
       </li>
       <li class="m-b-5">
-        <a href="#" style="font-size: 1.1rem">Anime list</a>
+        <a href="<c:url value="/admin/anime/list"></c:url>" style="font-size: 1.1rem">Anime list</a>
       </li>
       <li class="m-b-5">
         <a href="<c:url value="/admin/category/list"></c:url>" style="font-size: 1.1rem">Category list</a>

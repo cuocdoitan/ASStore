@@ -104,3 +104,16 @@ $.getJSON('animeApi', function (data) {
 
 });
 
+/*
+ * [ ANIME LIST ]
+ */
+function expandAnime(e) {
+  if ($(e).siblings(".anime-description").hasClass("less")) {
+    $(e).siblings(".anime-description").removeClass("less");
+    $(e).text("Read less");
+  }
+  else {
+    $(e).siblings(".anime-description").addClass("less");
+    $(e).text("Read more");
+  }
+}

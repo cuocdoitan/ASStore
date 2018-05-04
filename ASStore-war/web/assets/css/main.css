@@ -2382,3 +2382,21 @@ input.num-product::-webkit-inner-spin-button {
 .feedback-item:hover {
   border-color: #a5a5a5;
 }
+.hide {
+  display: none;
+}
+
+.anime-description {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.expand {
+  color: #2c6ed5;
+  cursor: pointer;
+}
+
+.less {
+  height: 100px;
+}
