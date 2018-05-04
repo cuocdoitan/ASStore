@@ -22,7 +22,7 @@
         <a href="#" style="font-size: 1.1rem">Anime list</a>
       </li>
       <li class="m-b-5">
-        <a href="#" style="font-size: 1.1rem">Category list</a>
+        <a href="<c:url value="/admin/category/list"></c:url>" style="font-size: 1.1rem">Category list</a>
       </li>
       <li class="m-b-5">
         <a href="#" style="font-size: 1.1rem">User list</a>

@@ -4,6 +4,7 @@
     Author     : zerox
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
@@ -35,9 +36,9 @@
       </div>
       <hr>
       <label>Product images</label>
-      <form action="UploadFile" class="dropzone">
+      <form class="dropzone" action="<c:url value="/uploadProductImages"/>"  method="post" enctype="multipart/form-data">
         <div class="fallback">
-          <input name="file" type="file" multiple />
+            <input name="file" type="file" multiple accept="image/*"/>
         </div>
       </form>
       <hr>

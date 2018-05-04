@@ -17,8 +17,8 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author zerox
  */
-@WebServlet(name = "category", urlPatterns = {"/category"})
-public class category extends HttpServlet {
+@WebServlet(name = "Orders", urlPatterns = {"/orders/*"})
+public class Orders extends HttpServlet {
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,7 +32,6 @@ public class category extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
-    request.getRequestDispatcher("user/categoryList.jsp").forward(request, response);
   }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -47,7 +46,15 @@ public class category extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    processRequest(request, response);
+    String clientRequest = request.getPathInfo();
+    switch (clientRequest) {
+      case "/list":
+        request.getRequestDispatcher("/user/orders.jsp").forward(request, response);
+        break;
+      case "/details":
+        request.getRequestDispatcher("/user/orders-details.jsp").forward(request, response);
+        break;    
+    }
   }
 
   /**

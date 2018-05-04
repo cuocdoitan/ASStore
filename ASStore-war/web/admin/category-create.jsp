@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <!DOCTYPE html>
-<t:layout>
+<t:adminLayout>
   <section class="bgwhite p-t-70 p-b-100">
     <div class="container">
       <h2>NEW CATEGORY</h2><br><br>
@@ -31,4 +31,4 @@
 
     </div>
   </section>
-</t:layout>
+</t:adminLayout>>
