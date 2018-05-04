@@ -5,8 +5,14 @@
  */
 package controllers;
 
+import Models.Product;
+import SB.MediaFacadeLocal;
+import SB.ProductFacadeLocal;
+import java.util.List;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,8 +24,17 @@ import javax.servlet.http.HttpServletResponse;
  * @author Tien Phat
  */
 @WebServlet(name = "products_admin", urlPatterns = {"/admin/products/*"})
-public class products_admin extends HttpServlet {
+public class Products_admin extends HttpServlet {
 
+    @EJB
+    private MediaFacadeLocal mediaFacade;
+
+    @EJB
+    private ProductFacadeLocal productFacade;
+
+
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,7 +47,7 @@ public class products_admin extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-    
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -50,18 +65,31 @@ public class products_admin extends HttpServlet {
         String clientRequest = request.getPathInfo();
         switch(clientRequest){
             case "/list":
+                List<Product> listProduct = productFacade.findAll();
+                request.setAttribute("listImages", mediaFacade.getImagesFromListProduct(listProduct));
+                request.setAttribute("listProduct", listProduct);
                 request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
                 break;
             case "/approving-list":
+                List<Product> listApprovingProduct = productFacade.getListApprovingProduct();
+                request.setAttribute("listImages", mediaFacade.getImagesFromListProduct(listApprovingProduct));
+                request.setAttribute("listApprovingProduct", listApprovingProduct);
                 request.getRequestDispatcher("/admin/products-approving-list.jsp").forward(request, response);
                 break;
             case "/deny":
+                int productId_deny = Integer.parseInt(request.getParameter("id"));
+                Product product_deny = productFacade.find(productId_deny);
+                request.setAttribute("images", mediaFacade.getImagesFromProduct(product_deny));
+                request.setAttribute("product", product_deny);
                 request.getRequestDispatcher("/admin/products-deny.jsp").forward(request, response);
                 break;
             case "/detail":
+                int productId_detail = Integer.parseInt(request.getParameter("id"));
+                request.setAttribute("product", productFacade.find(productId_detail));
                 request.getRequestDispatcher("/admin/products-details.jsp").forward(request, response);
                 break;
             case "/search":
+                
                 request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
                 break;   
             default:
@@ -83,6 +111,7 @@ public class products_admin extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        
     }
 
     /**

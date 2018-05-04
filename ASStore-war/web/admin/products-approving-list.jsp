@@ -7,121 +7,55 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<t:layout>
-    <div class="container-fluid">
-        <div style="padding: 20px">
-            <a href="<c:url value="/admin/products/list"/>">
-                <p style="text-align: center; font-weight: bold; font-size: 15; color: #00bbec">
-                    List Products
-                </p>
-            </a>
-        </div>
-        <br/>
-        <br/>
-        <table border="1">
-            <thead>
-                <tr style="text-align: center">
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Image</th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody id="ListUser">
-            <tr>
-                <td>1</td>
-                <td>FairyTail Shoes</td>
-                <td>
-                    akafan ifaifandis dasidasikt jdfjdk fdjfdjrl ljawjdl hgfgdfg
-                </div>
-                <td>
-                    <img src="<c:url value="/assets/img/products/fairytail_shoe.jpg"/>"  height="100px" width="100px"/>
-                </td>
-                <td>545.65</td>
-                <td>
-                    <a href="#" style="color: blue">Approve</a>
-                    ||
-                    <a href="#" style="color: red">Deny</a>
-                </td>
+<t:adminLayout>
+  <div class="container-fluid">
+    <h2 class="m-t-20 m-b-20" align="center">Approving Products</h2>
+    <div class="row">
+      <div class="col-12 m-l-r-auto">
+        <form class="m-b-20 m-t-20" method="get" action="#">    
+        </form>
+      <table border="1" style="width: 100%; border-color: #e6e6e6; border: 1px solid #e6e6e6">
+          <thead>
+            <tr style="text-align: center">
+              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">ID</th>
+              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Name</th>
+              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Description</th>
+              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Image</th>
+              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Price</th>
+              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Actions</th>
             </tr>
-            <tr>
-                <td>2</td>
-                <td>Kakakakakakashi cup</td>
-                <td>
-                    jkjeej dsjldjs leo54 feklfk klqjle flakflakf\n
-                    fdafjaf fdlfl fdfkdfklqf foefoae fafklaf
-                </td>
-                <td>
-                    <img src="<c:url value="/assets/img/products/kakashi_cup.jpg"/>"  height="100px" width="100px"/>
-                </td>
-                <td>2343.67</td>
-                <td>
-                    <a href="#" style="color: blue">Approve</a>
-                    ||
-                    <a href="#" style="color: red">Deny</a>
-                </td>
-            </tr>    
-            <tr>
-                <td>3</td>
-                <td>Cup kakakakaka</td>
-                <td>
-                    akafan ifaifand
-                    hghgh
-                    gfgfg gsgsg gsgsgssssyy www
-                </td>
-                <td>
-                    <img src="<c:url value="/assets/img/products/mikuhatsune_bag.jpg"/>"  height="100px" width="100px"/>
-                </td>
-                <td>1111.76</td>
-                <td>
-                    <a href="#" style="color: blue">Approve</a>
-                    ||
-                    <a href="#" style="color: red">Deny</a>
-                </td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td>Shoes Tail Fairy </td>
-                <td>
-                    akafan fdf fdfdfdf\n fdfdf
-                </td>
-                <td>
-                    <img src="<c:url value="/assets/img/products/fairytail_shoe.jpg"/>"  height="100px" width="100px"/>
-                </td>
-                <td>545.65</td>
-                <td>
-                    <a href="#" style="color: blue">Approve</a>
-                    ||
-                    <a href="#" style="color: red">Deny</a>
-                </div>
-            </tr>      
-        </table>
-
-                
-              
-<!--            <data>
-                <c:forEach items="${listProduct}" var="product">
+          </thead>
+          <tbody id="ListUser">
+            <data>
+                <c:forEach items="${listApprovingProduct}" var="product">
                     <tr>
-                        <td>${product.productId}</div>
-                        <td>${product.productName}</div>
-                        <td>
-                            <img src="<c:url value="/resources/IMAGE/${product.productImage}"/>"  height="100px" width="100px"/>
-                        </div>
-                        <td>${product.productPrice}</div>
-                        <td>${product.productDetails}</div>
-                        <td>${product.manufacturerId.manufacturerName}</div>
-                        <td>
-                            <a href="<c:url value="/product/details?id=${product.productId}"/>">Details</a> |
-                            <a href="<c:url value="/product/update?id=${product.productId}"/>">Edit</a>
-                            <form action="<c:url value="/product/delete?id=${product.productId}"/>" method="post" onsubmit="return lastCheck()">
-                                <input type="submit" value="Delete" style="background-color: red"/>
-                            </form>
-                        </div>
-                    </div>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">${product.id}</td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">${product.name}</td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">${product.description}</td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
+                              <c:forEach items="${listImages}" var="images">
+                                  <c:if test="${product.id == images.key}">
+                                      <c:forEach items="${images.value}" var="image">
+                                          <img src="<c:url value="/assets/img/products/${image}"/>" height="50px" width="50px"/>
+                                      </c:forEach>
+                                  </c:if>
+                              </c:forEach>
+                            <!--<img src="<c:url value="/assets/img/products/fairytail_shoe.jpg"/>" height="100px"/>-->
+                          </td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">${product.price}</td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
+                            <a href="#" style="color: #3498db">Approve</a>
+                            ||
+                            <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
+                            <a href="<c:url value="/admin/products/deny?id=${product.id}"/>" style="color: #e74c3c">Deny</a>
+                          </td>
+                    </tr>
                 </c:forEach>
-            </data>-->
-        </div>
+            </data>    
+          </tbody>
+        </table>
+      </div>
     </div>
-</t:layout>
+  </div>
+</div>
+</t:adminLayout>

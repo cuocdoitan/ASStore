@@ -21,10 +21,11 @@
             </button>
           </div>
         </form>
-        <table border="1" style="width: 100%; border-color: #e6e6e6; border: 1px solid #e6e6e6">
+      <table border="1" style="width: 100%; border-color: #e6e6e6; border: 1px solid #e6e6e6">
           <thead>
             <tr style="text-align: center">
               <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">ID</th>
+              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Status</th>
               <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Name</th>
               <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Description</th>
               <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Image</th>
@@ -33,45 +34,49 @@
             </tr>
           </thead>
           <tbody id="ListUser">
-            <tr>
-              <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">1</td>
-              <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">FairyTail Shoes</td>
-              <td class="p-t-20 p-l-20 p-r-20 p-b-20">
-                akafan ifaifandis dasidasikt jdfjdk fdjfdjrl ljawjdl hgfgdfg
-                </div>
-              <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
-                <img src="<c:url value="/assets/img/products/fairytail_shoe.jpg"/>" height="100px"/>
-              </td>
-              <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">545.65</td>
-              <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
-                <a href="#" style="color: #3498db">Details</a>
-                ||
-                <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
-                <a href="#" style="color: #e74c3c"  onclick="return confirm('Are you sure ?')">Delete</a>
-              </td>
-            </tr>
+            <data>
+                <c:forEach items="${listProduct}" var="product">
+                    <tr>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">${product.id}</td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
+                              <c:choose>
+                                  <c:when test="${product.status == 0}">
+                                      Checking
+                                  </c:when>
+                                  <c:when test="${product.status == 1}">
+                                      Available
+                                  </c:when>
+                                  <c:when test="${product.status == 2}">
+                                      Unavailable
+                                  </c:when>
+                              </c:choose>
+                          </td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">${product.name}</td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">${product.description}</td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
+                              <c:forEach items="${listImages}" var="images">
+                                  <c:if test="${product.id == images.key}">
+                                      <c:forEach items="${images.value}" var="image">
+                                          <img src="<c:url value="/assets/img/products/${image}"/>" height="50px" width="50px"/>
+                                      </c:forEach>
+                                  </c:if>
+                              </c:forEach>
+                            <!--<img src="<c:url value="/assets/img/products/fairytail_shoe.jpg"/>" height="100px"/>-->
+                          </td>
+                          
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
+                            <a href="#" style="color: #3498db">Details</a>
+                            ||
+                            <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
+                            <a href="#" style="color: #e74c3c"  onclick="return confirm('Are you sure ?')">Delete</a>
+                          </td>
+                    </tr>
+                </c:forEach>
+            </data>    
+          </tbody>
         </table>
       </div>
     </div>
-    <%--<c:forEach items="${listProduct}" var="product">
-        <tr>
-            <td>${product.productId}</div>
-            <td>${product.productName}</div>
-            <td>
-                <img src="<c:url value="/resources/IMAGE/${product.productImage}"/>"  height="100px" width="100px"/>
-            </div>
-            <td>${product.productPrice}</div>
-            <td>${product.productDetails}</div>
-            <td>${product.manufacturerId.manufacturerName}</div>
-            <td>
-                <a href="<c:url value="/product/details?id=${product.productId}"/>">Details</a> |
-                <a href="<c:url value="/product/update?id=${product.productId}"/>">Edit</a>
-                <form action="<c:url value="/product/delete?id=${product.productId}"/>" method="post" onsubmit="return lastCheck()">
-                    <input type="submit" value="Delete" style="background-color: red"/>
-                </form>
-            </div>
-        </div>
-    </c:forEach>--%>
   </div>
 </div>
 </t:adminLayout>

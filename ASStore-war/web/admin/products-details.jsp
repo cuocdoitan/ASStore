@@ -5,9 +5,10 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
-<div class="container">
+<t:adminLayout>
+    <div class="container">
     <div>
         <p style="font-weight: bold">User Id</p>
         <p>5</p>
@@ -54,5 +55,7 @@ nlel fn ln lj adf lad nflad fn</textarea>
         <button>
             << Back
         </button>
-</div>
+</div>    
+</t:adminLayout>
+
 
