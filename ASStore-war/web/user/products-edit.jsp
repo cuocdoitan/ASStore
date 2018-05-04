@@ -41,13 +41,18 @@
         </div>
       </form>
       <hr>
-      <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-        Edit product
-      </button>
-      <br/>
-      <button style="background-color: red" onclick="return confirm('Are you sure ?')">
-          Delete product
-      </button>
+      <div class="row flex-row-reverse">
+        <div class="col-6">
+          <button class="flex-c-m size1 bg4 bo-rad-23 s-text1 trans-0-4">
+            Edit product
+          </button>
+        </div>
+        <div class="col-6">
+          <button style="background-color: #e74c3c" class="flex-c-m size1 bg4 bo-rad-23 s-text1" onclick="return confirm('Are you sure ?')">
+            Delete product
+          </button>
+        </div>
+      </div>
     </div>
   </section>
 </t:layout>

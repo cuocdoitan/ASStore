@@ -14,7 +14,7 @@
       <div class="col-12 m-l-r-auto">
         <form class="m-b-20 m-t-20" method="get" action="#">
           <div class="search-product pos-relative bo4 m-t-5 m-b-5 m-r-10" style="width: 100%">
-            <input class="s-text7 size6 p-l-23 p-r-50" type="text" name="productId" placeholder="Search products by ID...">
+            <input class="s-text7 size6 p-l-23 p-r-50" type="text" name="productId" placeholder="Search products by name...">
 
             <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4" type="submit">
               <i class="fs-12 fa fa-search" aria-hidden="true"></i>
@@ -29,7 +29,8 @@
               <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Name</th>
               <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Description</th>
               <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Image</th>
-              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Price</th>
+              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Anime</th>
+              <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Category</th>
               <th class="text-center p-t-20 p-l-20 p-r-20 p-b-20">Actions</th>
             </tr>
           </thead>
@@ -61,9 +62,12 @@
                                       </c:forEach>
                                   </c:if>
                               </c:forEach>
-                            <!--<img src="<c:url value="/assets/img/products/fairytail_shoe.jpg"/>" height="100px"/>-->
                           </td>
-                          
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
+                              ${product.animeId.name}<br/>
+                              <img src="<c:url value="/assets/img/anime/${product.animeId.picture}"/>" height="100px" width="100px"/>
+                          </td>
+                          <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">${product.categoryId.name}</td>
                           <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
                             <a href="#" style="color: #3498db">Details</a>
                             ||

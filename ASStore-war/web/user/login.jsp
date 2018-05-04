@@ -6,9 +6,10 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags/" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <t:pureLayout>
-  <section class="p-t-150 p-b-60" style="background: url(assets/img/login_banner.jpg); height: 100vh; background-size: cover;">
+  <section class="p-t-150 p-b-60" style="background: url(<c:url value='/assets/img/login_banner.jpg' />); height: 100vh; background-size: cover;">
     <div class="container">
       <div class="row">
         <div class="col-md-6 p-b-30 p-t-30 p-l-30 p-r-30 bgwhite">

@@ -45,15 +45,12 @@
       <hr>
       <label style="color: red">**Note**</label>
       <div class="bo4 of-hidden m-b-20">
-          <textarea style="width: 100%; border: none; padding: 20px" rows="10" placeholder="Product description"></textarea>
+          <textarea style="width: 100%; border: none; padding: 20px" rows="10" placeholder="Note for product"></textarea>
       </div>
       <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
         Deny
       </button>
       <br/>
-      <button style="background-color: red">
-          Delete product
-      </button>
     </div>
   </section>
 </t:adminLayout>
