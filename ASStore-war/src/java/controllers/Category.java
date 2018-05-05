@@ -17,10 +17,23 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author zerox
  */
-@WebServlet(name = "products", urlPatterns = {"/products/*"})
-public class products extends HttpServlet {
-    
+@WebServlet(name = "category", urlPatterns = {"/category"})
+public class Category extends HttpServlet {
 
+  /**
+   * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+   * methods.
+   *
+   * @param request servlet request
+   * @param response servlet response
+   * @throws ServletException if a servlet-specific error occurs
+   * @throws IOException if an I/O error occurs
+   */
+  protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+          throws ServletException, IOException {
+    response.setContentType("text/html;charset=UTF-8");
+    request.getRequestDispatcher("user/categoryList.jsp").forward(request, response);
+  }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
   /**
@@ -34,28 +47,7 @@ public class products extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    String clientRequest = request.getPathInfo();
-    switch(clientRequest){
-            case "/list":
-                request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
-                break;
-            case "/new":
-                request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
-                break;
-            case "/details":
-                request.getRequestDispatcher("/user/products-details.jsp").forward(request, response);
-                break;
-            case "/edit":
-                request.getRequestDispatcher("/user/products-edit.jsp").forward(request, response);
-                break;
-            case "/repair":
-                request.getRequestDispatcher("/user/products-repair.jsp").forward(request, response);
-                break;
-            default:
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                break;
-        }
+    processRequest(request, response);
   }
 
   /**
@@ -69,11 +61,17 @@ public class products extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-    
+    processRequest(request, response);
   }
 
-
+  /**
+   * Returns a short description of the servlet.
+   *
+   * @return a String containing servlet description
+   */
+  @Override
+  public String getServletInfo() {
+    return "Short description";
+  }// </editor-fold>
 
 }

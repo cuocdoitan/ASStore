@@ -35,15 +35,11 @@
             </div>
             
             <div class="bo4 of-hidden size15 m-b-20">
-<<<<<<< HEAD
               <input class="sizefull s-text7 p-l-22 p-r-22" type="password" name="confirm_password" placeholder="Confirm password">
             </div>
             
             <div class="bo4 of-hidden size15 m-b-20">
               <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="address" placeholder="Address">
-=======
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="confirm_password" placeholder="Confirm password">
->>>>>>> 8892e68fdd574a61e12e2db57e566e52db82fc79
             </div>
             
             <div class="bo4 of-hidden size15 m-b-20">
