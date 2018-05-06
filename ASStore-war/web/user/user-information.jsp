@@ -15,5 +15,5 @@
     Address: <input type="text" name="adress" /> <br/> 
     Email: <input type="email" name="email" /> <br/>    
   </form> 
-  <button onclick="window.location.href = 'insert.jsp'">Update</button>
+  <button onclick="window.location.href = ''">Update</button>
 </t:layout>

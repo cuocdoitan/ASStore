@@ -28,5 +28,16 @@ public class UsersFacade extends AbstractFacade<Users> implements UsersFacadeLoc
     public UsersFacade() {
         super(Users.class);
     }
-    
+
+    @Override
+    public boolean checkLogin(String id, String password) {
+        Users e = find(id);
+        if (e != null) {
+            if (e.getPassword().equals(password)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
