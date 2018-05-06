@@ -5,9 +5,8 @@
  */
 package controllers;
 
-import java.util.List;
-import Models.Category;
-import SB.CategoryFacadeLocal;
+import Models.Feedback;
+import SB.FeedbackFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.ejb.EJB;
@@ -16,18 +15,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  *
  * @author TRAN HO QUANG
  */
-@WebServlet(name = "category_admin", urlPatterns = {"/admin/category/*"})
-public class Category_admin extends HttpServlet {
+@WebServlet(name = "feedbacks", urlPatterns = {"/feedbacks/*"})
+public class Feedbacks extends HttpServlet {
 
     @EJB
-    private CategoryFacadeLocal categoryFacade;
+    private FeedbackFacadeLocal feedbackFacade;
 
+    
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -36,10 +36,10 @@ public class Category_admin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet category_admin</title>");
+            out.println("<title>Servlet Feedbacks</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet category_admin at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet Feedbacks at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -57,24 +57,13 @@ public class Category_admin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-//        HttpSession sesion = request.getSession();
-//        if(sesion == null){
-//            requestsForClients(request, response);
-//        }else{
-//            requestsForUsers(request, response);
-//        }
+
         String clientRequest = request.getPathInfo();
         switch (clientRequest) {
             case "/list":
-                List<Category> listCategory = categoryFacade.findAll();
-                request.setAttribute("listCategory", listCategory);
-                request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
-                break;
-            case "/create":
-                request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
-                break;
-            case "/edit":
-                request.getRequestDispatcher("/admin/category-edit.jsp").forward(request, response);
+                List<Feedback> listFeedback = feedbackFacade.findAll();
+                request.setAttribute("listFeedback", listFeedback);
+                request.getRequestDispatcher("/user/feedback.jsp").forward(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -93,7 +82,6 @@ public class Category_admin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
 
     }
 
@@ -106,38 +94,5 @@ public class Category_admin extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
-    public void requestsForUsers(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String clientRequest = request.getPathInfo();
-        switch (clientRequest) {
-            case "/list":
-                request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
-                break;
-            case "/create":
-
-                request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
-                break;
-            case "/edit":
-                request.getRequestDispatcher("/admin/category-edit.jsp").forward(request, response);
-                break;
-            default:
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                break;
-        }
-    }
-
-    public void requestsForClients(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String clientRequest = request.getPathInfo();
-        switch (clientRequest) {
-            case "/list":
-                request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
-                break;
-            default:
-                response.sendError(HttpServletResponse.SC_NOT_FOUND);
-                break;
-        }
-    }
 
 }
