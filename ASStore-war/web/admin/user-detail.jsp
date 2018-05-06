@@ -14,7 +14,7 @@
     <body>
         <form action="">  
             PhoneNumber: <input type="text" name="phone" name="Phone number" /><br/>  
-            Password: <input type="text" name="pass"  name="Password" /><br/>  
+            Password: <input type="password" name="pass"  name="Password" /><br/>  
             FirstName: <input type="text" name="firstname"  name="FirstName" /><br/> 
             LastName: <input type="text" name="lastname"  name="LastName" /><br/> 
             Address: <input type="text" name="adress"  name="Address" /><br/> 

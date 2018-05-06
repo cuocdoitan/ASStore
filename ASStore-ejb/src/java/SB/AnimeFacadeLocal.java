@@ -29,5 +29,6 @@ public interface AnimeFacadeLocal {
     List<Anime> findRange(int[] range);
 
     int count();
+    List<Anime> getAll();
     
 }

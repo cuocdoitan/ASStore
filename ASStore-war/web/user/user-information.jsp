@@ -8,11 +8,12 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:layout>
   <form action="">  
-    PhoneNumber: <input type="text" name="phone"/>  <a href="">Edit</a> <br/>  
-    Password: <input type="password" name="pass" /> <a href="">Edit</a><br/>  
-    FirstName: <input type="text" name="firstname"  /> <a href="">Edit</a> <br/> 
-    LastName: <input type="text" name="lastname"  /> <a href="">Edit</a> <br/> 
-    Address: <input type="text" name="adress" /> <a href="">Edit</a><br/> 
-    Email: <input type="email" name="email" /> <a href="">Edit</a><br/>    
-  </form>  
+    PhoneNumber: <input type="text" name="phone"/>  <a href="">Change PhoneNumber</a> <br/>  
+    Password: <input type="password" name="pass" /> <a href="">Change Password</a><br/>  
+    FirstName: <input type="text" name="firstname"  /> <br/> 
+    LastName: <input type="text" name="lastname"  /> <br/> 
+    Address: <input type="text" name="adress" /> <br/> 
+    Email: <input type="email" name="email" /> <br/>    
+  </form> 
+  <button onclick="window.location.href = ''">Update</button>
 </t:layout>
