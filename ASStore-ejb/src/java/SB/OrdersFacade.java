@@ -34,4 +34,10 @@ public class OrdersFacade extends AbstractFacade<Orders> implements OrdersFacade
       order.setEnabled(false);
       em.merge(order);
     }
+    
+    public void validate(int id) {
+      Orders order = em.find(Orders.class, id);
+      order.setStatus(true);
+      em.merge(order);
+    }
 }

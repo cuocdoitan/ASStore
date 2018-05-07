@@ -43,7 +43,7 @@
         <div class="flex-w" style="width: 100%">
           <label>Delivery address</label>
           <div class="bo4 of-hidden m-b-20" style="width: 100%">
-            <textarea style="width: 100%; border: none; padding: 20px" rows="10" placeholder="leave blank if you already signed up"></textarea>
+            <textarea style="width: 100%; border: none; padding: 20px" rows="10" placeholder="590CMT8, HCM City"></textarea>
           </div>
         </div>
 

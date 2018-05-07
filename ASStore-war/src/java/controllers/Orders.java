@@ -62,7 +62,7 @@ public class Orders extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     String clientRequest = request.getPathInfo();
-    
+
     switch (clientRequest) {
       case "/list":
         List<Models.Orders> orders = orderFacade.findAll();
@@ -89,6 +89,9 @@ public class Orders extends HttpServlet {
         orderFacade.delete(orderId);
         response.sendRedirect("list");
         break;
+      case "/check":
+        request.getRequestDispatcher("/user/orders-checkcode.jsp").forward(request, response);
+        break;
       default:
         response.sendError(HttpServletResponse.SC_NOT_FOUND);
         break;
@@ -106,7 +109,42 @@ public class Orders extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    processRequest(request, response);
+    String clientRequest = request.getPathInfo();
+
+    switch (clientRequest) {
+      case "/check":
+        List<Models.OrdersDetail> details;
+        if (request.getParameter("order") != null && request.getParameter("pass") != null) {
+          int orderId = Integer.parseInt(request.getParameter("order"));
+          String pass = request.getParameter("pass");
+          Models.Orders order = orderFacade.find(orderId);
+          if (order.getPassCode().equals(pass)) {
+            if (request.getParameter("validate") != null && request.getParameter("validate").equals("true")) {
+              orderFacade.validate(orderId);
+              request.setAttribute("message", "Order confirmed !");
+              request.getRequestDispatcher("/user/orders-checkcode.jsp").forward(request, response);
+            }
+            details = orderDetailFacade.findByOrder(orderId);
+            HashMap images = new HashMap();
+            BigDecimal total = new BigDecimal(0);
+            for (Models.OrdersDetail detail : details) {
+              total = total.add(detail.getUnitPrice().multiply(new BigDecimal(detail.getQuantity())));
+              images.put(detail.getProductId().getId(), mediaFacade.getFirstImageFromProduct(detail.getProductId()));
+            }
+            request.setAttribute("orderTotal", total);
+            request.setAttribute("images", images);
+            request.setAttribute("details", details);
+            request.setAttribute("orderId", orderId);
+            request.setAttribute("orderPass", pass);
+            request.getRequestDispatcher("/user/orders-checkcode.jsp").forward(request, response);
+          }
+          else {
+            request.setAttribute("error", "Passcode for order is not correct!");
+          }
+        }
+        request.getRequestDispatcher("/user/orders-checkcode.jsp").forward(request, response);
+        break;
+    }
   }
 
   /**
