@@ -34,4 +34,5 @@ public interface MediaFacadeLocal {
     
     public HashMap<Integer,List<String>> getImagesFromListProduct(List<Product> listProduct);
     public List<String> getImagesFromProduct(Product product);
+    public String getFirstImageFromProduct(Product product);
 }

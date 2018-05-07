@@ -21,6 +21,8 @@ public interface OrdersFacadeLocal {
     void edit(Orders orders);
 
     void remove(Orders orders);
+    
+    void delete(int id);
 
     Orders find(Object id);
 

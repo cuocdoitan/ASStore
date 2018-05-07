@@ -36,7 +36,7 @@
       </div>
       <hr>
       <label>Product images</label>
-      <form class="dropzone" action="<c:url value="/uploadProductImages"/>"  method="post" enctype="multipart/form-data">
+      <form class="dropzone" action="<c:url value="/uploadProductImages"/>" id="imageUpload" method="post" enctype="multipart/form-data">
         <div class="fallback">
             <input name="file" type="file" multiple accept="image/*"/>
         </div>
