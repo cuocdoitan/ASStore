@@ -16,6 +16,7 @@ import SB.UsersFacadeLocal;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.io.IOException;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,7 +30,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "products", urlPatterns = {"/products/*"})
 public class ProductServlet extends HttpServlet {
-
+    
     @EJB
     private UsersFacadeLocal usersFacade;
 

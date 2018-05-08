@@ -21,12 +21,16 @@ public interface OrdersFacadeLocal {
     void edit(Orders orders);
 
     void remove(Orders orders);
+    
+    void delete(int id);
 
     Orders find(Object id);
 
     List<Orders> findAll();
 
     List<Orders> findRange(int[] range);
+    
+    void validate(int id);
 
     int count();
     

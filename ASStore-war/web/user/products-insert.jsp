@@ -49,10 +49,12 @@
           <textarea style="width: 100%; border: none; padding: 20px" rows="10" placeholder="Product description" name="description"></textarea>
       </div>
       <hr>
+
       <input type="hidden" name="image1" value="1111.png"/>
       <input type="hidden" name="image2" value="222.png"/>
       <input type="hidden" name="image3" value="333.png"/>
       <input type="hidden" name="image4" value="444.png"/>
+
       <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
         Sell product
       </button>

@@ -7,9 +7,33 @@ $('button').click(function (){
                
             },
            function (result) {
-                $('#test_ajax_result').val(result);
+                alert('OK');
             });               
     });
+/*
+ * [ IMAGE UPLOAD ]
+ */
+Dropzone.autoDiscover = false;
+$("#imageUpload").dropzone({
+  maxFiles: 4,
+  addRemoveLinks: true,
+  acceptedFiles: ".png,.jpg,.jpeg",
+  removedfile: function (file) {
+    console.log($(file.previewElement).index());
+    var _ref;
+    return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
+  },
+  init: function () {
+    this.on("success", function (file, response) {
+      console.log(response);
+    });
+    this.on("maxfilesexceeded", function (file) {
+      alert("No more images please!");
+      this.removeFile(file);
+    });
+  }
+});
+
 /*
  * [ Product rating ]
  */
@@ -59,7 +83,7 @@ filterBar.noUiSlider.on('update', function (values, handle) {
 /*
  * [ AUTO complete anime ]
  */
-    
+
 $.getJSON(urlBase + '/animeApi', function (data) {
   $("#anime_name").autocomplete({
     source: function (request, response) {
@@ -76,18 +100,18 @@ $.getJSON(urlBase + '/animeApi', function (data) {
     }
   }).data("ui-autocomplete")._renderItem = function (ul, item) {
     var li = $('<li>'),
-       img = $('<img>');
+            img = $('<img>');
 
     img.attr({
       src: 'assets/img/anime/' + item.picture,
       alt: item.name
     });
-    
+
     li.css({
       "height": "100px",
       "width": "100%"
     });
-    
+
     img.css({
       "width": "80px",
       "height": "100px"
@@ -95,8 +119,8 @@ $.getJSON(urlBase + '/animeApi', function (data) {
 
     li.data("ui-autocomplete-item", item.id);
     li.append('<a href="#">');
-    
-    
+
+
     var a = li.find('a');
     a.css({
       "width": "100%",
@@ -105,19 +129,15 @@ $.getJSON(urlBase + '/animeApi', function (data) {
       "padding": "0",
       "margin": "0"
     });
-    
-    a.hover(function() {
-      a.css("border", "none");
-    });
-    
-    a.append(img).append("<span style='margin-left: 20px'>" + item.name + "</span>");
 
+    a.hover(function () {
+      a.css("border", "none");
+    })
+    a.append(img).append("<span style='margin-left: 20px'>" + item.name + "</span>");
     return li.appendTo(ul);
   };
 
 });
-
-
 
 
 /*
@@ -127,8 +147,7 @@ function expandAnime(e) {
   if ($(e).siblings(".anime-description").hasClass("less")) {
     $(e).siblings(".anime-description").removeClass("less");
     $(e).text("Read less");
-  }
-  else {
+  } else {
     $(e).siblings(".anime-description").addClass("less");
     $(e).text("Read more");
   }

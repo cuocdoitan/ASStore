@@ -52,6 +52,7 @@ public class MediaFacade extends AbstractFacade<Media> implements MediaFacadeLoc
         return images;
     }
     
+
     @Override
     public List<Media> getFirstImageFromListProduct(List<Product> listProduct){
         List<Media> images = new ArrayList<>();
@@ -64,5 +65,14 @@ public class MediaFacade extends AbstractFacade<Media> implements MediaFacadeLoc
             }
         }
         return images;
+
+    public String getFirstImageFromProduct(Product product) {
+      for(Media media : this.findAll()){
+        if (product.getId() == media.getProductId().getId()) {
+          return media.getUrlImage();
+        }
+      }
+      return null;
+
     }
 }

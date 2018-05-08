@@ -6,6 +6,7 @@
 package SB;
 
 import Models.Anime;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,6 +29,11 @@ public class AnimeFacade extends AbstractFacade<Anime> implements AnimeFacadeLoc
 
     public AnimeFacade() {
         super(Anime.class);
+    }
+
+    @Override
+    public List<Anime> getAll() {
+        return findAll();
     }
     
     public Anime findAnimeByName(String name){
