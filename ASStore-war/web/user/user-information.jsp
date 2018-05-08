@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:layout>
-  <form action="">  
+    <form method="post" action="">  
     PhoneNumber: <input type="text" name="phone"/>  <a href="">Change PhoneNumber</a> <br/>  
     Password: <input type="password" name="pass" /> <a href="">Change Password</a><br/>  
     FirstName: <input type="text" name="firstname"  /> <br/> 

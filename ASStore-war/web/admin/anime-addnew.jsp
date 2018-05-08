@@ -12,7 +12,7 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <form method="post" action="InsertServlet">
+        <form method="post" action="Anime_admin">
             <p>ID</p>
             <p><input type="text" name="id"/></p>
             <p>Name</p>
@@ -24,7 +24,12 @@
                 <input type="file" id="inputPhoto" name="picture" accept="image/*"/>
                 <br/>
             </p>
-            <p><input type="submit" value="Add new"/></p>
+            <div class="w-size25">
+              <!-- Button -->
+              <button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
+                New Anime
+              </button>
+            </div>
         </form>
     </body>
 </html>
