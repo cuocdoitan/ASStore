@@ -5,20 +5,31 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <form action="">  
-            PhoneNumber: <input type="text" name="phone" name="Phone number" /><br/>  
-            Password: <input type="password" name="pass"  name="Password" /><br/>  
-            FirstName: <input type="text" name="firstname"  name="FirstName" /><br/> 
-            LastName: <input type="text" name="lastname"  name="LastName" /><br/> 
-            Address: <input type="text" name="adress"  name="Address" /><br/> 
-            Emaill: <input type="email" name="email"  name="Emaill" /><br/>          
-        </form>  
-    </body>
-</html>
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<t:adminLayout>
+  <div class="container">
+    <div class="row">
+      <div class="col-6 m-t-20 m-l-r-auto">
+        <div class="m-b-10">
+          <img src="<c:url value="/assets/img/avatars/user_1.jpg" />" width="200" height="200">
+        </div>
+        <div class="m-b-10">
+          Phone number: 0922102133
+        </div>
+        <div class="m-b-10">
+          First name: Nguyen
+        </div>
+        <div class="m-b-10">
+          Last name: Viet Hung
+        </div> 
+        <div class="m-b-10">
+          Address: 590 CMT8, District 3, HCM City
+        </div>
+        <div class="m-b-10">
+          Email: viethungax@gmail.com
+        </div>
+      </div>
+    </div>
+  </div> 
+</t:adminLayout>

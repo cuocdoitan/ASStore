@@ -5,10 +5,13 @@
  */
 package SB;
 
+import Models.Orders;
 import Models.OrdersDetail;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +30,12 @@ public class OrdersDetailFacade extends AbstractFacade<OrdersDetail> implements 
 
     public OrdersDetailFacade() {
         super(OrdersDetail.class);
+    }
+    
+    public List<OrdersDetail> findByOrder(int id) {
+      Query query = em.createNamedQuery("OrdersDetail.findByOrder");
+      query.setParameter("id", new Orders(id));
+      return query.getResultList();
     }
     
 }

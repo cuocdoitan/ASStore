@@ -29,4 +29,15 @@ public class OrdersFacade extends AbstractFacade<Orders> implements OrdersFacade
         super(Orders.class);
     }
     
+    public void delete(int id) {
+      Orders order = em.find(Orders.class, id);
+      order.setEnabled(false);
+      em.merge(order);
+    }
+    
+    public void validate(int id) {
+      Orders order = em.find(Orders.class, id);
+      order.setStatus(true);
+      em.merge(order);
+    }
 }
