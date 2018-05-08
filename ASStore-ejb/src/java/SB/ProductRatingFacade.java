@@ -29,4 +29,14 @@ public class ProductRatingFacade extends AbstractFacade<ProductRating> implement
         super(ProductRating.class);
     }
     
+    public float getAverageRatingFromOneProduct(Models.Product product){
+        float total = 0;
+        for(ProductRating pr : product.getProductRatingCollection()){
+            float rating = (float)pr.getRating();
+            total = total + rating;
+        }
+        float average = total/product.getProductRatingCollection().size();
+        return average;
+    }
+    
 }

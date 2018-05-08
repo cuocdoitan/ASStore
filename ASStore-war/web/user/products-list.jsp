@@ -114,27 +114,19 @@
               </div>
             </div>
           </div>
-
           <!-- Product -->
           <div class="row">
-              <c:forEach items="listProduct">
+              <c:forEach items="${listProduct}" var="product">
+                  <jsp:include page="/user/components/productList/productItem.jsp">  
+                      <jsp:param name="productId" value="${product.id}" />
+                    <jsp:param name="name" value="${product.name}" />
+                    <jsp:param name="price" value="${product.price}" />
+                  </jsp:include>
+                  <!--Show avarage rating of product-->
                   
+                  <a href="<c:url value="/products/repair-product?id=${product.id}"/>">Edit</a> ||
+                  <a href="<c:url value="/products/edit?id=${product.id}" />">Repair</a> 
               </c:forEach>
-            <jsp:include page="/user/components/productList/productItem.jsp">
-              <jsp:param name="image" value="kakashi_cup.jpg" />
-              <jsp:param name="name" value="Kakashi Hatake coffee cup" />
-              <jsp:param name="price" value="22.00" />
-            </jsp:include>
-            <jsp:include page="/user/components/productList/productItem.jsp">
-              <jsp:param name="image" value="kakashi_cup.jpg" />
-              <jsp:param name="name" value="Kakashi Hatake coffee cup" />
-              <jsp:param name="price" value="22.00" />
-            </jsp:include>
-            <jsp:include page="/user/components/productList/productItem.jsp">
-              <jsp:param name="image" value="kakashi_cup.jpg" />
-              <jsp:param name="name" value="Kakashi Hatake coffee cup" />
-              <jsp:param name="price" value="22.00" />
-            </jsp:include>
           </div>
         </div>
       </div>

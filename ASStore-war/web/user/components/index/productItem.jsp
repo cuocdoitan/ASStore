@@ -12,8 +12,11 @@
       <!-- Block2 -->
       <div class="block2">
         <div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-          <img src="assets/img/products/${param.image}" alt="IMG-PRODUCT">
-
+            <c:forEach items="${images}" var="image">
+                <c:if test="${image.productId.id == param.productId}">
+                    <img src="<c:url value='/assets/img/products/${image.urlImage}'/>" alt="IMG-PRODUCT">
+                </c:if>
+            </c:forEach>
           <div class="block2-overlay trans-0-4">
             <div class="block2-btn-addcart w-size1 trans-0-4">
               <!-- Button -->

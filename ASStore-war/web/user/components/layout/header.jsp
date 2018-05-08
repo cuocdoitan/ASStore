@@ -45,6 +45,9 @@
 
       <!-- Header Icon -->
       <div class="header-icons">
+        <a href="<c:url value="/products/new-product"/>" >
+            <button>NEW POST</button>   
+        </a>
         <a href="#" class="header-wrapicon1 dis-block">
             <img src="<c:url value='/assets/img/icons/icon-header-01.png'/>" class="header-icon1" alt="ICON">
         </a>

@@ -9,6 +9,7 @@ import Models.Anime;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -29,4 +30,9 @@ public class AnimeFacade extends AbstractFacade<Anime> implements AnimeFacadeLoc
         super(Anime.class);
     }
     
+    public Anime findAnimeByName(String name){
+        TypedQuery query = em.createNamedQuery("Anime.findByName", Anime.class);
+        query.setParameter("name", name);
+        return (Anime) query.getSingleResult();
+    }
 }

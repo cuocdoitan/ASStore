@@ -5,10 +5,11 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <tr class="table-row">
   <td class="column-1">
     <div class="cart-img-product b-rad-4 o-f-hidden">
-      <img src="assets/img/products/${param.image}" alt="IMG-PRODUCT">
+      <img src="<c:url value="/assets/img/products/${param.image}"/>" alt="IMG-PRODUCT" />
     </div>
   </td>
   <td class="column-2 text-center">${param.name}</td>

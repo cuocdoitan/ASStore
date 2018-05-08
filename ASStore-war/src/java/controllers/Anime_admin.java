@@ -5,26 +5,27 @@
  */
 package controllers;
 
+import SB.AnimeFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import java.util.List;
+import Models.Anime;
 
 /**
  *
  * @author zerox
  */
-@WebServlet(name = "animeApi", urlPatterns = {"/animeApi"})
-public class animeApi extends HttpServlet {
+@WebServlet(name = "Anime_admin", urlPatterns = {"/admin/anime/*"})
+public class Anime_admin extends HttpServlet {
+
+  @EJB
+  private AnimeFacadeLocal animeFacade;
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,48 +38,19 @@ public class animeApi extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    response.setContentType("application/json");
-    PrintWriter out = response.getWriter();
-    ArrayList<Anime> animes = new ArrayList<>();
-    animes.add(new Anime(1, "Naruto", "17450.jpg"));
-    animes.add(new Anime(2, "Trigun", "20310.jpg"));
-    animes.add(new Anime(3, "One Piece", "73245.jpg"));
-    animes.add(new Anime(4, "Hunter x Hunter", "19473.jpg"));
-
-    JSONArray animesJSON = new JSONArray();
-
-    if (request.getParameterMap().containsKey("name")) {
-      final String name = request.getParameter("name").trim();
-      Collections.sort(animes, new Comparator<Anime>() {
-        @Override
-        public int compare(Anime o1, Anime o2) {
-          return -Integer.compare(getSimilarity(o1, name), getSimilarity(o2, name));
-        }
-
-        private int getSimilarity(Anime anime, String keyword) {
-          return anime.getName().toLowerCase().length() - anime.getName().toLowerCase().replace(keyword, "").length();
-        }
-      });
-      
-      for (Iterator<Anime> iterator = animes.iterator(); iterator.hasNext();) {
-        Anime anime = iterator.next();
-        int similarity = anime.getName().toLowerCase().length() - anime.getName().toLowerCase().replace(name, "").length();
-        
-        if (similarity == 0) {
-          iterator.remove();
-        }
-      }
+    response.setContentType("text/html;charset=UTF-8");
+    try (PrintWriter out = response.getWriter()) {
+      /* TODO output your page here. You may use following sample code. */
+      out.println("<!DOCTYPE html>");
+      out.println("<html>");
+      out.println("<head>");
+      out.println("<title>Servlet Anime_admin</title>");
+      out.println("</head>");
+      out.println("<body>");
+      out.println("<h1>Servlet Anime_admin at " + request.getContextPath() + "</h1>");
+      out.println("</body>");
+      out.println("</html>");
     }
-    
-    for (Anime anime : animes) {
-      JSONObject animeJSON = new JSONObject();
-      animeJSON.put("id", anime.id);
-      animeJSON.put("name", anime.name);
-      animeJSON.put("picture", anime.picture);
-      animesJSON.add(animeJSON);
-    }
-    out.print(animesJSON);
-    out.flush();
   }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -93,7 +65,20 @@ public class animeApi extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    processRequest(request, response);
+    String clientRequest = request.getPathInfo();
+    switch (clientRequest) {
+      case "/list":
+        List<Anime> listAnime = animeFacade.findAll();
+        request.setAttribute("animeList", listAnime);
+        request.getRequestDispatcher("/admin/anime-list.jsp").forward(request, response);
+        break;
+      case "/update":
+        request.getRequestDispatcher("/admin/anime-list-update.jsp").forward(request, response);
+        break;
+      default:
+        response.sendError(HttpServletResponse.SC_NOT_FOUND);
+        break;
+    }
   }
 
   /**

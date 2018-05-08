@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package BusinessLogic;
 
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.awt.image.BufferedImage;
@@ -27,12 +27,28 @@ import javax.servlet.http.Part;
  *
  * @author Tien Phat
  */
-@WebServlet(name = "uploadImages", urlPatterns = {"/uploadProductImages"})
+@WebServlet(name = "InsertNewProductServlet", urlPatterns = {"/InsertNewProductServlet"})
 @MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
                  maxFileSize=1024*1024*10,      // 10MB
                  maxRequestSize=1024*1024*50)   // 50MB
-public class UploadProductImages extends HttpServlet {
+public class InsertNewProductServlet extends HttpServlet {
 
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+         
+        
+        
+        
+    }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -46,7 +62,7 @@ public class UploadProductImages extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+        processRequest(request, response);
     }
 
     /**
@@ -60,6 +76,22 @@ public class UploadProductImages extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        processRequest(request, response);
+    }
+
+    /**
+     * Returns a short description of the servlet.
+     *
+     * @return a String containing servlet description
+     */
+    @Override
+    public String getServletInfo() {
+        return "Short description";
+    }// </editor-fold>
+    
+    private void getNamesFromUploadedImages(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        
         String imageResourceAbsolutePath = getImageResourceAbsolutePath(request);
         for(Part part : request.getParts()){
             String imageName = extractFileName(part);
@@ -82,7 +114,6 @@ public class UploadProductImages extends HttpServlet {
             }
         }
     }
-
     
     private String getImageResourceAbsolutePath(HttpServletRequest request){
         String appPath = request.getServletContext().getRealPath("");

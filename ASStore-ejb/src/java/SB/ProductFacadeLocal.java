@@ -30,6 +30,10 @@ public interface ProductFacadeLocal {
 
     int count();
     
+    public List<Product> getListExistingProduct();
+    
     public List<Product> getListApprovingProduct();
+    
+    public List<Product> getListProductSortedDesc();
     
 }

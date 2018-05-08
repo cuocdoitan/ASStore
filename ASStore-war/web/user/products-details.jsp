@@ -16,39 +16,32 @@
       <div class="w-size13 p-t-30 respon5">
         <div class="wrap-slick3 flex-sb flex-w">
           <div class="wrap-slick3-dots"></div>
-
-          <div class="slick3">
-            <div class="item-slick3" data-thumb="<c:url value='/assets/img/products/kakashi_cup.jpg'/>">
-              <div class="wrap-pic-w">
-                <img src="<c:url value='/assets/img/products/kakashi_cup.jpg'/>" alt="IMG-PRODUCT">
-              </div>
+          
+            <!--Images -->
+            <div class="slick3">
+                <c:forEach items="${product.mediaCollection}" var="media">
+                    <div class="item-slick3" data-thumb="<c:url value='/assets/img/products/${media.urlImage}'/>">
+                      <div class="wrap-pic-w">
+                        <img src="<c:url value='/assets/img/products/${media.urlImage}'/>" alt="IMG-PRODUCT">
+                      </div>
+                    </div>
+                </c:forEach> 
             </div>
-
-            <div class="item-slick3" data-thumb="<c:url value='/assets/img/products/kakashi_cup2.jpg'/>">
-              <div class="wrap-pic-w">
-                <img src="<c:url value='/assets/img/products/kakashi_cup2.jpg'/>" alt="IMG-PRODUCT">
-              </div>
-            </div>
-
-            <div class="item-slick3" data-thumb="<c:url value='/assets/img/products/kakashi_cup3.jpg'/>">
-              <div class="wrap-pic-w">
-                <img src="<c:url value='/assets/img/products/kakashi_cup3.jpg'/>" alt="IMG-PRODUCT">
-              </div>
-            </div>
-          </div>
+          
+          
         </div>
       </div>
 
 
       <div class="w-size14 p-t-30 respon5">
         <h4 class="product-detail-name m-text16 p-b-13">
-          5 x Kakashi Hatake coffee cup
+          ${product.quantity} x ${product.name}
         </h4>
 
         <span class="m-text17">
-          $22
+          ${product.price}
         </span>
-        <!--  -->
+        <!-- Quantity add to cart-->
         <div class="p-t-10 p-b-10">
           <div class="w-size16 flex-w">
             <div class="flex-w bo5 of-hidden m-r-22 m-t-10 m-b-10">
@@ -66,14 +59,15 @@
             <div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
               <!-- Button -->
               <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
-                Add to Cart
+                  <a href="#">Add to Cart</a>
               </button>
             </div>
           </div>
         </div>
-
+        
+        <!-- Description-->
         <p class="s-text3 p-t-10">
-          The best cup evarrrrrrrrrr<br/> !!!!!!!!! They even have Kakashi image on !!!!!!!! Buy this shit !!!!! Shut up and give me your money
+          ${product.description}
         </p>
       </div>
     </div>
@@ -81,7 +75,6 @@
     <br/>
     <h3>Please rate this product</h3>
     <div class="p-l-10">
-                
       <div class="product-rating p-t-9">
         <span class="fa fa-star"></span>
         <span class="fa fa-star"></span>

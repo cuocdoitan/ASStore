@@ -10,12 +10,13 @@
 <t:layout>
   <section class="cart bgwhite p-t-70 p-b-100">
     <div class="container">
+      <h1 class="text-center m-b-50">Your cart</h1>
       <!-- Cart item -->
       <div class="container-table-cart pos-relative">
         <div class="wrap-table-shopping-cart bgwhite">
           <table class="table-shopping-cart">
             <tr class="table-head">
-              <th class="column-1"></th>
+              <th class="column-1">Image</th>
               <th class="column-2 text-center">Product</th>
               <th class="column-3 text-center">Price</th>
               <th class="column-4 text-center">Quantity</th>

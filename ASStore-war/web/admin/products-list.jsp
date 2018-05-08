@@ -42,13 +42,13 @@
                           <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
                               <c:choose>
                                   <c:when test="${product.status == 0}">
-                                      Checking
+                                      <span style="color: blue">Checking</span>
                                   </c:when>
                                   <c:when test="${product.status == 1}">
-                                      Available
+                                      <span style="color: green">Available</span>
                                   </c:when>
                                   <c:when test="${product.status == 2}">
-                                      Unavailable
+                                      <span style="color: red">Unavailable</span>
                                   </c:when>
                               </c:choose>
                           </td>

@@ -1,3 +1,15 @@
+var pathArray = window.location.pathname.split('/');  
+var urlBase = window.location.protocol + "//" + window.location.host + "/" + pathArray[1];
+$('button').click(function (){
+            //start ajax
+           $.get(urlBase + '/animeApi',
+           {
+               
+            },
+           function (result) {
+                $('#test_ajax_result').val(result);
+            });               
+    });
 /*
  * [ Product rating ]
  */
@@ -47,11 +59,12 @@ filterBar.noUiSlider.on('update', function (values, handle) {
 /*
  * [ AUTO complete anime ]
  */
-$.getJSON('animeApi', function (data) {
+    
+$.getJSON(urlBase + '/animeApi', function (data) {
   $("#anime_name").autocomplete({
     source: function (request, response) {
       $.ajax({
-        url: "animeApi",
+        url: urlBase + "/animeApi",
         dataType: "json",
         data: {
           name: $("#anime_name").val()
@@ -80,7 +93,7 @@ $.getJSON('animeApi', function (data) {
       "height": "100px"
     });
 
-    li.data("ui-autocomplete-item", item.id)
+    li.data("ui-autocomplete-item", item.id);
     li.append('<a href="#">');
     
     
@@ -95,7 +108,7 @@ $.getJSON('animeApi', function (data) {
     
     a.hover(function() {
       a.css("border", "none");
-    })
+    });
     
     a.append(img).append("<span style='margin-left: 20px'>" + item.name + "</span>");
 
@@ -104,3 +117,19 @@ $.getJSON('animeApi', function (data) {
 
 });
 
+
+
+
+/*
+ * [ ANIME LIST ]
+ */
+function expandAnime(e) {
+  if ($(e).siblings(".anime-description").hasClass("less")) {
+    $(e).siblings(".anime-description").removeClass("less");
+    $(e).text("Read less");
+  }
+  else {
+    $(e).siblings(".anime-description").addClass("less");
+    $(e).text("Read more");
+  }
+}

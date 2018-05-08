@@ -3,11 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package BusinessLogic;
 
 import SB.AnimeFacadeLocal;
+import Models.Anime;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -15,18 +20,21 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 
 /**
  *
  * @author zerox
  */
-@WebServlet(name = "Anime", urlPatterns = {"/anime/*"})
-public class Anime extends HttpServlet {
+@WebServlet(name = "animeApi", urlPatterns = {"/animeApi"})
+public class animeApi extends HttpServlet {
 
-  @EJB
-  private AnimeFacadeLocal animeFacade;
+    @EJB
+    private AnimeFacadeLocal animeFacade;
 
+    
+    
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
    * methods.
@@ -38,7 +46,46 @@ public class Anime extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
+    response.setContentType("application/json");
+      System.out.println("Someone calling me");
+      System.out.println("getContextPath" + request.getContextPath());
+    PrintWriter out = response.getWriter();
+    List<Anime> animes = animeFacade.findAll();
+
+    JSONArray animesJSON = new JSONArray();
+
+    if (request.getParameterMap().containsKey("name")) {
+      final String name = request.getParameter("name").trim();
+      Collections.sort(animes, new Comparator<Anime>() {
+        @Override
+        public int compare(Anime o1, Anime o2) {
+          return -Integer.compare(getSimilarity(o1, name), getSimilarity(o2, name));
+        }
+
+        private int getSimilarity(Anime anime, String keyword) {
+          return anime.getName().toLowerCase().length() - anime.getName().toLowerCase().replace(keyword, "").length();
+        }
+      });
+      
+      for (Iterator<Anime> iterator = animes.iterator(); iterator.hasNext();) {
+        Anime anime = iterator.next();
+        int similarity = anime.getName().toLowerCase().length() - anime.getName().toLowerCase().replace(name, "").length();
+        
+        if (similarity == 0) {
+          iterator.remove();
+        }
+      }
+    }
     
+    for (Anime anime : animes) {
+      JSONObject animeJSON = new JSONObject();
+      animeJSON.put("id", anime.getId());
+      animeJSON.put("name", anime.getName());
+      animeJSON.put("picture", anime.getPicture());
+      animesJSON.add(animeJSON);
+    }
+    out.print(animesJSON);
+    out.flush();
   }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -53,11 +100,7 @@ public class Anime extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    response.setContentType("text/html;charset=UTF-8");
-    List<Models.Anime> listAnime = animeFacade.findAll();
-        request.setAttribute("animeList", listAnime);
-        request.getRequestDispatcher("/user/anime.jsp").forward(request, response);
-      
+    processRequest(request, response);
   }
 
   /**
