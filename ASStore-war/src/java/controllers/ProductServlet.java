@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author zerox
  */
 @WebServlet(name = "products", urlPatterns = {"/products/*"})
-public class Products extends HttpServlet {
+public class ProductServlet extends HttpServlet {
 
     @EJB
     private UsersFacadeLocal usersFacade;
