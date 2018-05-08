@@ -10,7 +10,7 @@
 
 <t:layout>
 
-    <section class="bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(assets/img/category_banner.jpg); background-position-y: 100%">
+    <section class="bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(<c:url value='/assets/img/category_banner.jpg' />); background-position-y: 100%">
         <div class="mask">
 
         </div>

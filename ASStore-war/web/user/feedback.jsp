@@ -9,7 +9,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:layout>
-    <section class="bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(assets/img/feedback_banner.jpg!d); background-position-y: 100%">
+    <section class="bg-title-page p-t-50 p-b-40 flex-col-c-m" style="background-image: url(<c:url value='/assets/img/feedback_banner.jpg'/>); background-position-y: 100%">
         <div class="mask">
 
         </div>
@@ -24,7 +24,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-8 col-md-8 col-lg-8 m-l-r-auto m-b-20" style="padding: 0">
-                    <a href="<c:url value="#"/>" class="bo4 s-text2 p-t-10 p-l-20 p-r-20 p-b-10 hov1 trans-0-4">New feedback</a>
+                    <a href="<c:url value="/feedbacks/create"/>" class="bo4 s-text2 p-t-10 p-l-20 p-r-20 p-b-10 hov1 trans-0-4">New feedback</a>
                 </div>
             </div>
         </div>
@@ -34,7 +34,7 @@
             <jsp:include page="components/feedback/feedbackItem.jsp">
                 <jsp:param name="title" value="${feedback.title}"/>
                 <jsp:param name="content" value="${feedback.contents}"/>
-                <jsp:param name="link" value="https://google.com"/>
+                <jsp:param name="link" value="/feedbacks/details?id=${feedback.id}"/>
             </jsp:include>
         </c:forEach>
     </div>

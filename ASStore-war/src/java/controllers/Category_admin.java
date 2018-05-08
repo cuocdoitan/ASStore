@@ -10,8 +10,10 @@ import Models.Category;
 import SB.CategoryFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +25,9 @@ import javax.servlet.http.HttpSession;
  * @author TRAN HO QUANG
  */
 @WebServlet(name = "category_admin", urlPatterns = {"/admin/category/*"})
+@MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
+                 maxFileSize=1024*1024*10,      // 10MB
+                 maxRequestSize=1024*1024*50)   // 50MB
 public class Category_admin extends HttpServlet {
 
     @EJB
@@ -74,7 +79,14 @@ public class Category_admin extends HttpServlet {
                 request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
                 break;
             case "/edit":
+                Models.Category category = categoryFacade.find(Integer.parseInt(request.getParameter("id")));
+                request.setAttribute("category", category);
                 request.getRequestDispatcher("/admin/category-edit.jsp").forward(request, response);
+                break;
+            case "/delete":
+                Models.Category category1 = categoryFacade.find(Integer.parseInt(request.getParameter("id")));
+                categoryFacade.remove(category1);
+                request.getRequestDispatcher("/admin/category/list").forward(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -93,8 +105,15 @@ public class Category_admin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
-
+        response.setContentType("text/html;charset=UTF-8");
+        System.out.println("do post");
+        String clientRequest = request.getPathInfo();
+        switch (clientRequest) {
+            case "/create":
+                request.getRequestDispatcher("/UploadCategoryImages").forward(request, response);
+                break;
+            
+        }
     }
 
     /**
@@ -115,7 +134,6 @@ public class Category_admin extends HttpServlet {
                 request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
                 break;
             case "/create":
-
                 request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
                 break;
             case "/edit":
@@ -139,5 +157,6 @@ public class Category_admin extends HttpServlet {
                 break;
         }
     }
-
+    
+    
 }
