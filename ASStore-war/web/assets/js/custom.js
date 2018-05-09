@@ -1,15 +1,63 @@
 var pathArray = window.location.pathname.split('/');  
 var urlBase = window.location.protocol + "//" + window.location.host + "/" + pathArray[1];
-$('button').click(function (){
-            //start ajax
-           $.get(urlBase + '/animeApi',
-           {
-               
-            },
-           function (result) {
-                alert('OK');
-            });               
+    /*
+ * [ AUTO complete anime ]
+ */
+
+
+  $("#anime_name").autocomplete({
+    source: function (request, response) {
+      $.ajax({
+        url: urlBase + "/animeApi",
+        dataType: "json",
+        data: {
+          name: $("#anime_name").val()
+        },
+        success: function (data) {
+          response(data);
+        }
+      });
+    }
+  }).data("ui-autocomplete")._renderItem = function (ul, item) {
+    var li = $('<li>'),
+            img = $('<img>');
+
+    img.attr({
+      src: urlBase + '/assets/img/anime/' + item.picture,
+      alt: item.name
     });
+
+    li.css({
+      "height": "100px",
+      "width": "100%"
+    });
+
+    img.css({
+      "width": "80px",
+      "height": "100px"
+    });
+
+    li.data("ui-autocomplete-item", item.id);
+    li.append('<p>');
+    
+    var a = li.find('p');
+    a.css({
+      "width": "100%",
+      "height": "100px",
+      "display": "block",
+      "padding": "0",
+      "margin": "0"
+    });
+    
+    a.hover(function () {
+      a.css("border", "none");
+    });
+    
+    a.append(img).append("<span style='margin-left: 20px'>" + item.name + "</span>");
+    return li.appendTo(ul);
+  };
+
+
 /*
  * [ IMAGE UPLOAD ]
  */
@@ -20,15 +68,29 @@ $("#imageUpload").dropzone({
   acceptedFiles: ".png,.jpg,.jpeg",
   removedfile: function (file) {
     console.log($(file.previewElement).index());
+    var imageIndex = $(file.previewElement).index();
+    var hiddenTagName = "image" + imageIndex;
+    $("input[name="+hiddenTagName+"]").val('');
+    var deletedIndex = imageIndex;
+    for(deletedIndex;deletedIndex < 4;deletedIndex++){
+        var nextIndex = deletedIndex + 1;
+        var hiddenTagName_next = "image" + nextIndex;
+        var hiddenTagName_current = "image" + deletedIndex;
+        var nextImageName = $("input[name="+hiddenTagName_next+"]").val();
+        $("input[name="+hiddenTagName_current+"]").val(nextImageName);
+    }
     var _ref;
     return (_ref = file.previewElement) != null ? _ref.parentNode.removeChild(file.previewElement) : void 0;
   },
   init: function () {
     this.on("success", function (file, response) {
-      console.log(response);
+      console.log(response.filename);
+      var imageIndex = $(file.previewElement).index();
+      var hiddenTagName = "image" + imageIndex;
+      $("input[name="+hiddenTagName+"]").val(response.filename);
     });
     this.on("maxfilesexceeded", function (file) {
-      alert("No more images please!");
+      alert("Cannot upload more image");
       this.removeFile(file);
     });
   }
@@ -79,66 +141,6 @@ var skipValues = [
 filterBar.noUiSlider.on('update', function (values, handle) {
   skipValues[handle].innerHTML = Math.round(values[handle]);
 });
-
-/*
- * [ AUTO complete anime ]
- */
-
-$.getJSON(urlBase + '/animeApi', function (data) {
-  $("#anime_name").autocomplete({
-    source: function (request, response) {
-      $.ajax({
-        url: urlBase + "/animeApi",
-        dataType: "json",
-        data: {
-          name: $("#anime_name").val()
-        },
-        success: function (data) {
-          response(data);
-        }
-      });
-    }
-  }).data("ui-autocomplete")._renderItem = function (ul, item) {
-    var li = $('<li>'),
-            img = $('<img>');
-
-    img.attr({
-      src: 'assets/img/anime/' + item.picture,
-      alt: item.name
-    });
-
-    li.css({
-      "height": "100px",
-      "width": "100%"
-    });
-
-    img.css({
-      "width": "80px",
-      "height": "100px"
-    });
-
-    li.data("ui-autocomplete-item", item.id);
-    li.append('<a href="#">');
-
-
-    var a = li.find('a');
-    a.css({
-      "width": "100%",
-      "height": "100px",
-      "display": "block",
-      "padding": "0",
-      "margin": "0"
-    });
-
-    a.hover(function () {
-      a.css("border", "none");
-    })
-    a.append(img).append("<span style='margin-left: 20px'>" + item.name + "</span>");
-    return li.appendTo(ul);
-  };
-
-});
-
 
 /*
  * [ ANIME LIST ]

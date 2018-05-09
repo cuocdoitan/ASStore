@@ -165,11 +165,22 @@
         var numProduct = Number($(this).next().val());
         if(numProduct > 1) $(this).next().val(numProduct - 1);
     });
+    
+    $('.num-product').focusout(function(e){
+        if (Number($(this).val()) > Number($(this).attr("max"))) {
+            $(this).val($(this).attr("max"))
+        }
+        else if (Number($(this).val()) < 1){
+            $(this).val(1)
+        }
+    });
 
     $('.btn-num-product-up').on('click', function(e){
         e.preventDefault();
         var numProduct = Number($(this).prev().val());
-        $(this).prev().val(numProduct + 1);
+        if ($(this).prev().val() < $(this).prev().attr("max")) {
+            $(this).prev().val(numProduct + 1);
+        }
     });
 
 

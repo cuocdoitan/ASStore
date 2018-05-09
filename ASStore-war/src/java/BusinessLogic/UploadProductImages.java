@@ -5,6 +5,7 @@
  */
 package BusinessLogic;
 
+import Others.ImageName_JSON;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -12,7 +13,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import org.json.simple.JSONArray;
 
 /**
  *
@@ -60,6 +64,7 @@ public class UploadProductImages extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setContentType("application/json");
         String imageResourceAbsolutePath = getImageResourceAbsolutePath(request);
         for(Part part : request.getParts()){
             String imageName = extractFileName(part);
@@ -74,11 +79,11 @@ public class UploadProductImages extends HttpServlet {
                     BufferedImage e = ImageIO.read(inputStream);
                     ImageIO.write(e, "png", fileSaveDir);
                     inputStream.close();
+                    response.getWriter().print("{\"filename\":\"" + fileName + "\"}");
                 } catch (IOException fne) {
                     LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
                         new Object[]{fne.getMessage()});
-                }
-                
+                }  
             }
         }
     }

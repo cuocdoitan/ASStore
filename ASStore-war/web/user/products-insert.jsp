@@ -9,9 +9,9 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:layout>
-<form action="<c:url value="/products/insert"/>"  method="post" >
-  <section class="bgwhite p-t-70 p-b-100">
+<section class="bgwhite p-t-70 p-b-50">
     <div class="container">
+        <form action="<c:url value="/products/insert"/>"  method="post" onsubmit="return validateProductInsert();" id="insertProductForm">    
       <h2>Sell your product</h2><br><br>
       <input type="hidden" value="5" name="userId"/>
       <label>Product name</label>
@@ -50,25 +50,26 @@
       </div>
       <hr>
 
-      <input type="hidden" name="image1" value="1111.png"/>
-      <input type="hidden" name="image2" value="222.png"/>
-      <input type="hidden" name="image3" value="333.png"/>
-      <input type="hidden" name="image4" value="444.png"/>
-
-      <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-        Sell product
-      </button>
-   </section>
-</form>
-<form class="dropzone" method="post" action="<c:url value="/uploadProductImages"/>" enctype="">
-      <div class="container">
-        <label>Product images</label>
+      <input type="hidden" name="image1" value=""/>
+      <input type="hidden" name="image2" value=""/>
+      <input type="hidden" name="image3" value=""/>
+      <input type="hidden" name="image4" value=""/>
+    </form>
+      <label>Product images <span style="color: red">*Require at least 1 image, max is 4 images.</span></label>
+    <form class="dropzone" method="post" action="<c:url value="/uploadProductImages"/>" enctype="" id="imageUpload">
         <div class="fallback">
             <input name="images" type="file" multiple accept="image/*"/>
         </div>
-      </div>
-</form>
-      <hr>
-      
+    </form>
+    <hr>
+    <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4" onclick="submitNewProductForm()">
+        Sell product
+  </button>
     </div>
+</section>
+    <script>
+        function submitNewProductForm(){
+            document.getElementById("insertProductForm").submit();
+        }
+    </script>
 </t:layout>

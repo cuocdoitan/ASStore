@@ -32,6 +32,12 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         super(Product.class);
     }
     
+    public int createNewProduct(Product newProduct){
+        em.persist(newProduct);
+        em.flush();
+        return newProduct.getId();
+    }
+    
     public List<Product> getListApprovingProduct(){
         List<Product> listApprovinProduct = new ArrayList<>();
         for(Product product : this.getListExistingProduct()){

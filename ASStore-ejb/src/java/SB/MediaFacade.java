@@ -65,6 +65,7 @@ public class MediaFacade extends AbstractFacade<Media> implements MediaFacadeLoc
             }
         }
         return images;
+    }
 
     public String getFirstImageFromProduct(Product product) {
       for(Media media : this.findAll()){
