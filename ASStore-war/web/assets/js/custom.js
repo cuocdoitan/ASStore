@@ -17,6 +17,9 @@ var urlBase = window.location.protocol + "//" + window.location.host + "/" + pat
           response(data);
         }
       });
+    },
+    select: function (event, ui){
+        $("#anime_name").val("abdght");
     }
   }).data("ui-autocomplete")._renderItem = function (ul, item) {
     var li = $('<li>'),
@@ -52,7 +55,7 @@ var urlBase = window.location.protocol + "//" + window.location.host + "/" + pat
     a.hover(function () {
       a.css("border", "none");
     });
-    
+
     a.append(img).append("<span style='margin-left: 20px'>" + item.name + "</span>");
     return li.appendTo(ul);
   };

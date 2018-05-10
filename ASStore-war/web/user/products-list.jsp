@@ -122,10 +122,7 @@
                     <jsp:param name="name" value="${product.name}" />
                     <jsp:param name="price" value="${product.price}" />
                   </jsp:include>
-                  <!--Show avarage rating of product-->
-                  
-                  <a href="<c:url value="/products/repair-product?id=${product.id}"/>">Edit</a> ||
-                  <a href="<c:url value="/products/edit?id=${product.id}" />">Repair</a> 
+                  <!--Show avarage rating of product--> 
               </c:forEach>
           </div>
         </div>

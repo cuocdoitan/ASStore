@@ -11,7 +11,7 @@
 <t:layout>
 <section class="bgwhite p-t-70 p-b-50">
     <div class="container">
-        <form action="<c:url value="/products/insert"/>"  method="post" onsubmit="return validateProductInsert();" id="insertProductForm">    
+        <form action="<c:url value="/products/insert"/>"  method="post" onsubmit="return validateProductInsert();" id="formInsertProduct">    
       <h2>Sell your product</h2><br><br>
       <input type="hidden" value="5" name="userId"/>
       <label>Product name</label>
@@ -69,7 +69,7 @@
 </section>
     <script>
         function submitNewProductForm(){
-            document.getElementById("insertProductForm").submit();
+            document.getElementById("formInsertProduct").submit();
         }
     </script>
 </t:layout>

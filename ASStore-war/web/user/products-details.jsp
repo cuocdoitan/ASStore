@@ -73,6 +73,8 @@
     </div>
     <!-- Rating -->
     <br/>
+    <a href="<c:url value="/products/edit?id=${product.id}" />">Edit</a>  ||
+    <a href="<c:url value="/products/repair-product?id=${product.id}"/>">Repair</a>
     <h3>Please rate this product</h3>
     <div class="p-l-10">
       <div class="product-rating p-t-9">

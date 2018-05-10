@@ -11,11 +11,12 @@
 <t:adminLayout>
   <section class="bgwhite p-t-70 p-b-100">
     <div class="container">
+        <form>
       <h2>Send Note for this Product</h2><br><br>
-      
+      <input type="hidden" name="productId" value="${product.id}"/>
       <label>Product name</label>
       <div class="bo4 of-hidden size15 m-b-20">
-          <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" placeholder="Product name" value="${product.id}">
+          <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" placeholder="Product name" value="${product.name}">
       </div>
       <div class="row">
         <div class="col-6">
@@ -30,6 +31,25 @@
             <input class="sizefull s-text7 p-l-22 p-r-22" type="number" name="name" placeholder="Product price" readonly="true"  value="${product.price}">
           </div>
         </div>
+      </div>
+      <label>Anime</label>
+      <div class="search-product pos-relative bo4 m-t-5 m-b-5 m-r-10" style="width: 50%">
+        <input class="s-text7 size6 p-l-23 p-r-50" type="text" name="anime" id="anime_name" placeholder="Anime name of this product" value="${product.animeId.name}"/>
+      </div>
+      <label>Category</label>
+      <div>
+          <select name="category">
+              <c:forEach items="${categories}" var="category">
+                  <c:choose>
+                        <c:when test="${category.id == product.categoryId.id}">
+                            <option value="${category.id}" selected="true">${category.name}</option>
+                        </c:when>
+                        <c:otherwise>
+                           <option value="${category.id}">${category.name}</option>
+                        </c:otherwise>
+                    </c:choose>
+              </c:forEach>
+          </select>
       </div>
       <label>Product description</label>
       <div class="bo4 of-hidden m-b-20">
@@ -51,6 +71,7 @@
         Deny
       </button>
       <br/>
+      </form>
     </div>
   </section>
 </t:adminLayout>
