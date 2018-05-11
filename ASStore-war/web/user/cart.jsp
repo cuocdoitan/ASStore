@@ -21,6 +21,7 @@
               <th class="column-3 text-center">Price</th>
               <th class="column-4 text-center">Quantity</th>
               <th class="column-5 text-center">Total</th>
+              <th class="column-6 text-center p-l-20 p-r-20">Action</th>
             </tr>
             <jsp:include page="components/cart/cartItem.jsp">
               <jsp:param name="image" value="kakashi_cup.jpg" />
@@ -38,32 +39,48 @@
         <h5 class="m-text20 p-b-24">
           Cart Checkout
         </h5>
-
-        <!--  -->
-        <div class="flex-w" style="width: 100%">
-          <label>Delivery address</label>
-          <div class="bo4 of-hidden m-b-20" style="width: 100%">
-            <textarea style="width: 100%; border: none; padding: 20px" rows="10" placeholder="590CMT8, HCM City"></textarea>
+        <form>
+          <!--  -->
+          <div class="flex-w" style="width: 100%">
+            <label>Delivery address</label>
+            <div class="bo4 of-hidden m-b-20" style="width: 100%">
+              <textarea style="width: 100%; border: none; padding: 20px" rows="3" placeholder="590CMT8, HCM City"></textarea>
+            </div>
+            <div class="card-details" style="height: 0; overflow: hidden; width: 100%">
+              <label>Card number</label>
+              <div class="bo4 of-hidden size15 m-b-20">
+                <input class="sizefull s-text7 p-l-22 p-r-22" type="number">
+              </div>
+              <label>Security code</label>
+              <div class="bo4 of-hidden size15 m-b-20">
+                <input class="sizefull s-text7 p-l-22 p-r-22" type="number">
+              </div>
+              <label>Expiry date</label>
+              <div class="bo4 of-hidden size15 m-b-20">
+                <input class="sizefull s-text7 p-l-22 p-r-22" type="number">
+              </div>
+            </div>
+            <p class="showCreditCard" onclick="showCreditCard(this)">Pay by credit card</p>
           </div>
-        </div>
 
-        <!--  -->
-        <div class="flex-w flex-sb-m p-t-26 p-b-30">
-          <span class="m-text22 w-size19 w-full-sm">
-            Total:
-          </span>
+          <!--  -->
+          <div class="flex-w flex-sb-m p-t-26 p-b-30">
+            <span class="m-text22 w-size19 w-full-sm">
+              Total:
+            </span>
 
-          <span class="m-text21 w-size20 w-full-sm">
-            $39.00
-          </span>
-        </div>
-
-        <div class="size15 trans-0-4">
-          <!-- Button -->
-          <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
-            Proceed to Checkout
-          </button>
-        </div>
+            <span class="m-text21 w-size20 w-full-sm">
+              $39.00
+            </span>
+          </div>
+          <input type="hidden" name="method" value="cash" />
+          <div class="size15 trans-0-4">
+            <!-- Button -->
+            <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
+              Proceed to Checkout
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   </section>

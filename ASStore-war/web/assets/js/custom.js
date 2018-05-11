@@ -141,3 +141,14 @@ function expandAnime(e) {
   }
 }
 
+function showCreditCard(e) {
+  if ($(e).siblings(".card-details").css("height") == "0px") {
+    $(e).siblings(".card-details").css("height", "auto");
+    $("input[name='method']").val('card');
+    $(e).text("Pay in cash");
+  } else {
+    $(e).siblings(".card-details").css("height", "0px");
+    $("input[name='method']").val('cash');
+    $(e).text("Pay by credit card");
+  }
+}
