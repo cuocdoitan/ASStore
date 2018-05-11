@@ -61,6 +61,18 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         query.setParameter(2, 1);
         return query.getResultList();
     }
-
     
+    public List<Product> searchProductByName(String name){
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.name like ?2", Product.class);
+        query.setParameter(1, true);
+        query.setParameter(2, "%"+name+"%");
+        return query.getResultList();
+    }
+    
+    public List<Product> searchProductByUserPhoneNumber(String phoneNumber){
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.usersId.phoneNumber = ?2", Product.class);
+        query.setParameter(1, true);
+        query.setParameter(2, phoneNumber);
+        return query.getResultList();
+    }
 }

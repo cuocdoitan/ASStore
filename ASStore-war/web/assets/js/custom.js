@@ -1,5 +1,35 @@
 var pathArray = window.location.pathname.split('/');  
 var urlBase = window.location.protocol + "//" + window.location.host + "/" + pathArray[1];
+
+function approveProductAndReloadPage_admin(id){
+    $.ajax({
+        url: urlBase + '/admin/products/approve',
+        type: 'post',
+        data: {
+            id : id
+        },
+        success: function (data, textStatus, jqXHR) {
+            $("#listApprovingProductContent_admin").html(data);
+        }
+    });
+}
+
+
+function searchProductAndReloadPage_admin(){
+    $.ajax({
+        url: urlBase + '/admin/products/list',
+        type: 'get',
+        data: {
+            search : $("input[name=search]").val(),
+            SearchBy : $("select[name=SearchBy]").val()
+        },
+        success: function (data, textStatus, jqXHR) {
+            $("#listProductContent_admin").html(data);
+        }
+    });
+}
+
+
     /*
  * [ AUTO complete anime ]
  */
@@ -59,6 +89,8 @@ var urlBase = window.location.protocol + "//" + window.location.host + "/" + pat
     a.append(img).append("<span style='margin-left: 20px'>" + item.name + "</span>");
     return li.appendTo(ul);
   };
+
+
 
 
 /*

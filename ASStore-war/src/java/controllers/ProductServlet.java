@@ -119,6 +119,10 @@ public class ProductServlet extends HttpServlet {
         //<editor-fold defaultstate="collapsed" desc="go to repair page">
         int productId_repair= Integer.parseInt(request.getParameter("id"));
         Product product_repair = productFacade.find(productId_repair);
+        if(product_repair.getStatus() != 2){
+            response.sendRedirect(request.getHeader("referer"));
+            return;
+        }
         request.setAttribute("product", productFacade.find(productId_repair));
         request.setAttribute("categories", categoryFacade.findAll());
         String[] arrImage = {"", "", "", ""};
@@ -147,6 +151,9 @@ public class ProductServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         String clientRequest = request.getPathInfo();
         switch (clientRequest) {
+            case "/rating":
+                
+                break;
             case "/insert":
                 insertNewProduct(request, response);
                 response.sendRedirect(request.getContextPath() + "/products/list");
@@ -281,6 +288,8 @@ public class ProductServlet extends HttpServlet {
           throws ServletException, IOException{
         //<editor-fold defaultstate="collapsed" desc="action repair product image">
         int productId = Integer.parseInt(request.getParameter("productId"));
+        //Product before
+        Product productBefore = productFacade.find(productId);
         String name = request.getParameter("name");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
         BigDecimal price = new BigDecimal(request.getParameter("price"));
@@ -294,8 +303,6 @@ public class ProductServlet extends HttpServlet {
         //Category
         int categoryId = Integer.parseInt(request.getParameter("category"));
         Models.Category category = categoryFacade.find(categoryId);
-        //Produc before
-        Product productBefore = productFacade.find(productId);
         //new Product
         Models.Product editedProduct = new Product(productId, name, description, price, quantity,productBefore.getCreateAt() , true);
         editedProduct.setUsersId(user);

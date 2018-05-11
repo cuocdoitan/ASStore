@@ -36,4 +36,8 @@ public interface ProductFacadeLocal {
     
     public List<Product> getListProductSortedDesc();
     
+    public List<Product> searchProductByName(String name);
+    
+    public List<Product> searchProductByUserPhoneNumber(String phoneNumber);
+    
 }
