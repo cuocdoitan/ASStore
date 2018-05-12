@@ -63,6 +63,7 @@ public class Users implements Serializable {
   @Basic(optional = false)
   @NotNull
   @Column(name = "Id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   @Size(max = 15)
   @Column(name = "PhoneNumber")

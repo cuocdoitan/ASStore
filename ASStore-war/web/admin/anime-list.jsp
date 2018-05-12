@@ -41,9 +41,9 @@
                   <img src="<c:url value="/assets/img/anime/${anime.picture}" />" height="200px" alt="">
                 </td>
                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                  <a href="Anime_admin?ID" style="color: #3498db">Edit</a>
+                    <a href="<c:url value='/anime/update?anime=${anime.id}'/>" style="color: #3498db">Edit</a>
                   <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
-                  <a href="Anime_admin?ID" style="color: #e74c3c"  onclick="return confirm('Are you sure ?')">Delete</a>
+                  <a href="<c:url value="/anime/delete?anime=${anime.id}" />" style="color: #e74c3c"  onclick="return confirm('Are you sure ?')">Delete</a>
                 </td> 
               </tr>
             </c:forEach>

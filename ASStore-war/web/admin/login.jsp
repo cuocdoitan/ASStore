@@ -13,7 +13,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6 p-b-30 p-t-30 p-l-30 p-r-30 bgwhite">
-          <form>
+          <form method="post" action="<c:url value='/User/loginadmin'/>">
             <h4 class="m-text26 p-b-36 p-t-15">
               Login to AS Store
             </h4>
@@ -31,10 +31,6 @@
               <button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
                 Login
               </button>
-            </div>
-            
-            <div class="m-t-20">
-              <a href="#">Don't have an account? Create one now!</a>
             </div>
           </form>
         </div>
