@@ -16,5 +16,5 @@
   <td class="column-3 text-center">$${param.price}</td>
   <td class="column-4 text-center">${param.quantity}</td>
   <td class="column-5 text-center">$${param.total}</td>
-  <td class="column-6 text-center"><a href="#" style="color: #bd4147">Remove</a></td>
+  <td class="column-6 text-center"><a href="<c:url value="/cart/remove?id=${param.id}" />" onclick="return confirm('Are you sure?')" style="color: #bd4147">Remove</a></td>
 </tr>

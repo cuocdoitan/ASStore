@@ -8,7 +8,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:layout>
+<t:adminLayout>
   <section class="cart bgwhite p-t-70 p-b-100">
     <div class="container">
       <h1 class="text-center m-b-50">Order #${orderId} details</h1>
@@ -24,7 +24,7 @@
               <th class="column-5 text-center">Total</th>
             </tr>
             <c:forEach items="${details}" var="detail">
-              <jsp:include page="/user/components/confirmOrder/cartItem.jsp">
+              <jsp:include page="components/confirmOrder/cartItem.jsp">
                 <jsp:param name="image" value="${images.get(detail.productId.id)}" />
                 <jsp:param name="name" value="${detail.productId.name}" />
                 <jsp:param name="price" value="${detail.unitPrice}" />
@@ -45,4 +45,4 @@
     </div>
   </section>
 
-</t:layout>
+</t:adminLayout>

@@ -26,95 +26,96 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "CartDetail")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CartDetail.findAll", query = "SELECT c FROM CartDetail c")
-    , @NamedQuery(name = "CartDetail.findById", query = "SELECT c FROM CartDetail c WHERE c.id = :id")
-    , @NamedQuery(name = "CartDetail.findByQuantity", query = "SELECT c FROM CartDetail c WHERE c.quantity = :quantity")})
+  @NamedQuery(name = "CartDetail.findAll", query = "SELECT c FROM CartDetail c")
+  , @NamedQuery(name = "CartDetail.findById", query = "SELECT c FROM CartDetail c WHERE c.id = :id")
+  , @NamedQuery(name = "CartDetail.findByCartId", query = "SELECT c FROM CartDetail c WHERE c.cartId = :id")
+  , @NamedQuery(name = "CartDetail.findByQuantity", query = "SELECT c FROM CartDetail c WHERE c.quantity = :quantity")})
 public class CartDetail implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    @Id
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Id")
-    private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Quantity")
-    private int quantity;
-    @JoinColumn(name = "CartId", referencedColumnName = "Id")
-    @ManyToOne(optional = false)
-    private Cart cartId;
-    @JoinColumn(name = "ProductId", referencedColumnName = "Id")
-    @ManyToOne(optional = false)
-    private Product productId;
+  private static final long serialVersionUID = 1L;
+  @Id
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "Id")
+  private Integer id;
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "Quantity")
+  private int quantity;
+  @JoinColumn(name = "CartId", referencedColumnName = "Id")
+  @ManyToOne(optional = false)
+  private Cart cartId;
+  @JoinColumn(name = "ProductId", referencedColumnName = "Id")
+  @ManyToOne(optional = false)
+  private Product productId;
 
-    public CartDetail() {
-    }
+  public CartDetail() {
+  }
 
-    public CartDetail(Integer id) {
-        this.id = id;
-    }
+  public CartDetail(Integer id) {
+    this.id = id;
+  }
 
-    public CartDetail(Integer id, int quantity) {
-        this.id = id;
-        this.quantity = quantity;
-    }
+  public CartDetail(Integer id, int quantity) {
+    this.id = id;
+    this.quantity = quantity;
+  }
 
-    public Integer getId() {
-        return id;
-    }
+  public Integer getId() {
+    return id;
+  }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-    public int getQuantity() {
-        return quantity;
-    }
+  public int getQuantity() {
+    return quantity;
+  }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
+  public void setQuantity(int quantity) {
+    this.quantity = quantity;
+  }
 
-    public Cart getCartId() {
-        return cartId;
-    }
+  public Cart getCartId() {
+    return cartId;
+  }
 
-    public void setCartId(Cart cartId) {
-        this.cartId = cartId;
-    }
+  public void setCartId(Cart cartId) {
+    this.cartId = cartId;
+  }
 
-    public Product getProductId() {
-        return productId;
-    }
+  public Product getProductId() {
+    return productId;
+  }
 
-    public void setProductId(Product productId) {
-        this.productId = productId;
-    }
+  public void setProductId(Product productId) {
+    this.productId = productId;
+  }
 
-    @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
-    }
+  @Override
+  public int hashCode() {
+    int hash = 0;
+    hash += (id != null ? id.hashCode() : 0);
+    return hash;
+  }
 
-    @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof CartDetail)) {
-            return false;
-        }
-        CartDetail other = (CartDetail) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+  @Override
+  public boolean equals(Object object) {
+    // TODO: Warning - this method won't work in the case the id fields are not set
+    if (!(object instanceof CartDetail)) {
+      return false;
     }
+    CartDetail other = (CartDetail) object;
+    if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+      return false;
+    }
+    return true;
+  }
 
-    @Override
-    public String toString() {
-        return "Models.CartDetail[ id=" + id + " ]";
-    }
-    
+  @Override
+  public String toString() {
+    return "Models.CartDetail[ id=" + id + " ]";
+  }
+
 }

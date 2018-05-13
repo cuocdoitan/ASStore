@@ -5,16 +5,16 @@
  */
 package controllers;
 
-import SB.CartDetailFacadeLocal;
 import SB.MediaFacadeLocal;
+import SB.OrdersDetailFacadeLocal;
+import SB.OrdersFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,13 +23,16 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author zerox
  */
-@WebServlet(name = "Cart", urlPatterns = {"/cart/*"})
-public class Cart extends HttpServlet {
+@WebServlet(name = "Orders_admin", urlPatterns = {"/admin/orders/*"})
+public class Orders_admin extends HttpServlet {
 
   @EJB
-  private MediaFacadeLocal mediaFacade;
+  private OrdersFacadeLocal orderFacade;
   @EJB
-  private CartDetailFacadeLocal cartDetailFacade;
+  private OrdersDetailFacadeLocal orderDetailFacade;
+  @EJB
+  private MediaFacadeLocal mediaFacade;
+
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
    * methods.
@@ -42,6 +45,18 @@ public class Cart extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     response.setContentType("text/html;charset=UTF-8");
+    try (PrintWriter out = response.getWriter()) {
+      /* TODO output your page here. You may use following sample code. */
+      out.println("<!DOCTYPE html>");
+      out.println("<html>");
+      out.println("<head>");
+      out.println("<title>Servlet Orders_admin</title>");
+      out.println("</head>");
+      out.println("<body>");
+      out.println("<h1>Servlet Orders_admin at " + request.getContextPath() + "</h1>");
+      out.println("</body>");
+      out.println("</html>");
+    }
   }
 
   // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -57,24 +72,42 @@ public class Cart extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     String clientRequest = request.getPathInfo();
-    switch(clientRequest) {
+    switch (clientRequest) {
       case "/list":
-        java.util.List<Models.CartDetail> details = cartDetailFacade.findByCartId(1);
-        HashMap images = new HashMap();
-        BigDecimal total = new BigDecimal(0);
-        for (Models.CartDetail detail : details) {
-          total = total.add(detail.getProductId().getPrice().multiply(new BigDecimal(detail.getQuantity())));
-          images.put(detail.getProductId().getId(), mediaFacade.getFirstImageFromProduct(detail.getProductId()));
+        java.util.List<Models.Orders> orders = orderFacade.findAll();
+        ArrayList<Models.Orders> filteredOrders = new ArrayList<>();
+        if (request.getParameter("show_all") == null) {
+          if (request.getParameter("show_delivering") != null && request.getParameter("show_delivered") == null) {
+            for (Models.Orders order : orders) {
+              if (!order.getStatus()) {
+                filteredOrders.add(order);
+              }
+            }
+          } else if (request.getParameter("show_delivering") == null && request.getParameter("show_delivered") != null) {
+            for (Models.Orders order : orders) {
+              if (order.getStatus()) {
+                filteredOrders.add(order);
+              }
+            }
+          } else {
+            for (Models.Orders order : orders) {
+              filteredOrders.add(order);
+            }
+          }
+
+        } else {
+          for (Models.Orders order : orders) {
+            filteredOrders.add(order);
+          }
         }
-        request.setAttribute("cartTotal", total);
-        request.setAttribute("images", images);
-        request.setAttribute("details", details);
-        request.getRequestDispatcher("/user/cart.jsp").forward(request, response);
+        request.setAttribute("orders", filteredOrders);
+        HashMap users = new HashMap();
+        for (Models.Orders order : filteredOrders) {
+          users.put(order.getId(), order.getUsersId());
+        }
+        request.setAttribute("users", users);
+        request.getRequestDispatcher("/admin/orders.jsp").forward(request, response);
         break;
-      case "/remove":
-        int detailId = Integer.parseInt(request.getParameter("detailId"));
-        cartDetailFacade.remove(cartDetailFacade.find(detailId));
-        response.sendRedirect("/cart/list");
     }
   }
 

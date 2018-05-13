@@ -67,6 +67,11 @@ public class Orders extends HttpServlet {
       case "/list":
         List<Models.Orders> orders = orderFacade.findAll();
         request.setAttribute("orders", orders);
+        HashMap isCancelAble = new HashMap();
+        for (Models.Orders order : orders) {
+          isCancelAble.put(order.getId(), orderFacade.isCancelAble(order.getId()));
+        }
+        request.setAttribute("isCancelAble", isCancelAble);
         request.getRequestDispatcher("/user/orders.jsp").forward(request, response);
         break;
       case "/details":

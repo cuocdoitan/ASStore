@@ -32,6 +32,8 @@ public interface OrdersFacadeLocal {
     
     void validate(int id);
 
+    boolean isCancelAble(int id);
+    
     int count();
     
 }

@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "Orders")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o")
+  @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o ORDER BY o.createAt DESC")
   , @NamedQuery(name = "Orders.findById", query = "SELECT o FROM Orders o WHERE o.id = :id")
   , @NamedQuery(name = "Orders.findByPassCode", query = "SELECT o FROM Orders o WHERE o.passCode = :passCode")
   , @NamedQuery(name = "Orders.findByCreateAt", query = "SELECT o FROM Orders o WHERE o.createAt = :createAt")
@@ -71,7 +71,7 @@ public class Orders implements Serializable {
   @JoinColumn(name = "UsersId", referencedColumnName = "Id")
   @ManyToOne(optional = false)
   private Users usersId;
-
+  
   public Orders() {
   }
 

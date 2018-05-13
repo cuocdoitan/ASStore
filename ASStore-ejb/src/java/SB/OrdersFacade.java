@@ -6,9 +6,14 @@
 package SB;
 
 import Models.Orders;
+import java.text.Format;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -39,5 +44,21 @@ public class OrdersFacade extends AbstractFacade<Orders> implements OrdersFacade
       Orders order = em.find(Orders.class, id);
       order.setStatus(true);
       em.merge(order);
+    }
+    
+    public boolean isCancelAble(int id) {
+      Orders order = em.find(Orders.class, id);
+      Format formatter = new SimpleDateFormat("dd / MM / yyyy");
+      try {
+        return !formatter.format(new Date()).equals(order.getCreateAt());
+      } catch (Exception e) {
+        e.printStackTrace();
+        return false;
+      }
+    }
+    @Override
+    public List<Orders> findAll() {
+      Query query = em.createNamedQuery("Orders.findAll");
+      return query.getResultList();
     }
 }

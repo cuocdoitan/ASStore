@@ -3,7 +3,7 @@
     Created on : Apr 29, 2018, 12:20:17 PM
     Author     : zerox
 --%>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
@@ -23,13 +23,16 @@
               <th class="column-5 text-center">Total</th>
               <th class="column-6 text-center p-l-20 p-r-20">Action</th>
             </tr>
-            <jsp:include page="components/cart/cartItem.jsp">
-              <jsp:param name="image" value="kakashi_cup.jpg" />
-              <jsp:param name="name" value="Kakashi Hatake coffee cup" />
-              <jsp:param name="price" value="22" />
-              <jsp:param name="quantity" value="2" />
-              <jsp:param name="total" value="44" />
-            </jsp:include>
+            <c:forEach items="${details}" var="detail">
+              <jsp:include page="/user/components/cart/cartItem.jsp">
+                <jsp:param name="id" value="${detail.id}" />
+                <jsp:param name="image" value="${images.get(detail.productId.id)}" />
+                <jsp:param name="name" value="${detail.productId.name}" />
+                <jsp:param name="price" value="${detail.productId.price}" />
+                <jsp:param name="quantity" value="${detail.quantity}" />
+                <jsp:param name="total" value="${detail.productId.price * detail.quantity}" />
+              </jsp:include>
+            </c:forEach>
           </table>
         </div>
       </div>
@@ -70,7 +73,7 @@
             </span>
 
             <span class="m-text21 w-size20 w-full-sm">
-              $39.00
+              $${cartTotal}
             </span>
           </div>
           <input type="hidden" name="method" value="cash" />
