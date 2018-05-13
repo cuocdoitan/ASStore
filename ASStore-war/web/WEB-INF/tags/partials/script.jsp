@@ -42,3 +42,4 @@
 <script src="<c:url value='/assets/js/dropzone.js'/>"></script>
 <script src="<c:url value='/assets/js/main.js'/>"></script>
 <script src="<c:url value='/assets/js/custom.js'/>"></script>
+<script src="<c:url value='/assets/js/feedback.js'/>"></script>

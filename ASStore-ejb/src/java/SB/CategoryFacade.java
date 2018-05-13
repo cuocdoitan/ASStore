@@ -6,9 +6,12 @@
 package SB;
 
 import Models.Category;
+import Models.Feedback;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -28,5 +31,14 @@ public class CategoryFacade extends AbstractFacade<Category> implements Category
     public CategoryFacade() {
         super(Category.class);
     }
+
+    @Override
+    public List<Category> getList() {
+        TypedQuery query = em.createNamedQuery("Category.findByEnabled", Feedback.class);
+        query.setParameter("enabled", true);
+        return query.getResultList();
+    }
+
+ 
     
 }
