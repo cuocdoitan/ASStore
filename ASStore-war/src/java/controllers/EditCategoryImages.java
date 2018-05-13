@@ -29,11 +29,11 @@ import javax.servlet.http.Part;
  *
  * @author Tien Phat
  */
-@WebServlet(name = "uploadImagesCreate", urlPatterns = {"/UploadCategoryImages"})
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10, // 10MB
-        maxRequestSize = 1024 * 1024 * 50)   // 50MB
-public class UploadCategoryImages extends HttpServlet {
+@WebServlet(name = "uploadImages", urlPatterns = {"/EditCategoryImages"})
+@MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
+                 maxFileSize=1024*1024*10,      // 10MB
+                 maxRequestSize=1024*1024*50)   // 50MB
+public class EditCategoryImages extends HttpServlet {
 
     @EJB
     private CategoryFacadeLocal categoryFacade;
@@ -50,39 +50,6 @@ public class UploadCategoryImages extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String image = getImageName(request, response);
-        String name = request.getParameter("name");
-        String errorMess = "";
-        Models.Category category = new Models.Category();
-        category.setId(0);
-        category.setEnabled(true);
-        boolean error = false;
-        if (name.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Name Category can't be blank" : errorMess;
-            error = true;
-        } else {
-            request.setAttribute("name", name);
-            category.setName(name);
-        }
-        if (image.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Image Category can't be blank" : errorMess;
-            error = true;
-        }else{
-            request.setAttribute("image", image);
-            category.setPicture(image);
-        }
-        if(error){
-            request.setAttribute("error", errorMess);
-            request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
-        }
-        
-        try {
-            categoryFacade.create(category);
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        response.sendRedirect(request.getContextPath() + "/admin/category/list");
     }
 
     /**
@@ -96,71 +63,53 @@ public class UploadCategoryImages extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         String image = getImageName(request, response);
         String name = request.getParameter("name");
-        String errorMess = "";
-        Models.Category category = new Models.Category();
-        category.setId(0);
-        category.setEnabled(true);
-        boolean error = false;
-        if (name.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Name Category can't be blank" : errorMess;
-            error = true;
-        } else {
-            request.setAttribute("name", name);
-            category.setName(name);
-        }
-        if (image.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Image Category can't be blank" : errorMess;
-            error = true;
-        }else{
-            request.setAttribute("image", image);
-            category.setPicture(image);
-        }
-        if(error){
-            request.setAttribute("error", errorMess);
-            request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
-        }
+        String id = request.getParameter("id");
+        Models.Category category = categoryFacade.find(Integer.parseInt(id));
+        category.setName(name);
         
+        category.setPicture(image);
         try {
-            categoryFacade.create(category);
+            categoryFacade.edit(category);
         } catch (Exception e) {
             System.out.println(e.toString());
         }
         response.sendRedirect(request.getContextPath() + "/admin/category/list");
     }
-
+    
     protected String getImageName(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException{
         String imageResourceAbsolutePath = getImageResourceAbsolutePath(request);
-        for (Part part : request.getParts()) {
+        for(Part part : request.getParts()){
             String imageName = extractFileName(part);
             imageName = new File(imageName).getName();
-            if (!imageName.equals("")) {
+            if(!imageName.equals("")){
                 try {
                     InputStream inputStream = part.getInputStream();
                     String fileName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + imageName;
                     String imageAbsolutePath = imageResourceAbsolutePath + fileName;
                     File fileSaveDir = new File(imageAbsolutePath);
-
+                    
                     BufferedImage e = ImageIO.read(inputStream);
                     ImageIO.write(e, "png", fileSaveDir);
                     inputStream.close();
                     return fileName;
                 } catch (IOException fne) {
                     LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                            new Object[]{fne.getMessage()});
+                        new Object[]{fne.getMessage()});
                 }
-
+                
             }
         }
         return "";
     }
+            
 
-    private String getImageResourceAbsolutePath(HttpServletRequest request) {
+    
+    private String getImageResourceAbsolutePath(HttpServletRequest request){
         String appPath = request.getServletContext().getRealPath("");
-        String dist = "dist" + File.separator + "gfdeploy";
+        String dist = "dist"+File.separator+"gfdeploy";
         int distPosition = appPath.indexOf(dist);
         String projectPath = appPath.substring(0, distPosition - 1);
         String contextPath = request.getContextPath();
@@ -168,19 +117,19 @@ public class UploadCategoryImages extends HttpServlet {
         String imageResourceAbsolutePath = projectPath + contextPath + imageResourcePath;
         return imageResourceAbsolutePath;
     }
-
+  
     private String extractFileName(Part part) {
-        String contentDisp = part.getHeader("content-disposition");
-        String[] items = contentDisp.split(";");
-        System.out.println("number of items : " + items.length);
-        for (String s : items) {
-            System.out.println("extracted string : " + s);
-
-            if (s.trim().startsWith("filename")) {
-                return s.substring(s.indexOf("=") + 2, s.length() - 1);
-            }
+    String contentDisp = part.getHeader("content-disposition");
+    String[] items = contentDisp.split(";");
+        System.out.println("number of items : "+items.length);
+    for (String s : items) {
+        System.out.println("extracted string : "+s);
+        
+        if (s.trim().startsWith("filename")) {
+            return s.substring(s.indexOf("=") + 2, s.length()-1);
         }
-        return "";
     }
+    return "";
+  }
 
 }

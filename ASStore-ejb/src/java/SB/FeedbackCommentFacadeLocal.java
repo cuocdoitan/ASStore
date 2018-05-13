@@ -5,6 +5,7 @@
  */
 package SB;
 
+import Models.Feedback;
 import Models.FeedbackComment;
 import java.util.List;
 import javax.ejb.Local;
@@ -30,5 +31,5 @@ public interface FeedbackCommentFacadeLocal {
 
     int count();
     
-    
+    public List<FeedbackComment> getList();
 }

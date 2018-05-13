@@ -48,7 +48,7 @@ public class Category extends HttpServlet {
       String clientRequest = request.getPathInfo();
         switch (clientRequest) {
             case "/list":
-                java.util.List<Models.Category> listCategory = categoryFacade.findAll();
+                java.util.List<Models.Category> listCategory = categoryFacade.getList();
                 request.setAttribute("listCategory", listCategory);
                 request.getRequestDispatcher("/user/categoryList.jsp").forward(request, response);
                 break;

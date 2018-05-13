@@ -53,7 +53,6 @@
                     </tr>
                 </c:forEach>
             </data>
-
         </table>
     </div>
 </div>

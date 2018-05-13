@@ -5,7 +5,7 @@
  */
 package controllers;
 
-import SB.CategoryFacadeLocal;
+import SB.AnimeFacadeLocal;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -14,8 +14,8 @@ import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.ejb.EJB;
 import java.util.logging.Level;
+import javax.ejb.EJB;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -29,60 +29,19 @@ import javax.servlet.http.Part;
  *
  * @author Tien Phat
  */
-@WebServlet(name = "uploadImagesCreate", urlPatterns = {"/UploadCategoryImages"})
+@WebServlet(name = "uploadImages", urlPatterns = {"/UploadAnimeImages"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50)   // 50MB
-public class UploadCategoryImages extends HttpServlet {
+public class UploadAnimeImages extends HttpServlet {
 
     @EJB
-    private CategoryFacadeLocal categoryFacade;
+    private AnimeFacadeLocal animeFacade;
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String image = getImageName(request, response);
-        String name = request.getParameter("name");
-        String errorMess = "";
-        Models.Category category = new Models.Category();
-        category.setId(0);
-        category.setEnabled(true);
-        boolean error = false;
-        if (name.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Name Category can't be blank" : errorMess;
-            error = true;
-        } else {
-            request.setAttribute("name", name);
-            category.setName(name);
-        }
-        if (image.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Image Category can't be blank" : errorMess;
-            error = true;
-        }else{
-            request.setAttribute("image", image);
-            category.setPicture(image);
-        }
-        if(error){
-            request.setAttribute("error", errorMess);
-            request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
-        }
-        
-        try {
-            categoryFacade.create(category);
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        response.sendRedirect(request.getContextPath() + "/admin/category/list");
+
     }
 
     /**
@@ -96,43 +55,23 @@ public class UploadCategoryImages extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
         String image = getImageName(request, response);
         String name = request.getParameter("name");
-        String errorMess = "";
-        Models.Category category = new Models.Category();
-        category.setId(0);
-        category.setEnabled(true);
-        boolean error = false;
-        if (name.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Name Category can't be blank" : errorMess;
-            error = true;
-        } else {
-            request.setAttribute("name", name);
-            category.setName(name);
-        }
-        if (image.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Image Category can't be blank" : errorMess;
-            error = true;
-        }else{
-            request.setAttribute("image", image);
-            category.setPicture(image);
-        }
-        if(error){
-            request.setAttribute("error", errorMess);
-            request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
-        }
-        
+        String id = request.getParameter("id");
+
+        Models.Anime anime = animeFacade.find(Integer.parseInt(id));
+        anime.setName(name);
+        anime.setPicture(image);
         try {
-            categoryFacade.create(category);
+            animeFacade.edit(anime);
         } catch (Exception e) {
             System.out.println(e.toString());
         }
-        response.sendRedirect(request.getContextPath() + "/admin/category/list");
     }
 
     protected String getImageName(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         String imageResourceAbsolutePath = getImageResourceAbsolutePath(request);
         for (Part part : request.getParts()) {
             String imageName = extractFileName(part);
@@ -158,13 +97,14 @@ public class UploadCategoryImages extends HttpServlet {
         return "";
     }
 
-    private String getImageResourceAbsolutePath(HttpServletRequest request) {
+
+private String getImageResourceAbsolutePath(HttpServletRequest request) {
         String appPath = request.getServletContext().getRealPath("");
         String dist = "dist" + File.separator + "gfdeploy";
         int distPosition = appPath.indexOf(dist);
         String projectPath = appPath.substring(0, distPosition - 1);
         String contextPath = request.getContextPath();
-        String imageResourcePath = File.separator + "web" + File.separator + "assets" + File.separator + "img" + File.separator + "categories" + File.separator;
+        String imageResourcePath = File.separator + "web" + File.separator + "assets" + File.separator + "img" + File.separator + "products" + File.separator;
         String imageResourceAbsolutePath = projectPath + contextPath + imageResourcePath;
         return imageResourceAbsolutePath;
     }
