@@ -30,4 +30,5 @@ public interface FeedbackFacadeLocal {
 
     int count();
     
+    public List<Feedback> getList();
 }

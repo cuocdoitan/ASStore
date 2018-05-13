@@ -15,19 +15,19 @@
         <div class="container">
             <h2>NEW FEEDBACK</h2><br><br>
             <form method="post" action="<c:url value='/feedbacks/create' />">
+                <p style="color: red">${error}</p>
                 <label>Title Feedback</label>
                 <div class="bo4 of-hidden size15 m-b-20">
-                    <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="id">
+                    <input class="sizefull s-text7 p-l-22 p-r-22"  type="text" name="id">
                 </div>
                 <div class="bo4 of-hidden size15 m-b-20">
-                    <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="datefeedback">
-                </div>
-                <div class="bo4 of-hidden size15 m-b-20">
-                    <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="title" placeholder="Title Feedback">
+                    <input class="sizefull s-text7 p-l-22 p-r-22" value="${title}" type="text" name="title" placeholder="Title Feedback">
                 </div>
                 <label>Content Feedback</label>
                 <div class="bo4 of-hidden m-b-20">
-                    <textarea style="width: 100%; border: none; padding: 20px" rows="10" name="content" placeholder="Enter Feedback Content"></textarea>
+                    <textarea style="width: 100%; border: none; padding: 20px" rows="10" name="content" placeholder="Enter Feedback Content">
+                        ${content}
+                    </textarea>
                 </div>
                 <br/>
                 <br/>

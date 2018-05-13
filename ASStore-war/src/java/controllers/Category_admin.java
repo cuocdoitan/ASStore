@@ -10,7 +10,6 @@ import Models.Category;
 import SB.CategoryFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -71,7 +70,7 @@ public class Category_admin extends HttpServlet {
         String clientRequest = request.getPathInfo();
         switch (clientRequest) {
             case "/list":
-                List<Category> listCategory = categoryFacade.findAll();
+                List<Category> listCategory = categoryFacade.getList();
                 request.setAttribute("listCategory", listCategory);
                 request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
                 break;
@@ -85,7 +84,8 @@ public class Category_admin extends HttpServlet {
                 break;
             case "/delete":
                 Models.Category category1 = categoryFacade.find(Integer.parseInt(request.getParameter("id")));
-                categoryFacade.remove(category1);
+                category1.setEnabled(false);
+                categoryFacade.edit(category1);
                 request.getRequestDispatcher("/admin/category/list").forward(request, response);
                 break;
             default:
@@ -112,7 +112,12 @@ public class Category_admin extends HttpServlet {
             case "/create":
                 request.getRequestDispatcher("/UploadCategoryImages").forward(request, response);
                 break;
-            
+            case "/edit":
+                request.getRequestDispatcher("/EditCategoryImages").forward(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                break;
         }
     }
 
