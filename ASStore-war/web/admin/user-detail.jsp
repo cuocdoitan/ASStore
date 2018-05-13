@@ -12,22 +12,19 @@
     <div class="row">
       <div class="col-6 m-t-20 m-l-r-auto">
         <div class="m-b-10">
-          <img src="<c:url value="/assets/img/avatars/user_1.jpg" />" width="200" height="200">
+          Phone number: ${user.phoneNumber}
         </div>
         <div class="m-b-10">
-          Phone number: 0922102133
+          First name: ${user.firstName}
         </div>
         <div class="m-b-10">
-          First name: Nguyen
-        </div>
-        <div class="m-b-10">
-          Last name: Viet Hung
+          Last name: ${user.lastName}
         </div> 
         <div class="m-b-10">
-          Address: 590 CMT8, District 3, HCM City
+          Address: ${user.address}
         </div>
         <div class="m-b-10">
-          Email: viethungax@gmail.com
+          Email: ${user.email}
         </div>
       </div>
     </div>
