@@ -58,7 +58,7 @@ public class Index extends HttpServlet {
         for(Product product : productFacade.getListProductSortedDesc()){
             listProductIndex.add(product);
             numberOfProduct++;
-            if(numberOfProduct==9){
+            if(numberOfProduct==8){
                 break;
             }
         }

@@ -18,5 +18,4 @@
             </div>
         </div>
     </div>
-    <script src="<c:url value="/assets/js/custom-showList.js" />" type="text/javascript"></script>
 </t:adminLayout>

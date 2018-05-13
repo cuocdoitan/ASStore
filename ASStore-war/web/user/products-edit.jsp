@@ -61,10 +61,10 @@
       </div>
       <hr>
       
-      <input type="hidden" name="image1" value="${images[0]}"/>
-      <input type="hidden" name="image2" value="${images[1]}"/>
-      <input type="hidden" name="image3" value="${images[2]}"/>
-      <input type="hidden" name="image4" value="${images[3]}"/>
+      <input type="hidden" name="image1" class="image" value="<c:url value="/assets/img/products/${images[0]}"/>"/>
+      <input type="hidden" name="image2" class="image" value="<c:url value="/assets/img/products/${images[1]}"/>"/>
+      <input type="hidden" name="image3" class="image" value="<c:url value="/assets/img/products/${images[2]}"/>"/>
+      <input type="hidden" name="image4" class="image" value="<c:url value="/assets/img/products/${images[3]}"/>"/>
     </form>
       <label>Product images <span style="color: red">*Require at least 1 image, max is 4 images.</span></label>
     <form class="dropzone" method="post" action="<c:url value="/uploadProductImages"/>" enctype="" id="imageUpload">

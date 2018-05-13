@@ -5,7 +5,6 @@
  */
 package BusinessLogic;
 
-import Others.ImageName_JSON;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.awt.image.BufferedImage;
 import java.io.File;

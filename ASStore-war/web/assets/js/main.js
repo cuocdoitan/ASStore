@@ -178,7 +178,8 @@
     $('.btn-num-product-up').on('click', function(e){
         e.preventDefault();
         var numProduct = Number($(this).prev().val());
-        if ($(this).prev().val() < $(this).prev().attr("max")) {
+        var max = Number($(this).prev().attr("max"));
+        if (numProduct < max) {
             $(this).prev().val(numProduct + 1);
         }
     });

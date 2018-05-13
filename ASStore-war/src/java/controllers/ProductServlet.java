@@ -65,20 +65,13 @@ public class ProductServlet extends HttpServlet {
         String clientRequest = request.getPathInfo();
         switch (clientRequest) {
             case "/list":
-                java.util.List<Product> listProduct = productFacade.getListProductSortedDesc();
-                request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
-                request.setAttribute("listProduct", listProduct);
-                request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
+                listPage(request, response);
                 break;
             case "/new-product":
-                request.setAttribute("categories", categoryFacade.findAll());
-                request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
+                createProductPage(request, response);
                 break;
             case "/details":
-                int productId_detail = Integer.parseInt(request.getParameter("id"));
-                request.setAttribute("product", productFacade.find(productId_detail));
-                //request.setAttribute("images", mediaFacade.getImagesFromProduct(productFacade.find(productId_detail)));
-                request.getRequestDispatcher("/user/products-details.jsp").forward(request, response);
+                detailsPage(request, response);
                 break;
             case "/edit":
                 editPage(request, response);
@@ -86,26 +79,55 @@ public class ProductServlet extends HttpServlet {
             case "/repair-product":
                 repairPage(request, response);
                 break;
-            case "/search":
-                
-                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
         }
     }
-    
-    
+
+    protected void listPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="show list product and list searched product">
+        String productName = request.getParameter("productName");
+        String animeName = request.getParameter("animeName");
+        String category = request.getParameter("category");
+        String minPrice = request.getParameter("minPrice");
+        String maxPrice = request.getParameter("maxPrice");
+        
+        java.util.List<Product> listProduct = productFacade.getListProductSortedDesc();
+        request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
+        request.setAttribute("listProduct", listProduct);
+        request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
+        //</editor-fold>
+    }
+
+    protected void createProductPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="go to create product page">
+        request.setAttribute("categories", categoryFacade.findAll());
+        request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
+        //</editor-fold>
+    }
+
+    protected void detailsPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="go to details page">
+        int productId_detail = Integer.parseInt(request.getParameter("id"));
+        request.setAttribute("product", productFacade.find(productId_detail));
+        request.getRequestDispatcher("/user/products-details.jsp").forward(request, response);
+        //</editor-fold>
+    }
+
     protected void editPage(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to edit page">
-        int productId_edit= Integer.parseInt(request.getParameter("id"));
+        int productId_edit = Integer.parseInt(request.getParameter("id"));
         Product product_edit = productFacade.find(productId_edit);
         request.setAttribute("product", product_edit);
         request.setAttribute("categories", categoryFacade.findAll());
         String[] arrImage_edit = {"", "", "", ""};
         int i = 0;
-        for(Media media : product_edit.getMediaCollection()){
+        for (Media media : product_edit.getMediaCollection()) {
             arrImage_edit[i] = media.getUrlImage();
             i++;
         }
@@ -113,13 +135,13 @@ public class ProductServlet extends HttpServlet {
         request.getRequestDispatcher("/user/products-edit.jsp").forward(request, response);
         //</editor-fold>
     }
-    
+
     protected void repairPage(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to repair page">
-        int productId_repair= Integer.parseInt(request.getParameter("id"));
+        int productId_repair = Integer.parseInt(request.getParameter("id"));
         Product product_repair = productFacade.find(productId_repair);
-        if(product_repair.getStatus() != 2){
+        if (product_repair.getStatus() != 2) {
             response.sendRedirect(request.getHeader("referer"));
             return;
         }
@@ -127,7 +149,7 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("categories", categoryFacade.findAll());
         String[] arrImage = {"", "", "", ""};
         int j = 0;
-        for(Media media : product_repair.getMediaCollection()){
+        for (Media media : product_repair.getMediaCollection()) {
             arrImage[j] = media.getUrlImage();
             j++;
         }
@@ -176,8 +198,6 @@ public class ProductServlet extends HttpServlet {
         }
 
     }
-    
-    
 
     protected void insertNewProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -208,7 +228,7 @@ public class ProductServlet extends HttpServlet {
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Problems during insert product", e.getMessage());
         }
-         //</editor-fold>
+        //</editor-fold>
     }
 
     protected void uploadProductMedia(HttpServletRequest request, HttpServletResponse response, Product productId)
@@ -232,14 +252,14 @@ public class ProductServlet extends HttpServlet {
                 } catch (Exception e) {
                     LOGGER.log(Level.SEVERE, "Problems during saving image name", e.getMessage());
                 }
-                
+
             }
         }
         //</editor-fold>
     }
-    
+
     protected void editProduct(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException{
+            throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="action edit product">
         int productId = Integer.parseInt(request.getParameter("productId"));
         String name = request.getParameter("name");
@@ -258,7 +278,7 @@ public class ProductServlet extends HttpServlet {
         //Produc before
         Product productBefore = productFacade.find(productId);
         //new Product
-        Models.Product editedProduct = new Product(productId, name, description, price, quantity,productBefore.getCreateAt() , true);
+        Models.Product editedProduct = new Product(productId, name, description, price, quantity, productBefore.getCreateAt(), true);
         editedProduct.setUsersId(user);
         editedProduct.setAnimeId(anime);
         editedProduct.setCategoryId(category);
@@ -272,20 +292,20 @@ public class ProductServlet extends HttpServlet {
             LOGGER.log(Level.SEVERE, "Problems during edit product", e.getMessage());
         }
         //</editor-fold>
-  }
-    
+    }
+
     protected void editProductMedia(HttpServletRequest request, HttpServletResponse response, Product productId)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="action edit product image">
-        for(Media media : productId.getMediaCollection()){
+        for (Media media : productId.getMediaCollection()) {
             mediaFacade.remove(media);
         }
         uploadProductMedia(request, response, productId);
         //</editor-fold>
     }
-  
-  protected void repairProduct(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException{
+
+    protected void repairProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="action repair product image">
         int productId = Integer.parseInt(request.getParameter("productId"));
         //Product before
@@ -304,38 +324,38 @@ public class ProductServlet extends HttpServlet {
         int categoryId = Integer.parseInt(request.getParameter("category"));
         Models.Category category = categoryFacade.find(categoryId);
         //new Product
-        Models.Product editedProduct = new Product(productId, name, description, price, quantity,productBefore.getCreateAt() , true);
+        Models.Product editedProduct = new Product(productId, name, description, price, quantity, productBefore.getCreateAt(), true);
         editedProduct.setUsersId(user);
         editedProduct.setAnimeId(anime);
         editedProduct.setCategoryId(category);
         editedProduct.setStatus(Short.parseShort("0"));
-        if(productBefore.getUpdateAt() != null){
+        if (productBefore.getUpdateAt() != null) {
             editedProduct.setUpdateAt(new Date());
         }
         editedProduct.setAlertNote("");
         try {
             productFacade.edit(editedProduct);
             editProductMedia(request, response, productFacade.find(editedProduct.getId()));
-            
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Problems during editing product", e.getMessage());
         }
         //</editor-fold>  
-  }
-  
-  protected void deleteProduct(HttpServletRequest request, HttpServletResponse response)
-          throws ServletException, IOException{
-      //<editor-fold defaultstate="collapsed" desc="action delete product">
-      int id = Integer.parseInt(request.getParameter("id"));
-      try {
-          Product product = productFacade.find(id);
-          product.setEnabled(false);
-          productFacade.edit(product);
-          
-      } catch (Exception e) {
-          LOGGER.log(Level.SEVERE, "Problems during deleting product", e.getMessage());
-      }
-      //</editor-fold> 
-  }
-  
+    }
+
+    protected void deleteProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="action delete product">
+        int id = Integer.parseInt(request.getParameter("id"));
+        try {
+            Product product = productFacade.find(id);
+            product.setEnabled(false);
+            productFacade.edit(product);
+
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Problems during deleting product", e.getMessage());
+        }
+        //</editor-fold> 
+    }
+
 }

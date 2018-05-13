@@ -158,7 +158,6 @@ public class Products_admin extends HttpServlet {
     protected void approveProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="action approve product">
-        System.out.println("approve");
         int productId = Integer.parseInt(request.getParameter("id"));
         Product product = productFacade.find(productId);
         product.setStatus(Short.parseShort("1"));

@@ -50,10 +50,10 @@
       </div>
       <hr>
 
-      <input type="hidden" name="image1" value=""/>
-      <input type="hidden" name="image2" value=""/>
-      <input type="hidden" name="image3" value=""/>
-      <input type="hidden" name="image4" value=""/>
+      <input type="hidden" class="image"  name="image1" value=""/>
+      <input type="hidden" class="image"  name="image2" value=""/>
+      <input type="hidden" class="image" name="image3" value=""/>
+      <input type="hidden" class="image" name="image4" value=""/>
     </form>
       <label>Product images <span style="color: red">*Require at least 1 image, max is 4 images.</span></label>
     <form class="dropzone" method="post" action="<c:url value="/uploadProductImages"/>" enctype="" id="imageUpload">
