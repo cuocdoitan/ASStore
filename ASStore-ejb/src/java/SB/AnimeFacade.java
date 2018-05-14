@@ -30,7 +30,7 @@ public class AnimeFacade extends AbstractFacade<Anime> implements AnimeFacadeLoc
     public AnimeFacade() {
         super(Anime.class);
     }
-
+  
     @Override
     public List<Anime> getAll() {
         return findAll();

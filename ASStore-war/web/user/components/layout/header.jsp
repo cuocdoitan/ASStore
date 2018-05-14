@@ -29,7 +29,7 @@
             </li>
             
             <li>
-              <a href="<c:url value="/category"/>">Categories</a>
+              <a href="<c:url value="/category/list"/>">Categories</a>
             </li>
 
             <li>
@@ -37,7 +37,7 @@
             </li>
 
             <li>
-                <a href="<c:url value="/feedback"/>">Feedback</a>
+                <a href="<c:url value="/feedbacks/list"/>">Feedback</a>
             </li>
           </ul>
         </nav>

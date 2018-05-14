@@ -9,37 +9,39 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <t:pureLayout>
-  <section class="p-t-150 p-b-60" style="background: url(<c:url value='/assets/img/login_banner.jpg' />); height: 100vh; background-size: cover;">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 p-b-30 p-t-30 p-l-30 p-r-30 bgwhite">
-          <form>
-            <h4 class="m-text26 p-b-36 p-t-15">
-              Login to AS Store
-            </h4>
+    <form method="post" action="<c:url value='/User/login'/>">
+        <section class="p-t-150 p-b-60" style="background: url(<c:url value='/assets/img/login_banner.jpg' />); height: 100vh; background-size: cover;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-6 p-b-30 p-t-30 p-l-30 p-r-30 bgwhite">
+                        <form>
+                            <h4 class="m-text26 p-b-36 p-t-15">
+                                Login to AS Store
+                            </h4>
+                            <p style="color: red">${error}</p>
+                            <div class="bo4 of-hidden size15 m-b-20">
+                                <input class="sizefull s-text7 p-l-22 p-r-22" type="phone" name="phone" placeholder="Phone number" value="${phone}">
+                            </div>
+                            
+                            <div class="bo4 of-hidden size15 m-b-20">
+                                <input class="sizefull s-text7 p-l-22 p-r-22" type="password" name="password" placeholder="Password" value="${pass}">
+                            </div>
+                            
+                            <div class="w-size25">
+                                <!-- Button -->
+                                <button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
+                                    Login
+                                </button>
+                            </div>
 
-            <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="phone" name="phone" placeholder="Phone number">
+                            <div class="m-t-20">
+                                <a href="#">Don't have an account? Create one now!</a>
+                            </div>
+                        </form>
+                    </div>
+                            
+                </div>
             </div>
-
-            <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="password" name="password" placeholder="Password">
-            </div>
-
-            <div class="w-size25">
-              <!-- Button -->
-              <button class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
-                Login
-              </button>
-            </div>
-            
-            <div class="m-t-20">
-              <a href="#">Don't have an account? Create one now!</a>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
+        </section>
+    </form>
 </t:pureLayout>

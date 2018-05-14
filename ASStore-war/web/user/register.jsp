@@ -13,37 +13,39 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6 p-b-30 p-t-30 p-l-30 p-r-30 bgwhite">
-          <form>
+            <form method="post" action="<c:url value='/User/create' />">
             <h4 class="m-text26 p-b-36 p-t-15">
               Sign up to AS Store
             </h4>
+            <p style="color: red">${error}</p>
+            <div class="bo4 of-hidden size15 m-b-20">
+              <input class="sizefull s-text7 p-l-22 p-r-22" value="${phone}" type="phone" name="phone" placeholder="Phone number">
+            </div>
+            
+            
+            <div class="bo4 of-hidden size15 m-b-20">
+              <input class="sizefull s-text7 p-l-22 p-r-22" type="text" value="${firstname}" name="first_name" placeholder="First name">
+            </div>
+            
+            <div class="bo4 of-hidden size15 m-b-20">
+              <input class="sizefull s-text7 p-l-22 p-r-22" type="text" value="${lastname}" name="last_name" placeholder="Last name">
+            </div>
 
             <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="phone" name="phone" placeholder="Phone number">
-            </div>
-            
-            <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="first_name" placeholder="First name">
-            </div>
-            
-            <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="last_name" placeholder="Last name">
+                <input class="sizefull s-text7 p-l-22 p-r-22" type="password" value="${password}" name="password" placeholder="Password">
             </div>
 
             <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="password" name="password" placeholder="Password">
+              <input class="sizefull s-text7 p-l-22 p-r-22" type="password"  name="confirm_password" placeholder="Confirm password">
             </div>
+
             
             <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="password" name="confirm_password" placeholder="Confirm password">
+                <input class="sizefull s-text7 p-l-22 p-r-22" type="text" value="${address}" name="address" placeholder="Address">
             </div>
-            
+
             <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="address" placeholder="Address">
-            </div>
-            
-            <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="email" name="email" placeholder="Email">
+                <input class="sizefull s-text7 p-l-22 p-r-22" type="email" value="${email}" name="email" placeholder="Email">
             </div>
 
             <div class="w-size25">
@@ -52,7 +54,7 @@
                 Sign up
               </button>
             </div>
-            
+            <p style="color: red">${error4}</p>
             <div class="m-t-20">
               <a href="#">Already have an account? Login now!</a>
             </div>
