@@ -6,6 +6,7 @@
 package SB;
 
 import Models.ProductRating;
+import java.text.DecimalFormat;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,15 +29,4 @@ public class ProductRatingFacade extends AbstractFacade<ProductRating> implement
     public ProductRatingFacade() {
         super(ProductRating.class);
     }
-    
-    public float getAverageRatingFromOneProduct(Models.Product product){
-        float total = 0;
-        for(ProductRating pr : product.getProductRatingCollection()){
-            float rating = (float)pr.getRating();
-            total = total + rating;
-        }
-        float average = total/product.getProductRatingCollection().size();
-        return average;
-    }
-    
 }

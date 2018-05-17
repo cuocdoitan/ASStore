@@ -7,6 +7,7 @@ package Models;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
@@ -301,6 +302,9 @@ public class Product implements Serializable {
         for(ProductRating productRating : this.getProductRatingCollection()){
             average = average + productRating.getRating()/this.getProductRatingCollection().size();
         }
-        return average;
+        DecimalFormat priceFormatter = new DecimalFormat("#0.00");
+        String formatedAverage = priceFormatter.format(average);
+        double result = Double.parseDouble(formatedAverage);
+        return result;
     }
 }

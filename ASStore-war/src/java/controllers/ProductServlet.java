@@ -58,8 +58,6 @@ public class ProductServlet extends HttpServlet {
 
     @EJB
     private ProductFacadeLocal productFacade;
-    
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -228,14 +226,14 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("product", product);
         request.setAttribute("similarProducts", productFacade.getRandomProductSameAnime(product));
         Integer sessionUserId = (Integer) request.getSession().getAttribute("userid");
-        if(sessionUserId != null){
-            for(ProductRating productRating : product.getProductRatingCollection()){
-                if(productRating.getUsersId().getId() == sessionUserId){
-                    request.setAttribute("ratedStars", productRating.getRating());
+        if (sessionUserId != null) {
+            for (ProductRating productRating : product.getProductRatingCollection()) {
+                if (productRating.getUsersId().getId() == sessionUserId) {
+                    request.setAttribute("ratedStars", productRating);
                     break;
                 }
             }
-            
+
         }
         request.getRequestDispatcher("/user/products-details.jsp").forward(request, response);
         //</editor-fold>
@@ -308,7 +306,6 @@ public class ProductServlet extends HttpServlet {
         String anime = request.getParameter("anime");
         String description = request.getParameter("description");
         String image1 = request.getParameter("image1");
-        
 
         String errName = "";
         String errQuantity = "";
@@ -316,8 +313,6 @@ public class ProductServlet extends HttpServlet {
         String errAnime = "";
         String errDescription = "";
         String errImage = "";
-        
-        
 
         //check name
         if (name.trim().equals("")) {
@@ -342,12 +337,12 @@ public class ProductServlet extends HttpServlet {
             errQuantity = errQuantity.equals("") ? "Invalid number" : errQuantity;
             isInt = false;
         }
-        if(isInt){
-            if(intQuantity <= 0){
+        if (isInt) {
+            if (intQuantity <= 0) {
                 errQuantity = errQuantity.equals("") ? "Must be more than 0" : errQuantity;
             }
         }
-        
+
         //check price
         if (price.trim().equals("")) {
             errPrice = errPrice.equals("") ? "This field cannot be blank" : errPrice;
@@ -369,22 +364,22 @@ public class ProductServlet extends HttpServlet {
             if (compareMax == 0 || compareMax == 1) {
                 errPrice = errPrice.equals("") ? "Price can't be no more than 10000 $" : errPrice;
             }
-            
+
         }
 
         //check anime
-        if(anime.length() > 100){
+        if (anime.length() > 100) {
             errAnime = errAnime.equals("") ? "Can input no more than 100 characters" : errAnime;
         }
-        if(animeFacade.findAnimeByName(anime) == null){
+        if (animeFacade.findAnimeByName(anime) == null) {
             errAnime = errAnime.equals("") ? "This anime is not exist" : errAnime;
         }
         //check description
-        if(description.length()<=10 || description.length() > 500){
+        if (description.length() <= 10 || description.length() > 500) {
             errDescription = errDescription.equals("") ? "Need at least 10 characters and no more than 500 characters" : errDescription;
         }
         //check image
-        if(image1.equals("")){
+        if (image1.equals("")) {
             errImage = errImage.equals("") ? "Require at least 1 image" : errImage;
         }
         //errors
@@ -419,8 +414,14 @@ public class ProductServlet extends HttpServlet {
         }
         String clientRequest = request.getPathInfo();
         switch (clientRequest) {
-            case "/rating":
-                ratingProduct(request, response);
+            case "/createNewRating":
+                createRatingProduct(request, response);
+                break;
+            case "/editRating":
+                editRatingProduct(request, response);
+                break;
+            case "/cancelRating":
+                cancelRating(request, response);
                 break;
             case "/insert":
                 insertNewProduct(request, response);
@@ -575,33 +576,89 @@ public class ProductServlet extends HttpServlet {
         }
         //</editor-fold> 
     }
-    
-    protected void ratingProduct(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+
+    protected void createRatingProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="action rating product">
         double rating = Double.parseDouble(request.getParameter("rating"));
         int productId = Integer.parseInt(request.getParameter("productId"));
+        int userId = Integer.parseInt(request.getParameter("userId"));
         Product product = productFacade.find(productId);
         //new product rating
         ProductRating rate = new ProductRating();
         rate.setId(0);
         rate.setProductId(product);
         rate.setRating(rating);
-        rate.setUsersId(usersFacade.find(request.getSession().getAttribute("userid")));
+        rate.setUsersId(usersFacade.find(userId));
         try {
             productRatingFacade.create(rate);
-            Product addRatingProduct = addRatingToProduct(product, rate);
-            productFacade.edit(addRatingProduct);
+            Product addedRatingProduct = addRatingToProduct(product, rate);
+            productFacade.edit(addedRatingProduct);
+            request.setAttribute("product", addedRatingProduct);
+            request.setAttribute("ratedStars", productRatingFacade.find(rate.getId()));
+            request.getRequestDispatcher("/user/components/productDetails/rating.jsp").forward(request, response);
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Problems during rating product", e.getMessage());
+            LOGGER.log(Level.SEVERE, "Problems during create rating product", e.getMessage());
         }
         //</editor-fold> 
     }
-    
-    protected Product addRatingToProduct(Product product, ProductRating rate){
+
+    protected Product addRatingToProduct(Product product, ProductRating rate) {
         ProductRating pr = productRatingFacade.find(rate.getId());
         product.getProductRatingCollection().add(pr);
         return product;
+    }
+
+    protected void editRatingProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="action edit rating product">
+        double rating = Double.parseDouble(request.getParameter("rating"));
+        int ratingId = Integer.parseInt(request.getParameter("ratingId"));
+        ProductRating productRating = productRatingFacade.find(ratingId);
+        productRating.setRating(rating);
+        try {
+            productRatingFacade.edit(productRating);
+
+            Product editedProduct = productRating.getProductId();
+            for (ProductRating pr : editedProduct.getProductRatingCollection()) {
+                if (pr.getId() == productRating.getId()) {
+                    pr = productRating;
+                    break;
+                }
+            }
+            productFacade.edit(editedProduct);
+            request.setAttribute("product", editedProduct);
+            request.setAttribute("ratedStars", productRatingFacade.find(productRating.getId()));
+            request.getRequestDispatcher("/user/components/productDetails/rating.jsp").forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Problems during edit rating product", e.getMessage());
+        }
+        //</editor-fold> 
+
+    }
+
+    protected void cancelRating(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="action terminate rating product">
+        int ratingId = Integer.parseInt(request.getParameter("ratingId"));
+        ProductRating deleteProductRating = productRatingFacade.find(ratingId);
+        Product editedProduct = deleteProductRating.getProductId();
+        for (ProductRating pr : editedProduct.getProductRatingCollection()) {
+            if (pr.getId() == deleteProductRating.getId()) {
+                int deletePosition = editedProduct.getProductRatingCollection().indexOf(pr);
+                editedProduct.getProductRatingCollection().remove(deletePosition);
+                break;
+            }
+        }
+        try {
+            productFacade.edit(editedProduct);
+            productRatingFacade.remove(deleteProductRating);
+            request.setAttribute("product", productFacade.find(editedProduct.getId()));
+            request.getRequestDispatcher("/user/components/productDetails/rating.jsp").forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Problems during terminate rating product", e.getMessage());
+        }
+        //</editor-fold> 
     }
 
 }

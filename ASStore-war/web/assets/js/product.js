@@ -1,6 +1,8 @@
 /* 
  * ************************************USER*************************************
  */
+
+
 $("#formInsertProduct").submit(function (e) {
 
 });
@@ -13,10 +15,52 @@ $(function () {
 
 
 $(function () {
-    $('.rating input[type=radio]').change(function () {
-        
+    $('#newRating input[type=radio]').change(function () {
+        var rating = $(this).val();
+        $.ajax({
+            url: $("#urlProject").val() + '/products/createNewRating',
+            type: 'post',
+            data: {
+                productId: $("input[name=productId]").val(),
+                userId: $("input[name=userId]").val(),
+                rating: rating
+            },
+            success: function (data, textStatus, jqXHR) {
+                $("#RatingProductListContent_User").html(data);
+            }
+        });
+    });
+
+    $('#editRating input[type=radio]').change(function () {
+        var rating = $(this).val();
+        $.ajax({
+            url: $("#urlProject").val() + '/products/editRating',
+            type: 'post',
+            data: {
+                ratingId: $("input[name=ratingId]").val(),
+                rating: rating
+            },
+            success: function (data, textStatus, jqXHR) {
+                $("#RatingProductListContent_User").html(data);
+            }
+        });
+    });
+    
+    $('#cancelRating').click(function () {
+        $.ajax({
+            url: $("#urlProject").val() + '/products/cancelRating',
+            type: 'post',
+            data: {
+                ratingId: $("input[name=ratingId]").val()
+            },
+            success: function (data, textStatus, jqXHR) {
+                $("#RatingProductListContent_User").html(data);
+            }
+        });
     });
 });
+
+
 
 function validateProductSubmit_user() {
     clearErrorTexts();
@@ -42,8 +86,8 @@ function validateProductSubmit_user() {
                 $("#errAnime").text(result.errAnime);
                 $("#errDescription").text(result.errDescription);
                 $("#errImage").text(result.errImage);
-                if (result.errName === "" && result.errQuantity === "" &&  result.errPrice === "" &&  result.errAnime === "" &&  result.errDescription === "" &&  result.errImage === "") {
-                    if (confirm("Last check !")){
+                if (result.errName === "" && result.errQuantity === "" && result.errPrice === "" && result.errAnime === "" && result.errDescription === "" && result.errImage === "") {
+                    if (confirm("Last check !")) {
                         $("#formSubmitProduct").submit();
                     }
                 }
