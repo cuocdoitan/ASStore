@@ -8,11 +8,13 @@ package controllers;
 import Models.Media;
 import Models.Product;
 import Models.Users;
+import Models.ProductRating;
 import SB.AnimeFacadeLocal;
 import SB.CategoryFacadeLocal;
 import java.util.List;
 import SB.MediaFacadeLocal;
 import SB.ProductFacadeLocal;
+import SB.ProductRatingFacadeLocal;
 import SB.UsersFacadeLocal;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.io.IOException;
@@ -40,6 +42,9 @@ import org.json.simple.JSONObject;
 public class ProductServlet extends HttpServlet {
 
     @EJB
+    private ProductRatingFacadeLocal productRatingFacade;
+
+    @EJB
     private UsersFacadeLocal usersFacade;
 
     @EJB
@@ -53,6 +58,8 @@ public class ProductServlet extends HttpServlet {
 
     @EJB
     private ProductFacadeLocal productFacade;
+    
+    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -217,8 +224,19 @@ public class ProductServlet extends HttpServlet {
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to details page">
         int productId_detail = Integer.parseInt(request.getParameter("id"));
-        request.setAttribute("product", productFacade.find(productId_detail));
-        request.setAttribute("similarProducts", productFacade.getRandomProductSameAnime(productFacade.find(productId_detail)));
+        Product product = productFacade.find(productId_detail);
+        request.setAttribute("product", product);
+        request.setAttribute("similarProducts", productFacade.getRandomProductSameAnime(product));
+        Integer sessionUserId = (Integer) request.getSession().getAttribute("userid");
+        if(sessionUserId != null){
+            for(ProductRating productRating : product.getProductRatingCollection()){
+                if(productRating.getUsersId().getId() == sessionUserId){
+                    request.setAttribute("ratedStars", productRating.getRating());
+                    break;
+                }
+            }
+            
+        }
         request.getRequestDispatcher("/user/products-details.jsp").forward(request, response);
         //</editor-fold>
     }
@@ -395,14 +413,14 @@ public class ProductServlet extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         HttpSession session = request.getSession();
-        if (session == null) {
+        if (session.getAttribute("role") == null) {
             response.sendRedirect(request.getContextPath() + "/User/login");
             return;
         }
         String clientRequest = request.getPathInfo();
         switch (clientRequest) {
             case "/rating":
-                
+                ratingProduct(request, response);
                 break;
             case "/insert":
                 insertNewProduct(request, response);
@@ -556,6 +574,34 @@ public class ProductServlet extends HttpServlet {
             LOGGER.log(Level.SEVERE, "Problems during deleting product", e.getMessage());
         }
         //</editor-fold> 
+    }
+    
+    protected void ratingProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException{
+        //<editor-fold defaultstate="collapsed" desc="action rating product">
+        double rating = Double.parseDouble(request.getParameter("rating"));
+        int productId = Integer.parseInt(request.getParameter("productId"));
+        Product product = productFacade.find(productId);
+        //new product rating
+        ProductRating rate = new ProductRating();
+        rate.setId(0);
+        rate.setProductId(product);
+        rate.setRating(rating);
+        rate.setUsersId(usersFacade.find(request.getSession().getAttribute("userid")));
+        try {
+            productRatingFacade.create(rate);
+            Product addRatingProduct = addRatingToProduct(product, rate);
+            productFacade.edit(addRatingProduct);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Problems during rating product", e.getMessage());
+        }
+        //</editor-fold> 
+    }
+    
+    protected Product addRatingToProduct(Product product, ProductRating rate){
+        ProductRating pr = productRatingFacade.find(rate.getId());
+        product.getProductRatingCollection().add(pr);
+        return product;
     }
 
 }

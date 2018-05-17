@@ -134,9 +134,14 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
             return list;
         }else{
             List<Product> randomResult = new ArrayList<>();
+            List<Product> searched = new ArrayList<>(list);
             for(int i = 0; i<4;i++){
-                Product p = list.get(new Random().nextInt(list.size()));
-                randomResult.add(p);
+                int size = searched.size();
+                int deletePosition = new Random().nextInt(size);
+                Product p = searched.get(deletePosition);
+                randomResult.add(find(p.getId()));
+                
+                searched.remove(deletePosition);
             }
             return randomResult;
         }

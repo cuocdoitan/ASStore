@@ -10,19 +10,13 @@ $(function () {
         $("input[name=category]").val($(this).val());
     });
 });
-/*
- $("#productListSearch").submit(function (e){
- $.ajax({
- type: $(this).attr("method"),
- url: $(this).attr("action"),
- data: $(this).serialize(),
- success: function (data) {
- $("#ProductListContent_User").html(data);
- }
- });
- 
- });
- */
+
+
+$(function () {
+    $('.rating input[type=radio]').change(function () {
+        
+    });
+});
 
 function validateProductSubmit_user() {
     clearErrorTexts();
@@ -49,7 +43,9 @@ function validateProductSubmit_user() {
                 $("#errDescription").text(result.errDescription);
                 $("#errImage").text(result.errImage);
                 if (result.errName === "" && result.errQuantity === "" &&  result.errPrice === "" &&  result.errAnime === "" &&  result.errDescription === "" &&  result.errImage === "") {
-                    $("#formSubmitProduct").submit();
+                    if (confirm("Last check !")){
+                        $("#formSubmitProduct").submit();
+                    }
                 }
             }
 

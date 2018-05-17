@@ -296,5 +296,11 @@ public class Product implements Serializable {
         return "Models.Product[ id=" + id + " ]";
     }
 
-    
+    public double averageStars(){
+        double average = 0;
+        for(ProductRating productRating : this.getProductRatingCollection()){
+            average = average + productRating.getRating()/this.getProductRatingCollection().size();
+        }
+        return average;
+    }
 }

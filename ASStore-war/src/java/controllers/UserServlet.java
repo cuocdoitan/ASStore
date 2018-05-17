@@ -273,7 +273,7 @@ public class UserServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("phone", loginedUser.getPhoneNumber());
                 session.setAttribute("role", loginedUser.getRolesId());
-                request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/admin/products/list");
             } else {
                 request.setAttribute("phone", phone);
                 request.setAttribute("pass", password);

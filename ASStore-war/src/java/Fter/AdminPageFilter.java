@@ -108,10 +108,10 @@ public class AdminPageFilter implements Filter {
 
         Models.Roles role = (Models.Roles) session.getAttribute("role");
         if (role == null) {
-            res.sendRedirect(req.getContextPath() + "/User/login");
+            res.sendRedirect(req.getContextPath() + "/User/loginadmin");
         } else {
             if (role.getId() == 3) {
-                res.sendRedirect(req.getContextPath() + "/User/login");
+                res.sendRedirect(req.getContextPath() + "/User/loginadmin");
             } else {
                 chain.doFilter(req, res); // Logged-in user found, so just continue request.
             }

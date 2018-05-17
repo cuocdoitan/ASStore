@@ -71,22 +71,32 @@
                 </p>
             </div>
         </div>
+        <!-- Actions-->
+        <br/>
+        <c:if test="${product.usersId.id == sessionScope.userid}">
+            <a href="<c:url value="/products/edit?id=${product.id}" />">Edit</a>  ||
+            <a href="<c:url value="/products/repair-product?id=${product.id}"/>">Repair</a>
+        </c:if>
         <!-- Rating -->
-        <br/>
-        <a href="<c:url value="/products/edit?id=${product.id}" />">Edit</a>  ||
-        <a href="<c:url value="/products/repair-product?id=${product.id}"/>">Repair</a>
-        <h3>Please rate this product</h3>
-        <div class="p-l-10">
-            <div class="product-rating p-t-9">
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-                <span class="fa fa-star"></span>
-            </div>
-            <p>0/5 stars</p>
+        <div id="RatingProductListContent_User">
+            <jsp:include page="/user/components/productDetails/rating.jsp"/>
         </div>
+
+        <div class="p-l-10"></div>
+        <!--        <div class="p-l-10">
+                    <div class="product-rating p-t-9">
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                        <span class="fa fa-star"></span>
+                    </div>
+                    <p>0/5 stars</p>
+                </div>-->
         <br/>
+        <br/>
+        <br/>
+        <hr/>
         <!-- Another products -->
         <h3>Products with the same anime</h3>
         <div class="container">
@@ -103,5 +113,6 @@
                 </c:forEach>
             </div>
         </div>          
-    </div>             
+    </div>
+    <link href="<c:url value="/assets/css/star.css"/>" rel="stylesheet" type="text/css"/>
 </t:layout>
