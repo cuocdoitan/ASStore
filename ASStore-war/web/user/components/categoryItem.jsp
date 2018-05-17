@@ -10,7 +10,7 @@
 <div class="col-sm-10 col-md-8 col-lg-4 m-l-r-auto">
   <!-- block1 -->
   <div class="block1 hov-img-zoom pos-relative m-b-30">
-      <img src="<c:url value='/assets/img/categories/${param.image}'/>" alt="IMG-BENNER">
+      <img src="<c:url value='/assets/img/categories/${param.image}'/>" alt="IMG-BENNER" width="200px" height="200px">
 
     <div class="block1-wrapbtn w-size2">
       <!-- Button -->

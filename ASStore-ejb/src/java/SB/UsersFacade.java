@@ -6,9 +6,11 @@
 package SB;
 
 import Models.Users;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -30,14 +32,25 @@ public class UsersFacade extends AbstractFacade<Users> implements UsersFacadeLoc
     }
 
     @Override
-    public boolean checkLogin(String id, String password) {
-        Users e = find(id);
-        if (e != null) {
-            if (e.getPassword().equals(password)) {
-                return true;
-            }
+    public Users getUsersByPhone(String phone){
+        TypedQuery query = em.createQuery("SELECT u FROM Users u WHERE u.phoneNumber = ?1 and u.enabled = ?2", Users.class);
+        query.setParameter(1, phone);
+        query.setParameter(2, true);
+        List<Users> list = query.getResultList();
+        if(list.isEmpty()){
+            return null;
+        }else{
+            return list.get(0);
         }
-        return false;
     }
+
+    @Override
+    public List<Users> getList() {
+        TypedQuery query = em.createNamedQuery("Users.findByEnabled", Users.class);
+        query.setParameter("enabled", true);
+        return query.getResultList();
+    }
+
+    
 
 }

@@ -71,11 +71,13 @@ public class Anime implements Serializable {
         this.id = id;
     }
 
-    public Anime(Integer id, String picture, boolean enabled) {
+    public Anime(Integer id, String name, String description, String picture) {
         this.id = id;
+        this.name = name;
+        this.description = description;
         this.picture = picture;
-        this.enabled = enabled;
     }
+    
 
     public Integer getId() {
         return id;

@@ -5,30 +5,33 @@
  */
 package controllers;
 
+import java.util.List;
+import Models.Category;
+import SB.CategoryFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author TRAN HO QUANG
  */
 @WebServlet(name = "category_admin", urlPatterns = {"/admin/category/*"})
+@MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
+                 maxFileSize=1024*1024*10,      // 10MB
+                 maxRequestSize=1024*1024*50)   // 50MB
 public class Category_admin extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
+    @EJB
+    private CategoryFacadeLocal categoryFacade;
+
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -37,7 +40,7 @@ public class Category_admin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet category_admin</title>");            
+            out.println("<title>Servlet category_admin</title>");
             out.println("</head>");
             out.println("<body>");
             out.println("<h1>Servlet category_admin at " + request.getContextPath() + "</h1>");
@@ -58,22 +61,37 @@ public class Category_admin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+//        HttpSession sesion = request.getSession();
+//        if(sesion == null){
+//            requestsForClients(request, response);
+//        }else{
+//            requestsForUsers(request, response);
+//        }
         String clientRequest = request.getPathInfo();
-        switch(clientRequest){
+        switch (clientRequest) {
             case "/list":
+                List<Category> listCategory = categoryFacade.getList();
+                request.setAttribute("listCategory", listCategory);
                 request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
                 break;
             case "/create":
                 request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
                 break;
             case "/edit":
+                Models.Category category = categoryFacade.find(Integer.parseInt(request.getParameter("id")));
+                request.setAttribute("category", category);
                 request.getRequestDispatcher("/admin/category-edit.jsp").forward(request, response);
+                break;
+            case "/delete":
+                Models.Category category1 = categoryFacade.find(Integer.parseInt(request.getParameter("id")));
+                category1.setEnabled(false);
+                categoryFacade.edit(category1);
+                request.getRequestDispatcher("/admin/category/list").forward(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
         }
-        
     }
 
     /**
@@ -87,7 +105,20 @@ public class Category_admin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        System.out.println("do post");
+        String clientRequest = request.getPathInfo();
+        switch (clientRequest) {
+            case "/create":
+                request.getRequestDispatcher("/UploadCategoryImages").forward(request, response);
+                break;
+            case "/edit":
+                request.getRequestDispatcher("/EditCategoryImages").forward(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                break;
+        }
     }
 
     /**
@@ -100,4 +131,37 @@ public class Category_admin extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    public void requestsForUsers(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String clientRequest = request.getPathInfo();
+        switch (clientRequest) {
+            case "/list":
+                request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
+                break;
+            case "/create":
+                request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
+                break;
+            case "/edit":
+                request.getRequestDispatcher("/admin/category-edit.jsp").forward(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                break;
+        }
+    }
+
+    public void requestsForClients(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String clientRequest = request.getPathInfo();
+        switch (clientRequest) {
+            case "/list":
+                request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                break;
+        }
+    }
+    
+    
 }

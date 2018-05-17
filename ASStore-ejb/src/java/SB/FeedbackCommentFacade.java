@@ -5,10 +5,13 @@
  */
 package SB;
 
+import Models.Feedback;
 import Models.FeedbackComment;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -27,6 +30,13 @@ public class FeedbackCommentFacade extends AbstractFacade<FeedbackComment> imple
 
     public FeedbackCommentFacade() {
         super(FeedbackComment.class);
+    }
+
+    @Override
+    public List<FeedbackComment> getList() {
+        TypedQuery query = em.createNamedQuery("FeedbackComment.findByEnabled", Feedback.class);
+        query.setParameter("enabled", true);
+        return query.getResultList();
     }
     
 }

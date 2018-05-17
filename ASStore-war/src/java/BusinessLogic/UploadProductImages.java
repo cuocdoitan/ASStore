@@ -30,7 +30,7 @@ import org.json.simple.JSONArray;
  *
  * @author Tien Phat
  */
-@WebServlet(name = "uploadImages", urlPatterns = {"/uploadProductImages"})
+@WebServlet(name = "uploadProductImages", urlPatterns = {"/uploadProductImages"})
 @MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
                  maxFileSize=1024*1024*10,      // 10MB
                  maxRequestSize=1024*1024*50)   // 50MB
@@ -64,7 +64,7 @@ public class UploadProductImages extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
-        String imageResourceAbsolutePath = getImageResourceAbsolutePath(request);
+        String imageResourceAbsolutePath = getServletContext().getRealPath("assets/img/products/");
         for(Part part : request.getParts()){
             String imageName = extractFileName(part);
             imageName = new File(imageName).getName();

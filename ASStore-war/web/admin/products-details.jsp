@@ -10,6 +10,7 @@
 <t:adminLayout>
     <div class="container">
         <a href="javascript:history.back()" class="s-text2">&lt; Back</a>
+
         <div>
             <p style="font-weight: bold">Seller phone number</p>
             <p>${product.usersId.phoneNumber}</p>
@@ -50,6 +51,12 @@
             <p style="font-weight: bold">Description</p>
             <textarea style="width: 200px; height: 100px" readonly="true">${product.description}</textarea>
         </div>
+        <c:if test="${product.status == 1}">
+            <a href="<c:url value="/admin/products/deny?id=${product.id}"/>" style="color: #e74c3c">
+                <button style="color: red">Deny this Product</button>
+            </a>
+        </c:if>
+
     </div>    
 </t:adminLayout>
 

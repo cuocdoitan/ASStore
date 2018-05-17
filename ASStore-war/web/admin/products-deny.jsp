@@ -11,7 +11,7 @@
 <t:adminLayout>
     <section class="bgwhite p-t-70 p-b-100">
         <div class="container">
-            <form>
+            <form method="POST" action="<c:url value='/admin/products/deny' />">
                 <h2>Send Note for this Product</h2><br><br>
                 <input type="hidden" name="productId" value="${product.id}"/>
                 <label>Product name</label>
@@ -53,7 +53,7 @@
                 </div>
                 <label>Product description</label>
                 <div class="bo4 of-hidden m-b-20">
-                    <textarea style="width: 100%; border: none; padding: 20px" rows="10" placeholder="Product description" readonly="true"  value="${product.description}"></textarea>
+                    <textarea style="width: 100%; border: none; padding: 20px" rows="10" placeholder="Product description" readonly="true">${product.description}</textarea>
                 </div>
                 <hr>
                 <label>Product images</label>

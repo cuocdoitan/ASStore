@@ -30,15 +30,22 @@ public class AnimeFacade extends AbstractFacade<Anime> implements AnimeFacadeLoc
     public AnimeFacade() {
         super(Anime.class);
     }
-
+    
     @Override
     public List<Anime> getAll() {
         return findAll();
     }
     
+    @Override
     public Anime findAnimeByName(String name){
-        TypedQuery query = em.createNamedQuery("Anime.findByName", Anime.class);
-        query.setParameter("name", name);
-        return (Anime) query.getSingleResult();
+        TypedQuery query = em.createQuery("SELECT a FROM Anime a WHERE a.name = ?1 and a.enabled = ?2", Anime.class);
+        query.setParameter(1, name);
+        query.setParameter(2, true);
+        List<Anime> list = query.getResultList();
+        if(list.isEmpty()){
+            return null;
+        }else{
+            return list.get(0);
+        }
     }
 }

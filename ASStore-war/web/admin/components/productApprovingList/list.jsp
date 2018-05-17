@@ -35,6 +35,7 @@
                 <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
                     <button style="background-color: #ccccff; padding: 20px" onclick="approveProductAndReloadPage_admin(${product.id})">Approve</button>  
                     <br/>
+                    <br/>
                     <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
                     <a href="<c:url value="/admin/products/deny?id=${product.id}"/>" style="color: #e74c3c">
                         <button style="color: red">Deny</button>

@@ -9,6 +9,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -94,9 +97,9 @@ public class Product implements Serializable {
     @Column(name = "Enabled")
     private boolean enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Collection<ProductRating> productRatingCollection;
+    private List<ProductRating> productRatingCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Collection<Media> mediaCollection;
+    private List<Media> mediaCollection;
     @JoinColumn(name = "AnimeId", referencedColumnName = "Id")
     @ManyToOne(optional = false)
     private Anime animeId;
@@ -209,20 +212,20 @@ public class Product implements Serializable {
     }
 
     @XmlTransient
-    public Collection<ProductRating> getProductRatingCollection() {
+    public List<ProductRating> getProductRatingCollection() {
         return productRatingCollection;
     }
 
-    public void setProductRatingCollection(Collection<ProductRating> productRatingCollection) {
+    public void setProductRatingCollection(List<ProductRating> productRatingCollection) {
         this.productRatingCollection = productRatingCollection;
     }
 
     @XmlTransient
-    public Collection<Media> getMediaCollection() {
+    public List<Media> getMediaCollection() {
         return mediaCollection;
     }
 
-    public void setMediaCollection(Collection<Media> mediaCollection) {
+    public void setMediaCollection(List<Media> mediaCollection) {
         this.mediaCollection = mediaCollection;
     }
 

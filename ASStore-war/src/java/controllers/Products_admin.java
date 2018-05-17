@@ -174,9 +174,10 @@ public class Products_admin extends HttpServlet {
     protected void denyProduct(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="action deny product">
-        int productId = Integer.parseInt(request.getParameter("id"));
+        int productId = Integer.parseInt(request.getParameter("productId"));
         Product product = productFacade.find(productId);
         product.setAlertNote(request.getParameter("alertNote"));
+        product.setStatus(Short.parseShort("2"));
         try {
             productFacade.edit(product);
             response.sendRedirect(request.getContextPath() + "/admin/products/approving-list");

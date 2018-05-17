@@ -6,6 +6,7 @@
 package SB;
 
 import Models.Category;
+import Models.Feedback;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -29,5 +30,8 @@ public interface CategoryFacadeLocal {
     List<Category> findRange(int[] range);
 
     int count();
+    
+    public List<Category> getList();
+    
     
 }

@@ -8,6 +8,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Header -->
 <header class="header1">
+    <input type="hidden" id="urlProject" value="<c:url value="/" />"/>
   <!-- Header desktop -->
   <div class="container-menu-header">
     <div class="wrap_header">
@@ -29,7 +30,7 @@
             </li>
             
             <li>
-              <a href="<c:url value="/category"/>">Categories</a>
+              <a href="<c:url value="/category/list"/>">Categories</a>
             </li>
 
             <li>
@@ -37,7 +38,7 @@
             </li>
 
             <li>
-                <a href="<c:url value="/feedback"/>">Feedback</a>
+                <a href="<c:url value="/feedbacks/list"/>">Feedback</a>
             </li>
           </ul>
         </nav>

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import javax.servlet.ServletException;
@@ -27,7 +28,7 @@ import javax.servlet.http.Part;
  *
  * @author zerox
  */
-@WebServlet(name = "UploadFile", urlPatterns = {"/UploadFile"})
+@WebServlet(name = "products_uploadFile", urlPatterns = {"/products_uploadFile"})
 @MultipartConfig
 public class products_uploadFile extends HttpServlet {
 
@@ -42,9 +43,9 @@ public class products_uploadFile extends HttpServlet {
    */
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    response.setContentType("text/json;charset=UTF-8");
+    response.setContentType("application/json");
     // Create path components to save the file
-    final String path = getServletContext().getRealPath("assets/img");
+    final String path = getServletContext().getRealPath("assets/img/products/");
     final Part filePart = request.getPart("file");
     final String fileName = getFileName(filePart);
 
@@ -59,13 +60,12 @@ public class products_uploadFile extends HttpServlet {
 
       int read = 0;
       final byte[] bytes = new byte[1024];
-
+      
       while ((read = filecontent.read(bytes)) != -1) {
         out.write(bytes, 0, read);
       }
-      writer.println("{ status: 'success', name: '" + fileName + "', path: '" + path + "' }");
-      LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
-              new Object[]{fileName, path});
+      writer.println("{\"filename\":\"" + fileName + "\"}");
+      
     } catch (FileNotFoundException fne) {
       writer.println("{ status: 'failed', name: '" + fileName + "', error: '" + fne.getMessage() + "', path: '" + path + "' }");
 
@@ -90,8 +90,8 @@ public class products_uploadFile extends HttpServlet {
       if (content.trim().startsWith("filename")) {
         String fileName = content.substring(content.indexOf('=') + 1).trim().replace("\"", "");
         if (fileName.lastIndexOf(".") != -1 && fileName.lastIndexOf(".") != 0) {
-          String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
-          String rFileName = "n_" + (new Date()).getTime() + "." + extension;
+          //String extension = fileName.substring(fileName.lastIndexOf(".") + 1);
+          String rFileName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + fileName ;
           return rFileName;
         } else {
           return null;

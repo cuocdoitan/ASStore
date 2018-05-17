@@ -47,8 +47,6 @@ public class animeApi extends HttpServlet {
   protected void processRequest(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     response.setContentType("application/json");
-      System.out.println("Someone calling me");
-      System.out.println("getContextPath" + request.getContextPath());
     PrintWriter out = response.getWriter();
     List<Anime> animes = animeFacade.findAll();
 
