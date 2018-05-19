@@ -96,7 +96,8 @@ public class Cart extends HttpServlet {
           return;
         }
         int userId = (int)sess.getAttribute("userId");
-        java.util.List<Models.CartDetail> details = cartDetailFacade.findByCartId(cartFacade.findByUserId(userId).getId());
+        int id = cartFacade.findByUserId(userId).getId();
+        java.util.List<Models.CartDetail> details = cartDetailFacade.findByCartId(id);
         HashMap images = new HashMap();
         BigDecimal total = new BigDecimal(0);
         for (Models.CartDetail detail : details) {
