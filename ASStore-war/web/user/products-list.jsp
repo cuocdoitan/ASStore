@@ -32,7 +32,7 @@
                         </h4>
 
                         <fieldset id="categoryRadioField">
-                            <input type="radio" name="categoryRadio" value="" checked="true">All<br/> 
+                            <input type="radio" name="categoryRadio" value="" checked="true"> All<br/> 
                             <c:forEach items="${categories}" var="cate">
                                 <li class="p-t-4">
                                     <input type="radio" name="categoryRadio" id="categoryRadio" value="${cate.id}"> ${cate.name}
@@ -63,47 +63,48 @@
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-8 col-lg-9 p-b-50">
-                    <form action="<c:url value="/products/list" />" method="get" id="productListSearch" onsubmit="return form_searchProductList_user()">
-                        <div class="flex-row">
-                            <div class="search-product pos-relative bo4 m-t-5 m-b-5 m-r-10" style="width: 50%">
-                                <input class="s-text7 size6 p-l-23 p-r-50" type="text" name="productName" placeholder="Search products by name..." value="${vproductName}">
+                    <form action="<c:url value="/products/list" />" method="get" id="productListSearch" onsubmit="return form_searchProductList_user();">
+                    <div class="flex-row">
+                        <div class="search-product pos-relative bo4 m-t-5 m-b-5 m-r-10" style="width: 50%">
+                            <input class="s-text7 size6 p-l-23 p-r-50" type="text" name="productName" placeholder="Search products by name..." value="${vproductName}">
 
-                                <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
-                                    <i class="fs-12 fa fa-search" aria-hidden="true"></i>
-                                </button>
-                            </div>
-                            <div class="search-product pos-relative bo4 m-t-5 m-b-5 m-r-10" style="width: 50%">
-                                <input type="text" name="anime_name" id="anime_name" class="s-text7 size6 p-l-23 p-r-50" placeholder="Search products by anime..."  value="${vanimeName}"/>
-                                ${animeError}
-                                <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
-                                    <i class="fs-12 fa fa-search" aria-hidden="true"></i>
-                                </button>
-                            </div>
+                            <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
+                                <i class="fs-12 fa fa-search" aria-hidden="true"></i>
+                            </button>
                         </div>
-                        <input class="s-text7 size6 p-l-23 p-r-50" type="hidden" name="minPrice" value="${vminPrice}"/>
-                        <input class="s-text7 size6 p-l-23 p-r-50" type="hidden" name="maxPrice" value="${vmaxPrice}"/>
-                        <input class="s-text7 size6 p-l-23 p-r-50" type="hidden" name="category" value="${vcategory}"/>
-                        <div>
-                            <input type="submit" value="Search"/>
+                        <div class="search-product pos-relative bo4 m-t-5 m-b-5 m-r-10" style="width: 50%">
+                            <input type="text" name="anime_name" id="anime_name" class="s-text7 size6 p-l-23 p-r-50" placeholder="Search products by anime..."  value="${vanimeName}"/>
+                            <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
+                                <i class="fs-12 fa fa-search" aria-hidden="true"></i>
+                            </button>
                         </div>
-
-                    </form>
-                    <!--  -->
+                        <br/><p style="color: red" id="errAnime"></p>
+                    </div>
+                    <input class="s-text7 size6 p-l-23 p-r-50" type="hidden" name="minPrice" value="${vminPrice}"/>
+                    <input class="s-text7 size6 p-l-23 p-r-50" type="hidden" name="maxPrice" value="${vmaxPrice}"/>
+                    <input class="s-text7 size6 p-l-23 p-r-50" type="hidden" name="category" value="${vcategory}"/>
                     <div class="flex-sb-m flex-w p-b-35 p-t-20">
                         <div class="flex-w">
                             <div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
                                 <select class="selection-2" name="sorting">
-                                    <option>Sort by price</option>
-                                    <option>Price: low to high</option>
-                                    <option>Price: high to low</option>
+                                    <option value="">Sort by price</option>
+                                    <option value="lowToHigh">Low to high</option>
+                                    <option value="highToLow">High to low</option>
                                 </select>
                             </div>
                         </div>
+                        <div class="flex-w">
+                            <button id="buttonSearchListProduct">Search</button>
+                        </div>
                     </div>
+                    </form>
+                    <!--  -->
+
                     <!-- Product -->
                     <div class="row" id="ProductListContent_User">
                         <jsp:include page="/user/components/productList/list.jsp"/>
                     </div>
+                    
                 </div>
             </div>
         </div>

@@ -78,7 +78,7 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         return query.getResultList();
     }
     
-    public List<Product> searchProduct(String productName, Models.Anime animeId, Models.Category categoryId, BigDecimal minPrice, BigDecimal maxPrice){
+    public List<Product> searchProduct(String productName, Models.Anime animeId, Models.Category categoryId, BigDecimal minPrice, BigDecimal maxPrice, String sorting){
         String condition = "";
         String and = " and ";
         if(productName  != null){
@@ -95,6 +95,14 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         }
         if(maxPrice != null){
             condition += and + "p.price <= ?6";
+        }
+        if(sorting != null){
+            if(sorting.equals("ASC")){
+                condition += " " + "ORDER BY p.price ASC";
+            }else{
+                condition += " " + "ORDER BY p.price DESC";
+            }
+            
         }
         TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1"+condition, Product.class);
         query.setParameter(1, true);

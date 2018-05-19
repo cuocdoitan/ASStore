@@ -45,7 +45,7 @@ $(function () {
             }
         });
     });
-    
+
     $('#cancelRating').click(function () {
         $.ajax({
             url: $("#urlProject").val() + '/products/cancelRating',
@@ -106,25 +106,61 @@ function clearErrorTexts() {
     $("#errImage").text("");
 }
 
-function validateProductSearch_user() {
 
-}
+//$("#buttonSearchListProduct").click(function () {
+//    $("#errAnime").text("");
+//    var anime_name = $("input[name=anime_name]").val();
+//    $.get($("#urlProject").val() + "/checkIfAnimeExist",
+//            {
+//                animeName: anime_name
+//            },
+//            function (result) {
+//                var exist = result.exist;
+//                if (exist === "false") {
+//                    $("#errAnime").text("This anime isn't exist");
+//                } else {
+//                    //search product
+//                    getProductList();
+//                }
+//            }
+//    );
+//});
+//
+//$("#pagination li").click(function (){
+//    getProductList();
+//});
+//
+//
+//function getProductList() {
+//    var productName = $("input[name=productName]").val();
+//    var anime_name = $("input[name=anime_name]").val();
+//    var minPrice = $("input[name=minPrice]").val();
+//    var maxPrice = $("input[name=maxPrice]").val();
+//    var category = $("input[name=category]").val();
+//    var sorting = $("select[name=sorting]").val();
+//    var page = $("#pagination li").text();
+//    $.ajax({
+//        url: $("#urlProject").val() + '/products_Search',
+//        type: 'post',
+//        data: {
+//            productName: productName,
+//            anime_name: anime_name,
+//            minPrice: minPrice,
+//            maxPrice: maxPrice,
+//            category: category,
+//            sorting: sorting,
+//            page : page
+//        },
+//        success: function (data, textStatus, jqXHR) {
+//            $("#ProductListContent_User").html(data);
+//        }
+//    });
+//}
+
+
 /* 
  * ************************************ADMIN*************************************
  */
-function checkIfAnimeIsExist() {
-    $.get($("#urlProject").val() + "/checkIfAnimeExist",
-            {
-                animeName: $("#anime_name").val()
-            },
-            function (result) {
-                var exist = result.exist;
-                if (exist === 'false') {
-                    alert('');
-                }
-            }
-    );
-}
 
 $("#input_searchProduct_admin").keydown(function (e) {
     var key = e.which;

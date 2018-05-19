@@ -45,7 +45,7 @@ public interface ProductFacadeLocal {
     
     public int createNewProduct(Product newProduct);
     
-    public List<Product> searchProduct(String productName, Models.Anime animeId, Models.Category categoryId, BigDecimal minPrice, BigDecimal maxPrice);
+    public List<Product> searchProduct(String productName, Models.Anime animeId, Models.Category categoryId, BigDecimal minPrice, BigDecimal maxPrice, String sorting);
     
     public List<Product> getRandomProductSameAnime(Product product);
 }
