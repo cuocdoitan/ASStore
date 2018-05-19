@@ -7,6 +7,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <div class="left-nav col-2" style="padding: 20px; height: 100vh; background: white; box-shadow: 2px 0px 5px 0px rgba(0,0,0,0.20);">
+    <%-- Global Url --%>
+    <input type="hidden" id="urlProject" value="<c:url value="/" />"/>
+    
   <a href="index" class="m-b-20" style="margin-left: 10px; display: block">
     <img src="<c:url value='/assets/img/asstore-logo.png'/>" alt="IMG-LOGO">
   </a>

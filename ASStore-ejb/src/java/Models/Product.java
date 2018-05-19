@@ -7,13 +7,18 @@ package Models;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -65,7 +70,8 @@ public class Product implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "Id")
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id ;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -95,9 +101,9 @@ public class Product implements Serializable {
     @Column(name = "Enabled")
     private boolean enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Collection<ProductRating> productRatingCollection;
+    private List<ProductRating> productRatingCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Collection<Media> mediaCollection;
+    private List<Media> mediaCollection;
     @JoinColumn(name = "AnimeId", referencedColumnName = "Id")
     @ManyToOne(optional = false)
     private Anime animeId;
@@ -195,20 +201,20 @@ public class Product implements Serializable {
     }
 
     @XmlTransient
-    public Collection<ProductRating> getProductRatingCollection() {
+    public List<ProductRating> getProductRatingCollection() {
         return productRatingCollection;
     }
 
-    public void setProductRatingCollection(Collection<ProductRating> productRatingCollection) {
+    public void setProductRatingCollection(List<ProductRating> productRatingCollection) {
         this.productRatingCollection = productRatingCollection;
     }
 
     @XmlTransient
-    public Collection<Media> getMediaCollection() {
+    public List<Media> getMediaCollection() {
         return mediaCollection;
     }
 
-    public void setMediaCollection(Collection<Media> mediaCollection) {
+    public void setMediaCollection(List<Media> mediaCollection) {
         this.mediaCollection = mediaCollection;
     }
 
@@ -280,7 +286,6 @@ public class Product implements Serializable {
     }
 
 
-
   @XmlTransient
   public List<Coupons> getCouponsList() {
     return couponsList;
@@ -305,7 +310,14 @@ public class Product implements Serializable {
   public void setUpdateAt(Date updateAt) {
     this.updateAt = updateAt;
   }
-
-  
-    
+    public double averageStars(){
+        double average = 0;
+        for(ProductRating productRating : this.getProductRatingCollection()){
+            average = average + productRating.getRating()/this.getProductRatingCollection().size();
+        }
+        DecimalFormat priceFormatter = new DecimalFormat("#0.00");
+        String formatedAverage = priceFormatter.format(average);
+        double result = Double.parseDouble(formatedAverage);
+        return result;
+    }
 }

@@ -5,6 +5,7 @@
  */
 package controllers;
 
+
 import SB.MediaFacadeLocal;
 import SB.OrdersDetailFacadeLocal;
 import SB.OrdersFacadeLocal;
@@ -34,7 +35,6 @@ public class Orders extends HttpServlet {
   private OrdersDetailFacadeLocal orderDetailFacade;
   @EJB
   private MediaFacadeLocal mediaFacade;
-
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
    * methods.
@@ -116,6 +116,7 @@ public class Orders extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
+
     String clientRequest = request.getPathInfo();
 
     switch (clientRequest) {

@@ -8,6 +8,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!-- Header -->
 <header class="header1">
+    <input type="hidden" id="urlProject" value="<c:url value="/" />"/>
   <!-- Header desktop -->
   <div class="container-menu-header">
     <div class="wrap_header">
@@ -45,6 +46,9 @@
 
       <!-- Header Icon -->
       <div class="header-icons">
+        <a href="<c:url value="/products/new-product"/>" >
+            <button>NEW POST</button>   
+        </a>
         <a href="#" class="header-wrapicon1 dis-block">
             <img src="<c:url value='/assets/img/icons/icon-header-01.png'/>" class="header-icon1" alt="ICON">
         </a>

@@ -3,14 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package BusinessLogic;
 
+import SB.AnimeFacadeLocal;
+import Models.Anime;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -26,6 +30,11 @@ import org.json.simple.JSONObject;
 @WebServlet(name = "animeApi", urlPatterns = {"/animeApi"})
 public class animeApi extends HttpServlet {
 
+    @EJB
+    private AnimeFacadeLocal animeFacade;
+
+    
+    
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
    * methods.
@@ -39,11 +48,7 @@ public class animeApi extends HttpServlet {
           throws ServletException, IOException {
     response.setContentType("application/json");
     PrintWriter out = response.getWriter();
-    ArrayList<Anime> animes = new ArrayList<>();
-    animes.add(new Anime(1, "Naruto", "17450.jpg"));
-    animes.add(new Anime(2, "Trigun", "20310.jpg"));
-    animes.add(new Anime(3, "One Piece", "73245.jpg"));
-    animes.add(new Anime(4, "Hunter x Hunter", "19473.jpg"));
+    List<Anime> animes = animeFacade.findAll();
 
     JSONArray animesJSON = new JSONArray();
 
@@ -72,9 +77,9 @@ public class animeApi extends HttpServlet {
     
     for (Anime anime : animes) {
       JSONObject animeJSON = new JSONObject();
-      animeJSON.put("id", anime.id);
-      animeJSON.put("name", anime.name);
-      animeJSON.put("picture", anime.picture);
+      animeJSON.put("id", anime.getId());
+      animeJSON.put("name", anime.getName());
+      animeJSON.put("picture", anime.getPicture());
       animesJSON.add(animeJSON);
     }
     out.print(animesJSON);

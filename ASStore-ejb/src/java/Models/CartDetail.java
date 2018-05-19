@@ -10,6 +10,8 @@ import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,7 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
   , @NamedQuery(name = "CartDetail.findByUnitPrice", query = "SELECT c FROM CartDetail c WHERE c.unitPrice = :unitPrice")
   , @NamedQuery(name = "CartDetail.findByCoupon", query = "SELECT c FROM CartDetail c WHERE c.coupon = :coupon")})
 public class CartDetail implements Serializable {
-
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)

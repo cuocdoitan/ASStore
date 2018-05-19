@@ -6,6 +6,7 @@
 package SB;
 
 import Models.ProductRating;
+import java.text.DecimalFormat;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -28,5 +29,4 @@ public class ProductRatingFacade extends AbstractFacade<ProductRating> implement
     public ProductRatingFacade() {
         super(ProductRating.class);
     }
-    
 }

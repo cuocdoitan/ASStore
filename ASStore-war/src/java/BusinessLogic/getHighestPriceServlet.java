@@ -3,15 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package BusinessLogic;
 
-import Models.Product;
-import SB.MediaFacadeLocal;
 import SB.ProductFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -21,13 +18,10 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  *
- * @author zerox
+ * @author Tien Phat
  */
-@WebServlet(name = "index", urlPatterns = {"/index"})
-public class Index extends HttpServlet {
-
-    @EJB
-    private MediaFacadeLocal mediaFacade;
+@WebServlet(name = "getHighestPriceServlet", urlPatterns = {"/getHighestPriceServlet"})
+public class getHighestPriceServlet extends HttpServlet {
 
     @EJB
     private ProductFacadeLocal productFacade;
@@ -45,26 +39,9 @@ public class Index extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        System.out.println("getContextPath :" + request.getContextPath());
-        System.out.println("getServletPath :" + request.getServletPath());
-        System.out.println("getRequestURI :" + request.getRequestURI());
-        System.out.println("getLocalName :" + request.getLocalName());
-        System.out.println("getPathTranslated :" + request.getPathTranslated());
-        System.out.println("getQueryString :" + request.getQueryString());
-        System.out.println("getRemoteUser :" + request.getRemoteUser());
-        List<Models.Product> listProductIndex = new ArrayList<>();
-        int numberOfProduct = 0;
-        for(Product product : productFacade.getListProductSortedDesc()){
-            listProductIndex.add(product);
-            numberOfProduct++;
-            if(numberOfProduct==8){
-                break;
-            }
-        }
-        request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProductIndex));
-        request.setAttribute("listProduct", listProductIndex);
-        request.getRequestDispatcher("user/index.jsp").forward(request, response);
+        response.setContentType("application/json");
+        BigDecimal result = productFacade.getHighestProductPrice();
+        response.getWriter().print("{\"maxPrice\":\"" + result + "\"}");
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

@@ -309,4 +309,5 @@ public class Users implements Serializable {
   public void setUpdateAt(Date updateAt) {
     this.updateAt = updateAt;
   }
+
 }
