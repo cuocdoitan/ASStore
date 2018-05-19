@@ -6,12 +6,15 @@
 package controllers;
 
 import Models.Product;
+import SB.CategoryFacadeLocal;
 import SB.MediaFacadeLocal;
 import SB.ProductFacadeLocal;
+import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.util.List;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,30 +30,20 @@ import javax.servlet.http.HttpServletResponse;
 public class Products_admin extends HttpServlet {
 
     @EJB
+    private CategoryFacadeLocal categoryFacade;
+
+    @EJB
     private MediaFacadeLocal mediaFacade;
 
     @EJB
     private ProductFacadeLocal productFacade;
 
-
-    
-    
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
@@ -62,41 +55,73 @@ public class Products_admin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String clientRequest = request.getPathInfo();
-        switch(clientRequest){
+        String adminRequest = request.getPathInfo();
+        switch (adminRequest) {
             case "/list":
-                List<Product> listProduct = productFacade.findAll();
-                request.setAttribute("listImages", mediaFacade.getImagesFromListProduct(listProduct));
-                request.setAttribute("listProduct", listProduct);
-                request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
+                listPage(request, response);
                 break;
             case "/approving-list":
-                List<Product> listApprovingProduct = productFacade.getListApprovingProduct();
-                request.setAttribute("listImages", mediaFacade.getImagesFromListProduct(listApprovingProduct));
-                request.setAttribute("listApprovingProduct", listApprovingProduct);
-                request.getRequestDispatcher("/admin/products-approving-list.jsp").forward(request, response);
+                approvingListPage(request, response);
                 break;
             case "/deny":
-                int productId_deny = Integer.parseInt(request.getParameter("id"));
-                Product product_deny = productFacade.find(productId_deny);
-                request.setAttribute("images", mediaFacade.getImagesFromProduct(product_deny));
-                request.setAttribute("product", product_deny);
-                request.getRequestDispatcher("/admin/products-deny.jsp").forward(request, response);
+                denyPage(request, response);
                 break;
-            case "/detail":
-                int productId_detail = Integer.parseInt(request.getParameter("id"));
-                request.setAttribute("product", productFacade.find(productId_detail));
-                request.setAttribute("images", mediaFacade.getImagesFromProduct(productFacade.find(productId_detail)));
-                request.getRequestDispatcher("/admin/products-details.jsp").forward(request, response);
+            case "/details":
+                detailsPage(request, response);
                 break;
-            case "/search":
-                
-                request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
-                break;   
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
         }
+    }
+
+    protected void listPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="show list products">
+        String search = request.getParameter("search");
+        if (search == null) {
+            request.setAttribute("listProduct", productFacade.findAll());
+            request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
+        } else {
+            String searchBy = request.getParameter("SearchBy");
+            if (searchBy.equals("productName")) {
+                request.setAttribute("listProduct", productFacade.searchProductByName(search));
+                request.getRequestDispatcher("/admin/components/productList/list.jsp").forward(request, response);
+            }
+            if (searchBy.equals("phoneNumber")) {
+                request.setAttribute("listProduct", productFacade.searchProductByUserPhoneNumber(search));
+                request.getRequestDispatcher("/admin/components/productList/list.jsp").forward(request, response);
+            }
+
+        }
+        //</editor-fold> 
+    }
+
+    protected void approvingListPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="show list pending products">
+        request.setAttribute("listApprovingProduct", productFacade.getListApprovingProduct());
+        request.getRequestDispatcher("/admin/products-approving-list.jsp").forward(request, response);
+        //</editor-fold> 
+    }
+
+    protected void denyPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="go to deny product page">
+        int productId_deny = Integer.parseInt(request.getParameter("id"));
+        request.setAttribute("product", productFacade.find(productId_deny));
+        request.setAttribute("categories", categoryFacade.findAll());
+        request.getRequestDispatcher("/admin/products-deny.jsp").forward(request, response);
+        //</editor-fold> 
+    }
+
+    protected void detailsPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="go to details product page">
+        int productId_detail = Integer.parseInt(request.getParameter("id"));
+        request.setAttribute("product", productFacade.find(productId_detail));
+        request.getRequestDispatcher("/admin/products-details.jsp").forward(request, response);
+        //</editor-fold> 
     }
 
     /**
@@ -112,17 +137,69 @@ public class Products_admin extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        
+        String adminRequest = request.getPathInfo();
+        switch (adminRequest) {
+            case "/approve":
+                approveProduct(request, response);
+                break;
+            case "/deny":
+                denyProduct(request, response);
+                break;
+            case "/delete":
+                deleteProduct(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+                break;
+        }
+
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    protected void approveProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="action approve product">
+        int productId = Integer.parseInt(request.getParameter("id"));
+        Product product = productFacade.find(productId);
+        product.setStatus(Short.parseShort("1"));
+        try {
+            productFacade.edit(product);
+            request.setAttribute("listApprovingProduct", productFacade.getListApprovingProduct());
+            request.getRequestDispatcher("/admin/components/productApprovingList/list.jsp").forward(request, response);
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Problems during denying product", e.getMessage());
+        }
+        //</editor-fold> 
+    }
+
+    protected void denyProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="action deny product">
+        int productId = Integer.parseInt(request.getParameter("productId"));
+        Product product = productFacade.find(productId);
+        product.setAlertNote(request.getParameter("alertNote"));
+        product.setStatus(Short.parseShort("2"));
+        try {
+            productFacade.edit(product);
+            response.sendRedirect(request.getContextPath() + "/admin/products/approving-list");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Problems during denying product", e.getMessage());
+        }
+        //</editor-fold> 
+    }
+
+    protected void deleteProduct(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="action delete product">
+        int id = Integer.parseInt(request.getParameter("id"));
+        try {
+            Product product = productFacade.find(id);
+            product.setEnabled(false);
+            productFacade.edit(product);
+            response.sendRedirect(request.getContextPath() + "/admin/products/list");
+        } catch (Exception e) {
+            LOGGER.log(Level.SEVERE, "Problems during deleting product", e.getMessage());
+        }
+        //</editor-fold> 
+    }
 
 }

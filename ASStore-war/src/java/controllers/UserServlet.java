@@ -5,8 +5,11 @@
  */
 package controllers;
 
+import Models.CartDetail;
 import Models.Roles;
 import Models.Users;
+import SB.CartDetailFacadeLocal;
+import SB.CartFacadeLocal;
 import SB.RolesFacadeLocal;
 import SB.UsersFacadeLocal;
 import java.io.IOException;
@@ -35,6 +38,11 @@ public class UserServlet extends HttpServlet {
     @EJB
     private UsersFacadeLocal usersFacade;
 
+    @EJB
+    private CartFacadeLocal cartFacade;
+    
+    @EJB
+    private CartDetailFacadeLocal cartDetailFacade;
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -244,7 +252,11 @@ public class UserServlet extends HttpServlet {
                 session.setAttribute("phone", loginedUser.getPhoneNumber());
                 session.setAttribute("role", loginedUser.getRolesId());
                 session.setAttribute("userid", loginedUser.getId());
+                session.setAttribute("userId", loginedUser.getId());
                 request.setAttribute("user", loginedUser);
+                if (cartFacade.findByUserId(loginedUser.getId()) == null) {
+                  migrateCartToAccount(session, loginedUser);
+                }
                 request.getRequestDispatcher("/user/user-information.jsp").forward(request, response);
             } else {
                 request.setAttribute("phone", phone);
@@ -253,6 +265,20 @@ public class UserServlet extends HttpServlet {
                 request.getRequestDispatcher("/user/login.jsp").forward(request, response);
             }
         }
+    }
+    
+    private void migrateCartToAccount(HttpSession sess, Users user) {
+      Models.Cart cart = new Models.Cart();
+      cart.setId(0);
+      cart.setUsersId(user);
+      cartFacade.create(cart);
+      if (sess.getAttribute("cart") != null) {
+        java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
+        for (Models.CartDetail detail : cartDetailSess) {
+          detail.setCartId(cart);
+          cartDetailFacade.create(detail);
+        }
+      }
     }
 
     protected void loginadmin(HttpServletRequest request, HttpServletResponse response)
@@ -273,7 +299,7 @@ public class UserServlet extends HttpServlet {
                 HttpSession session = request.getSession();
                 session.setAttribute("phone", loginedUser.getPhoneNumber());
                 session.setAttribute("role", loginedUser.getRolesId());
-                request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/admin/products/list");
             } else {
                 request.setAttribute("phone", phone);
                 request.setAttribute("pass", password);

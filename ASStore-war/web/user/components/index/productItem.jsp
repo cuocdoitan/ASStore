@@ -6,20 +6,21 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/core" prefix = "c" %>
-<div class="post-item p-t-35 fade show active">
-  <div class="row">
-    <div class="col-sm-6 col-md-4 col-lg-3 p-b-50">
+<div class="post-item p-t-35 fade show active col-3">
       <!-- Block2 -->
       <div class="block2">
         <div class="block2-img wrap-pic-w of-hidden pos-relative block2-labelnew">
-          <img src="assets/img/products/${param.image}" alt="IMG-PRODUCT">
-
+            <c:forEach items="${images}" var="image">
+                <c:if test="${image.productId.id == param.productId}">
+                  <img src="<c:url value='/assets/img/products/${image.urlImage}'/>" height="300px" alt="IMG-PRODUCT">
+                </c:if>
+            </c:forEach>
           <div class="block2-overlay trans-0-4">
             <div class="block2-btn-addcart w-size1 trans-0-4">
               <!-- Button -->
-              <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
-                Add to Cart
-              </button>
+              <a class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4" href="<c:url value="/products/details?id=${param.productId}" />">
+                View more
+              </a>
             </div>
           </div>
         </div>
@@ -34,6 +35,5 @@
           </span>
         </div>
       </div>
-    </div>
-  </div>
+  
 </div>

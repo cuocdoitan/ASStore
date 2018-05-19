@@ -7,8 +7,12 @@ package Models;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -50,13 +54,25 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Product.findByEnabled", query = "SELECT p FROM Product p WHERE p.enabled = :enabled")})
 public class Product implements Serializable {
 
+  @Basic(optional = false)
+  @NotNull
+  @Temporal(TemporalType.DATE)
+  @Column(name = "CreateAt")
+  private Date createAt;
+  @Temporal(TemporalType.DATE)
+  @Column(name = "UpdateAt")
+  private Date updateAt;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+  private List<Coupons> couponsList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer id ;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)
@@ -76,14 +92,6 @@ public class Product implements Serializable {
     @NotNull
     @Column(name = "Quantity")
     private int quantity;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CreateAt")
-    @Temporal(TemporalType.DATE)
-    private Date createAt;
-    @Column(name = "UpdateAt")
-    @Temporal(TemporalType.DATE)
-    private Date updateAt;
     @Column(name = "Status")
     private Short status;
     @Size(max = 200)
@@ -94,9 +102,9 @@ public class Product implements Serializable {
     @Column(name = "Enabled")
     private boolean enabled;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Collection<ProductRating> productRatingCollection;
+    private List<ProductRating> productRatingCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
-    private Collection<Media> mediaCollection;
+    private List<Media> mediaCollection;
     @JoinColumn(name = "AnimeId", referencedColumnName = "Id")
     @ManyToOne(optional = false)
     private Anime animeId;
@@ -168,21 +176,6 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
-    }
 
     public Short getStatus() {
         return status;
@@ -209,20 +202,20 @@ public class Product implements Serializable {
     }
 
     @XmlTransient
-    public Collection<ProductRating> getProductRatingCollection() {
+    public List<ProductRating> getProductRatingCollection() {
         return productRatingCollection;
     }
 
-    public void setProductRatingCollection(Collection<ProductRating> productRatingCollection) {
+    public void setProductRatingCollection(List<ProductRating> productRatingCollection) {
         this.productRatingCollection = productRatingCollection;
     }
 
     @XmlTransient
-    public Collection<Media> getMediaCollection() {
+    public List<Media> getMediaCollection() {
         return mediaCollection;
     }
 
-    public void setMediaCollection(Collection<Media> mediaCollection) {
+    public void setMediaCollection(List<Media> mediaCollection) {
         this.mediaCollection = mediaCollection;
     }
 
@@ -292,5 +285,40 @@ public class Product implements Serializable {
     public String toString() {
         return "Models.Product[ id=" + id + " ]";
     }
-    
+
+
+  @XmlTransient
+  public List<Coupons> getCouponsList() {
+    return couponsList;
+  }
+
+  public void setCouponsList(List<Coupons> couponsList) {
+    this.couponsList = couponsList;
+  }
+
+  public Date getCreateAt() {
+    return createAt;
+  }
+
+  public void setCreateAt(Date createAt) {
+    this.createAt = createAt;
+  }
+
+  public Date getUpdateAt() {
+    return updateAt;
+  }
+
+  public void setUpdateAt(Date updateAt) {
+    this.updateAt = updateAt;
+  }
+    public double averageStars(){
+        double average = 0;
+        for(ProductRating productRating : this.getProductRatingCollection()){
+            average = average + productRating.getRating()/this.getProductRatingCollection().size();
+        }
+        DecimalFormat priceFormatter = new DecimalFormat("#0.00");
+        String formatedAverage = priceFormatter.format(average);
+        double result = Double.parseDouble(formatedAverage);
+        return result;
+    }
 }

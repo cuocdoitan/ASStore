@@ -37,8 +37,6 @@ public class UsersFacade extends AbstractFacade<Users> implements UsersFacadeLoc
         query.setParameter(1, phone);
         query.setParameter(2, true);
         List<Users> list = query.getResultList();
-        System.out.println("=====================================");
-        System.out.println("list = "+list.toString());
         if(list.isEmpty()){
             return null;
         }else{

@@ -5,10 +5,14 @@
  */
 package SB;
 
+import Models.Cart;
 import Models.CartDetail;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -29,4 +33,9 @@ public class CartDetailFacade extends AbstractFacade<CartDetail> implements Cart
         super(CartDetail.class);
     }
     
+    public List<CartDetail> findByCartId(int id) {
+      Query query = em.createNamedQuery("CartDetail.findByCartId");
+      query.setParameter("id", new Cart(id));
+      return query.getResultList();
+    }
 }

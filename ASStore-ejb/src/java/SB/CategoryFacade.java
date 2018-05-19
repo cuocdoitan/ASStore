@@ -55,5 +55,5 @@ public class CategoryFacade extends AbstractFacade<Category> implements Category
     }
 
  
-    
+
 }

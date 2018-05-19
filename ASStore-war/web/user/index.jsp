@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
@@ -37,12 +38,19 @@
           Newest Products
         </h3>
       </div>
-
-      <jsp:include page="components/index/productItem.jsp">
-        <jsp:param name="image" value="fairytail_shoe.jpg"/>
-        <jsp:param name="name" value="Fairy Tail Sneaker"/>
-        <jsp:param name="price" value="75.20"/>
-      </jsp:include>
+      <div class="row">
+        <c:forEach items="${listProduct}" var="product">
+          <jsp:include page="components/index/productItem.jsp">
+            <jsp:param name="productId" value="${product.id}"/>
+            <jsp:param name="name" value="${product.name}"/>
+            <jsp:param name="price" value="${product.price}"/>
+          </jsp:include>
+        </c:forEach>
+      </div>
+        <a href="<c:url value="/products/list"/>">
+            <span style="font-weight: bold">SEE ALL &gt; &gt;</span>
+        </a>
+      
     </div>
   </section>
 </t:layout>
