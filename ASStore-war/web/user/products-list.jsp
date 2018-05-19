@@ -35,7 +35,9 @@
                             <input type="radio" name="categoryRadio" value="" checked="true">All<br/> 
                             <c:forEach items="${categories}" var="cate">
                                 <li class="p-t-4">
-                                    <input type="radio" name="categoryRadio" id="categoryRadio" value="${cate.id}"> ${cate.name}
+                                  
+                                    <input type="radio" name="categoryRadio" <c:if test="${cate.id == vcategory}" >checked</c:if> id="categoryRadio" value="${cate.id}"> ${cate.name}
+                                  
                                 </li>
                             </c:forEach>
                         </fieldset>

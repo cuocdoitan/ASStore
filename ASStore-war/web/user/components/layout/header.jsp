@@ -13,7 +13,7 @@
   <div class="container-menu-header">
     <div class="wrap_header">
       <!-- Logo -->
-      <a href="index" class="logo">
+      <a href="<c:url value="/index"/>" class="logo">
           <img src="<c:url value='/assets/img/asstore-logo.png'/>" alt="IMG-LOGO">
       </a>
 
@@ -46,7 +46,7 @@
 
       <!-- Header Icon -->
       <div class="header-icons">
-        <a href="<c:url value="/products/new-product"/>" >
+        <a href="<c:url value="/products/new-product"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
             <button>NEW POST</button>   
         </a>
         <a href="#" class="header-wrapicon1 dis-block">
