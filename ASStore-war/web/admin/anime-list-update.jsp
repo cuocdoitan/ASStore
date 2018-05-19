@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:adminLayout>
-    <form method="post" action="<c:url value='/UploadAnimeImages'/>" enctype="multipart/form-data">
+    <form method="post" action="<c:url value='/Anime_Edit'/>" enctype="multipart/form-data">
         <div class="container">
             <div class="row">
                 <div class="col-12">

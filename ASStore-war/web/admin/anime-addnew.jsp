@@ -4,6 +4,7 @@
     Author     : leminhtung
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
@@ -13,7 +14,7 @@
       <div class="col-12 m-r-l-auto m-t-20">
         <h2 class="m-b-30">New Anime</h2>
         <p style="color: red">${error}</p>
-        <form method="post" action="create" enctype="multipart/form-data">
+        <form method="post" action="<c:url value="/admin/anime/create" />" enctype="multipart/form-data">
           <label>Anime Name</label>
           <div class="bo4 of-hidden size15 m-b-20">
               <input class="sizefull s-text7 p-l-22 p-r-22" type="text" value="${name}" name="name">
