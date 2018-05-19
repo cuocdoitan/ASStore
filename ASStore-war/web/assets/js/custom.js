@@ -140,4 +140,3 @@ function expandAnime(e) {
     $(e).text("Read more");
   }
 }
-

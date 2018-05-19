@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import Models.Anime;
+import Models.Roles;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -26,6 +27,7 @@ import java.util.logging.Level;
 import javax.ejb.EJBException;
 import javax.imageio.ImageIO;
 import javax.servlet.annotation.MultipartConfig;
+import javax.servlet.http.HttpSession;
 import javax.servlet.http.Part;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -70,8 +72,14 @@ public class Anime_admin extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String clientRequest = request.getPathInfo();
+        HttpSession sess = request.getSession();
+        Roles role = (Roles)sess.getAttribute("role");
+        if (!role.getName().equals("admin")) {
+            request.getRequestDispatcher("/admin/no-permission.jsp").forward(request, response);
+            return;
+        }
         switch (clientRequest) {
-            case "/list":
+            case "/list":               
                 List<Anime> listAnime = animeFacade.findAll();
                 request.setAttribute("animeList", listAnime);
                 request.getRequestDispatcher("/admin/anime-list.jsp").forward(request, response);
@@ -81,7 +89,7 @@ public class Anime_admin extends HttpServlet {
                 break;
             case "/update":
                 Models.Anime animee = animeFacade.find(Integer.parseInt(request.getParameter("anime")));
-                request.setAttribute("anime", animee);
+                request.setAttribute("animes", animee);
                 request.getRequestDispatcher("/admin/anime-list-update.jsp").forward(request, response);
                 break;
             case "/delete":
@@ -214,11 +222,19 @@ public class Anime_admin extends HttpServlet {
                         request.setAttribute("description", description);
                         anime.setDescription(description);
                     }
+                    if (pic.trim().equals("")) {
+                        errorMess = errorMess.equals("") ? " Picture can't be blank" : errorMess;
+                        error = true;
+                    } else {
+                        request.setAttribute("pic", pic);
+                        anime.setPicture(pic);
+                    }
                     if (error) {
                         request.setAttribute("error", errorMess);
                         request.getRequestDispatcher("/admin/anime-addnew.jsp").forward(request, response);
+                        return;
                     }
-                    anime.setPicture(pic);
+                    
                     anime.setEnabled(true);
                     animeFacade.create(anime);
 
@@ -236,6 +252,9 @@ public class Anime_admin extends HttpServlet {
                     }
                 }
                 response.sendRedirect("create");
+                break;
+            case "/update":
+                request.getRequestDispatcher("/UploadAnimeImages").forward(request, response);
                 break;
 
             default:

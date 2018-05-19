@@ -7,6 +7,9 @@ package controllers;
 
 import Models.Roles;
 import Models.Users;
+import static Models.Users_.email;
+import java.util.List;
+import SB.ProductFacadeLocal;
 import SB.RolesFacadeLocal;
 import SB.UsersFacadeLocal;
 import java.io.IOException;
@@ -30,10 +33,15 @@ import javax.servlet.http.HttpSession;
 public class UserServlet extends HttpServlet {
 
     @EJB
+    private ProductFacadeLocal productFacade;
+
+    @EJB
     private RolesFacadeLocal rolesFacade;
 
     @EJB
     private UsersFacadeLocal usersFacade;
+    
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -73,8 +81,9 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
+        HttpSession sess = request.getSession();
         String clientRequest = request.getPathInfo();
+//        Roles role = (Roles)sess.getAttribute("role");
         switch (clientRequest) {
             case "/list":
                 java.util.List<Models.Users> listaccount = usersFacade.getList();
@@ -82,6 +91,10 @@ public class UserServlet extends HttpServlet {
                 request.getRequestDispatcher("/admin/user-accountlist.jsp").forward(request, response);
                 break;
             case "/login":
+                if(sess.getAttribute("userid") != null) {
+                    response.sendRedirect(request.getContextPath() + "/index");
+                    return;
+                }
                 request.getRequestDispatcher("/user/login.jsp").forward(request, response);
                 break;
             case "/loginadmin":
@@ -91,14 +104,38 @@ public class UserServlet extends HttpServlet {
                 request.getRequestDispatcher("/user/register.jsp").forward(request, response);
                 break;
             case "/detail":
-                Models.Users user = usersFacade.find(Integer.parseInt(request.getParameter("id")));
+                Models.Users user = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+                List<Models.Product> listAvailableProduct = productFacade.getListAvailableProduct_User(user);
+                List<Models.Product> listCheckingProduct = productFacade.getListCheckingProduct_User(user);
+                List<Models.Product> listUnavailableProduct = productFacade.getListUnavailableProduct_User(user);
+                request.setAttribute("listAvailableProduct", listAvailableProduct);
+                request.setAttribute("listCheckingProduct", listCheckingProduct);
+                request.setAttribute("listUnavailableProduct", listUnavailableProduct);
                 request.setAttribute("user", user);
-                request.getRequestDispatcher("/admin/user-detail.jsp").forward(request, response);
+                request.getRequestDispatcher("/user/user-information.jsp").forward(request, response);
                 break;
             case "/userinfo":
-                Models.Users userinfo = usersFacade.find(Integer.parseInt(request.getParameter("id")));
+                Models.Users userinfo = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
                 request.setAttribute("userid", userinfo);
-                request.getRequestDispatcher("/user/user-infomation.jsp").forward(request, response);
+                request.getRequestDispatcher("/admin/user-detail.jsp").forward(request, response);
+                break;
+            case "/update":
+                //HttpSession sess = request.getSession();
+                Models.Users userupdate = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+                request.setAttribute("user", userupdate);
+                request.getRequestDispatcher("/user/user-information-update.jsp").forward(request, response);
+                break;
+            case "/updatephone":
+                //HttpSession sess = request.getSession();
+                Models.Users userupdatephone = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+                request.setAttribute("user", userupdatephone);
+                request.getRequestDispatcher("/user/user-information-updatephone.jsp").forward(request, response);
+                break;
+            case "/updatepass":
+                //HttpSession sess = request.getSession();
+                Models.Users userupdatepass = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+                request.setAttribute("user", userupdatepass);
+                request.getRequestDispatcher("/user/user-information-changepass.jsp").forward(request, response);
                 break;
             case "/delete":
                 Models.Users user1 = usersFacade.find(Integer.parseInt(request.getParameter("id")));
@@ -123,6 +160,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         String clientRequest = request.getPathInfo();
         switch (clientRequest) {
             case "/create":
@@ -134,6 +172,15 @@ public class UserServlet extends HttpServlet {
             case "/loginadmin":
                 loginadmin(request, response);
                 break;
+            case "/Updateuser":
+                Updateuser(request, response);
+                break;
+            case "/Updateuserphone":
+                Updateuserphone(request, response);
+                break;
+            case "/Updateuserpass":
+                Updateuserpass(request, response);
+                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
@@ -142,76 +189,97 @@ public class UserServlet extends HttpServlet {
 
     protected void registerNewUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // <editor-fold defaultstate="collapsed" desc="register new user">
         String phone = request.getParameter("phone");
         String firstname = request.getParameter("first_name");
         String lastname = request.getParameter("last_name");
         String password = request.getParameter("password");
         String address = request.getParameter("address");
         String email = request.getParameter("email");
+        String inputConfirmpass = request.getParameter("confirm_password");
         String errorMess = "";
-
+        Models.Users exitsUser = usersFacade.getUsersByPhone(phone);
         try {
             Models.Users user = new Users();
             user.setId(0);
             boolean error = false;
+
             if (phone.trim().equals("")) {
                 errorMess = errorMess.equals("") ? "phone can't be blank" : errorMess;
                 error = true;
-            }
-            else {
-                String pattern = "^\\dre{10,11}";
-                Pattern r = Pattern.compile(pattern);
-                Matcher m = r.matcher(phone);
-                if (m.matches()) {
-                    errorMess = errorMess.equals("") ? "phone must include only number and from 10 - 11 digits" : errorMess;
+            } else {
+                if (exitsUser != null) {
+                    errorMess = errorMess.equals("") ? "phone exits" : errorMess;
                     error = true;
-                }
-                else {
-                    request.setAttribute("phone", phone);
-                    user.setPhoneNumber(phone);
+                } else {
+                    String pattern = "^0(1|8|9)\\d{8,9}$";
+                    Pattern r = Pattern.compile(pattern);
+                    Matcher m = r.matcher(phone);
+                    if (!m.matches()) {
+                        errorMess = errorMess.equals("") ? "phone must include only number and from 10 - 11 digits, please try again! " : errorMess;
+                        error = true;
+                    } else {
+                        request.setAttribute("phone", phone);
+                        user.setPhoneNumber(phone);
+                    }
                 }
             }
-            
+
             if (firstname.trim().equals("")) {
                 errorMess = errorMess.equals("") ? "Firstname can't be blank" : errorMess;
                 error = true;
-            }else {
+            } else {
                 request.setAttribute("firstname", firstname);
                 user.setFirstName(firstname);
             }
             if (lastname.trim().equals("")) {
                 errorMess = errorMess.equals("") ? "Lastname can't be blank" : errorMess;
                 error = true;
-            }else {
+            } else {
                 request.setAttribute("lastname", lastname);
                 user.setLastName(lastname);
             }
-            if (password.trim().equals("")) {
-                errorMess = errorMess.equals("") ? "Password can't be blank" : errorMess;
+            String pattern = "^\\w{6,16}";
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(password);
+            if (!m.matches()) {
+                errorMess = errorMess.equals("") ? "Password must from 6 - 16 charecter, please try again! " : errorMess;
                 error = true;
-            }else {
+            } else {
                 request.setAttribute("password", password);
                 user.setPassword(password);
+            }
+            if (!password.equals(inputConfirmpass)) {
+                errorMess = errorMess.equals("") ? "comfirm password isn't the same with old pass" : errorMess;
+                error = true;
             }
             if (address.trim().equals("")) {
                 errorMess = errorMess.equals("") ? "Address can't be blank" : errorMess;
                 error = true;
-            }else {
+            } else {
                 request.setAttribute("address", address);
                 user.setAddress(address);
             }
             if (email.trim().equals("")) {
                 errorMess = errorMess.equals("") ? "Email can't be blank" : errorMess;
                 error = true;
-                
+
             } else {
-                request.setAttribute("email", email);
-                user.setEmail(email);
+                Models.Users userEmail = usersFacade.getUserByEmail(email);
+                if (userEmail != null) {
+                    // da co dua xai email nay
+                    errorMess = errorMess.equals("") ? "Email is exists!" : errorMess;
+                    error = true;
+                } else {
+                    request.setAttribute("email", email);
+                    user.setEmail(email); //email anh muốn bắt trùng thì 
+                }
             }
-            
+
             if (error) {
                 request.setAttribute("error", errorMess);
-                request.getRequestDispatcher("/user/register.jsp").forward(request, response);
+                request.getRequestDispatcher("/user/login.jsp").forward(request, response);
+                //return;
             }
             user.setCreateAt(new Date());
             user.setEnabled(true);
@@ -219,15 +287,17 @@ public class UserServlet extends HttpServlet {
             user.setRolesId(rolesFacade.find(3));
             usersFacade.create(user);
         } catch (Exception e) {
-            System.out.println("============================== ");
+            System.out.println("==============================");
             System.out.println("Exception : ");
-            System.out.println(e.toString());
+            e.printStackTrace();
         }
         response.sendRedirect(request.getContextPath() + "/User/create");
+        // <editor-fold>
     }
 
     protected void login(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // <editor-fold defaultstate="collapsed" desc="login user">
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
         Users loginedUser = usersFacade.getUsersByPhone(phone);
@@ -244,8 +314,9 @@ public class UserServlet extends HttpServlet {
                 session.setAttribute("phone", loginedUser.getPhoneNumber());
                 session.setAttribute("role", loginedUser.getRolesId());
                 session.setAttribute("userid", loginedUser.getId());
+                session.setAttribute("user", loginedUser);
                 request.setAttribute("user", loginedUser);
-                request.getRequestDispatcher("/user/user-information.jsp").forward(request, response);
+                response.sendRedirect(request.getContextPath() + "/User/detail");
             } else {
                 request.setAttribute("phone", phone);
                 request.setAttribute("pass", password);
@@ -253,10 +324,12 @@ public class UserServlet extends HttpServlet {
                 request.getRequestDispatcher("/user/login.jsp").forward(request, response);
             }
         }
+        //<editor-fold>
     }
 
     protected void loginadmin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // <editor-fold defaultstate="collapsed" desc="login admin">
         String phone = request.getParameter("phone");
         String password = request.getParameter("password");
         Users loginedUser = usersFacade.getUsersByPhone(phone);
@@ -269,18 +342,158 @@ public class UserServlet extends HttpServlet {
             request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
         } else {//account co ton tai
             //check password
-            if (loginedUser.getPassword().equals(password) && loginadmin.getId() == 1) {
+            if (loginedUser.getPassword().equals(password) && (loginedUser.getRolesId().getName().equals("admin") || loginedUser.getRolesId().getName().equals("moderator"))) {
                 HttpSession session = request.getSession();
                 session.setAttribute("phone", loginedUser.getPhoneNumber());
                 session.setAttribute("role", loginedUser.getRolesId());
-                request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
+                session.setAttribute("userid", loginedUser.getId());
+                response.sendRedirect(request.getContextPath() + "/User/userinfo");
             } else {
                 request.setAttribute("phone", phone);
                 request.setAttribute("pass", password);
-                request.setAttribute("error", "This account is Invalid!");
+                if (loginedUser.getRolesId().getName().equals("admin") && loginedUser.getRolesId().getName().equals("moderator")) {
+                    request.setAttribute("error", "You don't have permission to access this page");
+                } else {
+                    request.setAttribute("error", "This account is Invalid!");
+                }
                 request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
             }
         }
     }
 
+    protected void Updateuser(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // <editor-fold defaultstate="collapsed" desc="update user">
+        String inputfirstname = request.getParameter("firstname");
+        String inputlastname = request.getParameter("lastname");
+        String inputaddress = request.getParameter("address");
+        String inputemail = request.getParameter("email");
+        HttpSession sess = request.getSession();
+        Models.Users user = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+        Models.Users userEmail = usersFacade.getUserByEmail(inputemail);
+        String errorMess = "";
+        try {
+            boolean error = false;
+            //validate firstname
+            if (inputfirstname.trim().equals("")) {
+                errorMess = errorMess.equals("") ? "Firstname can't be blank" : errorMess;
+                error = true;
+            }
+            if (inputlastname.trim().equals("")) {
+                errorMess = errorMess.equals("") ? "Lastname can't be blank" : errorMess;
+                error = true;
+            }
+            if (error == true) {
+                request.setAttribute("error", errorMess);
+                request.getRequestDispatcher("/user/user-information-update.jsp").forward(request, response);
+            }
+            if (userEmail != null) {
+                errorMess = errorMess.equals("") ? "Email exits" : errorMess;
+                error = true;
+            } 
+            else {
+                user.setFirstName(inputfirstname);
+                user.setLastName(inputlastname);
+                user.setEmail(inputemail);
+                user.setAddress(inputaddress);
+                usersFacade.edit(user);
+                response.sendRedirect("detail");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void Updateuserphone(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // <editor-fold defaultstate="collapsed" desc="update user phone">
+        HttpSession sess = request.getSession();
+        String inputPass = request.getParameter("pass");
+        String inputNewPhone = request.getParameter("new_phone");
+        String inputConfirmPhone = request.getParameter("confirm_new_phone");
+        Models.Users user = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+        String errorMess = "";
+        Models.Users exitsUser = usersFacade.getUsersByPhone(inputNewPhone);
+        try {
+            boolean error = false;
+            //validate password
+            if (!user.getPassword().equals(inputPass)) {
+                errorMess = errorMess.equals("") ? "Wrong password" : errorMess;
+                error = true;
+            }
+            //validate phone
+            String pattern = "^0(1|8|9)\\d{8,9}$";
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(inputNewPhone);
+            if (!m.matches()) {
+                errorMess = errorMess.equals("") ? "phone must include only number and from 10 - 11 digits, please try again! " : errorMess;
+                error = true;
+            }
+            if (exitsUser != null) {
+                errorMess = errorMess.equals("") ? "phone exits" : errorMess;
+                error = true;
+            }
+            //validate comfirm phone
+            if (!inputConfirmPhone.equals(inputNewPhone)) {
+                errorMess = errorMess.equals("") ? "comfirm phone isn't the same with new phone" : errorMess;
+                error = true;
+            }
+            //check error
+            if (error == true) {
+                request.setAttribute("error", errorMess);
+                request.getRequestDispatcher("/user/user-information-updatephone.jsp").forward(request, response);
+            } else {
+                user.setPhoneNumber(inputNewPhone);
+                usersFacade.edit(user);
+                response.sendRedirect("detail");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    protected void Updateuserpass(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // <editor-fold defaultstate="collapse+d" desc="update user phone">
+        HttpSession sess = request.getSession();
+        String inputPass = request.getParameter("old_pass");
+        String inputNewpass = request.getParameter("new_pass");
+        String inputConfirmpass = request.getParameter("confirm_new_pass");
+        Models.Users user = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+        String errorMess = "";
+//        Models.Users exitsUser = usersFacade.getUsersByPhone(inputNewPhone);
+        try {
+            boolean error = false;
+            //validate password
+            if (!user.getPassword().equals(inputPass)) {
+                errorMess = errorMess.equals("") ? "Wrong old password" : errorMess;
+                error = true;
+            }
+            String pattern = "^\\w{6,16}";
+            Pattern r = Pattern.compile(pattern);
+            Matcher m = r.matcher(inputNewpass);
+            if (!m.matches()) {
+                errorMess = errorMess.equals("") ? "Password must from 6 - 16 charecter, please try again! " : errorMess;
+                error = true;
+            }
+            //validate comfirm pass
+            if (!inputConfirmpass.equals(inputNewpass)) {
+                errorMess = errorMess.equals("") ? "comfirm password isn't the same with New password" : errorMess;
+                error = true;
+            }
+            //check error
+            if (error == true) {
+                request.setAttribute("error", errorMess);
+                request.getRequestDispatcher("/user/user-information-changepass.jsp").forward(request, response);
+            } else {
+                user.setPassword(inputNewpass);
+                usersFacade.edit(user);
+                response.sendRedirect("detail");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    // </editor-fold>
 }

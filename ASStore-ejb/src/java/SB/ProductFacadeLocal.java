@@ -24,12 +24,18 @@ public interface ProductFacadeLocal {
 
     Product find(Object id);
 
-    List<Product> findAll();
+    List<Models.Product> findAll();
 
-    List<Product> findRange(int[] range);
+    List<Models.Product> findRange(int[] range);
 
     int count();
     
-    public List<Product> getListApprovingProduct();
+    public List<Models.Product> getListAvailableProduct_User(Models.Users user);
+    
+    public List<Models.Product> getListCheckingProduct_User(Models.Users user);
+    
+    public List<Models.Product> getListUnavailableProduct_User(Models.Users user);
+    
+    public List<Models.Product> getListApprovingProduct();
     
 }

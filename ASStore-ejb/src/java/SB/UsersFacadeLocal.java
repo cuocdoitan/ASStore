@@ -32,5 +32,8 @@ public interface UsersFacadeLocal {
     
     public Users getUsersByPhone(String phone);
     
+    public Users getUserByEmail(String email);
+    
     public List<Users> getList();
+    
 }

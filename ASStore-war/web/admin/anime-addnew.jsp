@@ -16,15 +16,15 @@
         <form method="post" action="create" enctype="multipart/form-data">
           <label>Anime Name</label>
           <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name">
+              <input class="sizefull s-text7 p-l-22 p-r-22" type="text" value="${name}" name="name">
           </div>
           <label>Anime Description</label>
           <div class="bo4 of-hidden m-b-20">
-            <textarea style="width: 100%; border: none; padding: 20px" rows="10" name="description" placeholder="Product description"></textarea>
+            <textarea style="width: 100%; border: none; padding: 20px" rows="10" name="description" placeholder="Product description">${anime.description}</textarea>
           </div>
           <label>Anime Picture</label>
           <div class="m-b-20">
-            <input type="file" id="inputPhoto" name="picture" accept="image/*"/>
+            <input type="file" id="inputPhoto" name="pic" accept="image/*"/>
             <br/>
           </div>
           <div class="m-b-20">

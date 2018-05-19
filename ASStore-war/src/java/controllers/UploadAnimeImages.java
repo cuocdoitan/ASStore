@@ -29,7 +29,7 @@ import javax.servlet.http.Part;
  *
  * @author Tien Phat
  */
-@WebServlet(name = "uploadImages", urlPatterns = {"/UploadAnimeImages"})
+@WebServlet(name = "uploadImagesAnime", urlPatterns = {"/UploadAnimeImages"})
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50)   // 50MB
@@ -57,16 +57,19 @@ public class UploadAnimeImages extends HttpServlet {
             throws ServletException, IOException {
         String image = getImageName(request, response);
         String name = request.getParameter("name");
-        String id = request.getParameter("id");
+        String description = request.getParameter("description");
+        String id = request.getParameter("anime");
 
         Models.Anime anime = animeFacade.find(Integer.parseInt(id));
-        anime.setName(name);
+        anime.setName(name);     
         anime.setPicture(image);
+        anime.setDescription(description);
         try {
             animeFacade.edit(anime);
         } catch (Exception e) {
             System.out.println(e.toString());
         }
+        response.sendRedirect(request.getContextPath() + "/anime/list");
     }
 
     protected String getImageName(HttpServletRequest request, HttpServletResponse response)
@@ -97,14 +100,13 @@ public class UploadAnimeImages extends HttpServlet {
         return "";
     }
 
-
-private String getImageResourceAbsolutePath(HttpServletRequest request) {
+    private String getImageResourceAbsolutePath(HttpServletRequest request) {
         String appPath = request.getServletContext().getRealPath("");
         String dist = "dist" + File.separator + "gfdeploy";
         int distPosition = appPath.indexOf(dist);
         String projectPath = appPath.substring(0, distPosition - 1);
         String contextPath = request.getContextPath();
-        String imageResourcePath = File.separator + "web" + File.separator + "assets" + File.separator + "img" + File.separator + "products" + File.separator;
+        String imageResourcePath = File.separator + "web" + File.separator + "assets" + File.separator + "img" + File.separator + "anime" + File.separator;
         String imageResourceAbsolutePath = projectPath + contextPath + imageResourcePath;
         return imageResourceAbsolutePath;
     }
