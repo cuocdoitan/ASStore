@@ -20,9 +20,7 @@
                 </div>
                 <label>Category image</label>
                 <p>
-                    <label for="inputPhoto">
                         <img id="preview_inputPhoto" style="height:100px; width:100px"/>
-                    </label>
                     <br/>
                     <br/>
                     <input class="m-b-50" type="file" name="image" accept="image/*" onchange="previewPhoto(event)"/>

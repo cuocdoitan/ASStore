@@ -35,4 +35,6 @@ public interface ProductFacadeLocal {
     
     public List<Product> getProductbyCategory(int proCateId);
     
+    public List<Product> getProductbyCate(int proCateId);
+    
 }

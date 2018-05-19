@@ -88,11 +88,11 @@ public class Category_admin extends HttpServlet {
                 break;
             case "/delete":
                 int idcate = Integer.parseInt(request.getParameter("id"));
-                List<Models.Product> cateProduct = productFacade.getProductbyCategory(idcate);
+                List<Models.Product> cateProduct = productFacade.getProductbyCate(idcate);
                 if (cateProduct == null) {
                     Models.Category category1 = categoryFacade.find(idcate);
-                    category1.setEnabled(false);
-                    categoryFacade.edit(category1);
+//                    category1.setEnabled(false);
+                    categoryFacade.remove(category1);
                     request.getRequestDispatcher("/admin/category/list").forward(request, response);
                 } else {
                     request.setAttribute("error", "Category can not be deleted. Category existing products...!");
@@ -121,7 +121,7 @@ public class Category_admin extends HttpServlet {
         String adminRequest = request.getPathInfo();
         switch (adminRequest) {
             case "/create":
-                request.getRequestDispatcher("/UploadCategoryImages").forward(request, response);
+                request.getRequestDispatcher("/category_uploadFile").forward(request, response);
                 break;
             case "/edit":
                 request.getRequestDispatcher("/EditCategoryImages").forward(request, response);

@@ -7,7 +7,6 @@ package controllers;
 
 import SB.CategoryFacadeLocal;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -15,11 +14,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import javax.ejb.EJB;
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
@@ -32,24 +29,33 @@ import javax.servlet.http.Part;
  *
  * @author zerox
  */
-@WebServlet(name = "UploadFileNewCategory", urlPatterns = {"/UploadFileCategoryNew"})
+@WebServlet(name = "category_uploadFile", urlPatterns = {"/category_uploadFile"})
 @MultipartConfig
-public class categorys_uploadFile extends HttpServlet {
+public class category_uploadFile extends HttpServlet {
 
     @EJB
     private CategoryFacadeLocal categoryFacade;
 
+    
+    /**
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
+     * methods.
+     *
+     * @param request servlet request
+     * @param response servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException if an I/O error occurs
+     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/json;charset=UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
         // Create path components to save the file
         final String path = getServletContext().getRealPath("assets/img/categories/");
-        final Part filePart = request.getPart("file");
+        final Part filePart = request.getPart("image");
         final String fileName = getFileName(filePart);
 
         OutputStream out = null;
         InputStream filecontent = null;
-        final PrintWriter writer = response.getWriter();
 
         try {
             out = new FileOutputStream(new File(path + File.separator
@@ -62,12 +68,9 @@ public class categorys_uploadFile extends HttpServlet {
             while ((read = filecontent.read(bytes)) != -1) {
                 out.write(bytes, 0, read);
             }
-            writer.println("{ status: 'success', name: '" + fileName + "', path: '" + path + "' }");
             LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
                     new Object[]{fileName, path});
         } catch (FileNotFoundException fne) {
-            writer.println("{ status: 'failed', name: '" + fileName + "', error: '" + fne.getMessage() + "', path: '" + path + "' }");
-
             LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
                     new Object[]{fne.getMessage()});
         } finally {
@@ -77,10 +80,44 @@ public class categorys_uploadFile extends HttpServlet {
             if (filecontent != null) {
                 filecontent.close();
             }
-            if (writer != null) {
-                writer.close();
+        }
+        //post new category
+        String image = fileName;
+        String name = request.getParameter("name");
+        String errorMess = "";
+        Models.Category getcate = (Models.Category) categoryFacade.getCateByName(name);
+        Models.Category category = new Models.Category();
+        category.setId(0);
+        category.setEnabled(true);
+        boolean error = false;
+        if (name.trim().equals("")) {
+            errorMess = errorMess.equals("") ? "Name Category can't be blank" : errorMess;
+            error = true;
+        } else {
+            if (getcate != null) {
+                errorMess = errorMess.equals("") ? "Name Category exist" : errorMess;
+                error = true;
+            } else {
+                request.setAttribute("name", name);
+                category.setName(name);
             }
         }
+
+        request.setAttribute("image", image);
+        category.setPicture(image);
+
+        if (error) {
+            request.setAttribute("error", errorMess);
+            request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
+            return;
+        }
+
+        try {
+            categoryFacade.create(category);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        response.sendRedirect(request.getContextPath() + "/admin/category/list");
     }
 
     private String getFileName(final Part part) {
@@ -126,87 +163,7 @@ public class categorys_uploadFile extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        String image = getImageName(request, response);
-        String name = request.getParameter("name");
-        String errorMess = "";
-        Models.Category getcate = (Models.Category) categoryFacade.getCateByName(name);
-        Models.Category category = new Models.Category();
-        category.setId(0);
-        category.setEnabled(true);
-        boolean error = false;
-        if (name.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Name Category can't be blank" : errorMess;
-            error = true;
-        } else {
-            if (getcate != null) {
-                errorMess = errorMess.equals("") ? "Name Category exist" : errorMess;
-                error = true;
-            } else {
-                request.setAttribute("name", name);
-                category.setName(name);
-            }
-        }
-
-        request.setAttribute("image", image);
-        category.setPicture(image);
-
-        if (error) {
-            request.setAttribute("error", errorMess);
-            request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
-        }
-
-        try {
-            categoryFacade.create(category);
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        response.sendRedirect(request.getContextPath() + "/admin/category/list");
-    }
-
-    protected String getImageName(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/json;charset=UTF-8");
-        // Create path components to save the file
-        final String path = getServletContext().getRealPath("assets/img/categories/");
-        final Part filePart = request.getPart("file");
-        final String fileName = getFileName(filePart);
-
-        OutputStream out = null;
-        InputStream filecontent = null;
-        final PrintWriter writer = response.getWriter();
-
-        try {
-            out = new FileOutputStream(new File(path + File.separator
-                    + fileName));
-            filecontent = filePart.getInputStream();
-
-            int read = 0;
-            final byte[] bytes = new byte[1024];
-
-            while ((read = filecontent.read(bytes)) != -1) {
-                out.write(bytes, 0, read);
-            }
-            writer.println("{ status: 'success', name: '" + fileName + "', path: '" + path + "' }");
-            LOGGER.log(Level.INFO, "File{0}being uploaded to {1}",
-                    new Object[]{fileName, path});
-        } catch (FileNotFoundException fne) {
-            writer.println("{ status: 'failed', name: '" + fileName + "', error: '" + fne.getMessage() + "', path: '" + path + "' }");
-
-            LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                    new Object[]{fne.getMessage()});
-        } finally {
-            if (out != null) {
-                out.close();
-            }
-            if (filecontent != null) {
-                filecontent.close();
-            }
-            if (writer != null) {
-                writer.close();
-            }
-        }
-        return "";
+        processRequest(request, response);
     }
 
     /**

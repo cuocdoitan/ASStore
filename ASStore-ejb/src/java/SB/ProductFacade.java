@@ -55,4 +55,19 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         return list;
     }
 
+    @Override
+    public List<Product> getProductbyCate(int proCateId) {
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.categoryId.id = ?1 and p.enabled = ?2", Product.class);
+        query.setParameter(1, proCateId);
+        query.setParameter(2, true);
+        List<Product> list = query.getResultList();
+        if(list.isEmpty()){
+            return null;
+        }
+        else{
+            return list;
+        }
+        
+    }
+
 }
