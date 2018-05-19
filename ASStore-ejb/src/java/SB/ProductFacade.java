@@ -6,11 +6,14 @@
 package SB;
 
 import Models.Product;
+import Models.Users;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -30,15 +33,26 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
     public ProductFacade() {
         super(Product.class);
     }
-    
-    public List<Product> getListApprovingProduct(){
+
+    @Override
+    public List<Product> getListApprovingProduct() {
         List<Product> listApprovinProduct = new ArrayList<>();
-        for(Product product : this.findAll()){
-            if(product.getStatus()==0){
+        for (Product product : this.findAll()) {
+            if (product.getStatus() == 0) {
                 listApprovinProduct.add(product);
             }
         }
         return listApprovinProduct;
     }
-    
+
+    @Override
+    public List<Product> getProductbyCategory(int proCateId) {
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.categoryId.id = ?1 and p.enabled = ?2 and p.status = ?3", Product.class);
+        query.setParameter(1, proCateId);
+        query.setParameter(2, true);
+        query.setParameter(3, 1);
+        List<Product> list = query.getResultList();
+        return list;
+    }
+
 }

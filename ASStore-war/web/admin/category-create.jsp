@@ -20,18 +20,23 @@
                 </div>
                 <label>Category image</label>
                 <p>
-                    <input type="file" name="image" accept="image/*" value="${image}"/>
+                    <label for="inputPhoto">
+                        <img id="preview_inputPhoto" style="height:100px; width:100px"/>
+                    </label>
+                    <br/>
+                    <br/>
+                    <input class="m-b-50" type="file" name="image" accept="image/*" onchange="previewPhoto(event)"/>
                     <br/>
                 </p>
                 <br/>
                 <br/>
-                <button style="width: 200px; background: #e74c3c" class="size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4 m-r-20">
+<!--                <button style="width: 200px; background: #e74c3c" class="size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4 m-r-20">
                     Cancel
-                </button>
+                </button>-->
                 <button style="width: 200px;" class="size1 bg4 bo-rad-23 s-text1 trans-0-4">
                     Add Category
                 </button>
             </div>
         </section>
     </form>
-</t:adminLayout>>
+</t:adminLayout>

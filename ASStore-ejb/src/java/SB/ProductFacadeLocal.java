@@ -6,6 +6,7 @@
 package SB;
 
 import Models.Product;
+import Models.Users;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -31,5 +32,7 @@ public interface ProductFacadeLocal {
     int count();
     
     public List<Product> getListApprovingProduct();
+    
+    public List<Product> getProductbyCategory(int proCateId);
     
 }

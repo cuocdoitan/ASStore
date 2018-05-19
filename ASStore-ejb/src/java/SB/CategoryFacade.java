@@ -39,6 +39,21 @@ public class CategoryFacade extends AbstractFacade<Category> implements Category
         return query.getResultList();
     }
 
+    @Override
+    public Category getCateByName(String cateName) {
+        TypedQuery query = em.createQuery("SELECT c FROM Category c WHERE c.name like ?1 and c.enabled = ?2", Category.class);
+        query.setParameter(1, "%"+cateName+"%");
+        query.setParameter(2, true);
+        List<Category> list = query.getResultList();
+        System.out.println("=====================================");
+        System.out.println("list = "+list.toString());
+        if(list.isEmpty()){
+            return null;
+        }else{
+            return list.get(0);
+        }
+    }
+
  
     
 }

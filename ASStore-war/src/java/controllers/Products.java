@@ -46,8 +46,7 @@ public class Products extends HttpServlet {
     response.setContentType("text/html;charset=UTF-8");
     String clientRequest = request.getPathInfo();
     switch(clientRequest){
-            case "/list":
-                
+            case "/list":  
                 request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
                 break;
             case "/new-product":

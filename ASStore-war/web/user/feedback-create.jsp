@@ -18,9 +18,6 @@
                 <p style="color: red">${error}</p>
                 <label>Title Feedback</label>
                 <div class="bo4 of-hidden size15 m-b-20">
-                    <input class="sizefull s-text7 p-l-22 p-r-22"  type="text" name="id">
-                </div>
-                <div class="bo4 of-hidden size15 m-b-20">
                     <input class="sizefull s-text7 p-l-22 p-r-22" value="${title}" type="text" name="title" placeholder="Title Feedback">
                 </div>
                 <label>Content Feedback</label>

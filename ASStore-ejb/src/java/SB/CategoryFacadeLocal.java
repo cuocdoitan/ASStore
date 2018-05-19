@@ -7,6 +7,7 @@ package SB;
 
 import Models.Category;
 import Models.Feedback;
+import Models.Users;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -33,5 +34,5 @@ public interface CategoryFacadeLocal {
     
     public List<Category> getList();
     
-    
+    public Category getCateByName(String cateName);
 }

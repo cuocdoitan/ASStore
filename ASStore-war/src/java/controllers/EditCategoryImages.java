@@ -29,10 +29,10 @@ import javax.servlet.http.Part;
  *
  * @author Tien Phat
  */
-@WebServlet(name = "uploadImages", urlPatterns = {"/EditCategoryImages"})
-@MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
-                 maxFileSize=1024*1024*10,      // 10MB
-                 maxRequestSize=1024*1024*50)   // 50MB
+@WebServlet(name = "uploadImagesEdit", urlPatterns = {"/EditCategoryImages"})
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
+        maxFileSize = 1024 * 1024 * 10, // 10MB
+        maxRequestSize = 1024 * 1024 * 50)   // 50MB
 public class EditCategoryImages extends HttpServlet {
 
     @EJB
@@ -67,9 +67,17 @@ public class EditCategoryImages extends HttpServlet {
         String name = request.getParameter("name");
         String id = request.getParameter("id");
         Models.Category category = categoryFacade.find(Integer.parseInt(id));
-        category.setName(name);
-        
-        category.setPicture(image);
+        if (name.trim().isEmpty()) {
+            category.setPicture(categoryFacade.find(Integer.parseInt(id)).getName());
+        } else {
+            category.setName(name);
+        }
+        if (image.trim().isEmpty()) {
+            category.setPicture(categoryFacade.find(Integer.parseInt(id)).getPicture());
+        } else {
+            category.setPicture(image);
+        }
+
         try {
             categoryFacade.edit(category);
         } catch (Exception e) {
@@ -77,39 +85,37 @@ public class EditCategoryImages extends HttpServlet {
         }
         response.sendRedirect(request.getContextPath() + "/admin/category/list");
     }
-    
+
     protected String getImageName(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException{
+            throws ServletException, IOException {
         String imageResourceAbsolutePath = getImageResourceAbsolutePath(request);
-        for(Part part : request.getParts()){
+        for (Part part : request.getParts()) {
             String imageName = extractFileName(part);
             imageName = new File(imageName).getName();
-            if(!imageName.equals("")){
+            if (!imageName.equals("")) {
                 try {
                     InputStream inputStream = part.getInputStream();
                     String fileName = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(new Date()) + imageName;
                     String imageAbsolutePath = imageResourceAbsolutePath + fileName;
                     File fileSaveDir = new File(imageAbsolutePath);
-                    
+
                     BufferedImage e = ImageIO.read(inputStream);
                     ImageIO.write(e, "png", fileSaveDir);
                     inputStream.close();
                     return fileName;
                 } catch (IOException fne) {
                     LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
-                        new Object[]{fne.getMessage()});
+                            new Object[]{fne.getMessage()});
                 }
-                
+
             }
         }
         return "";
     }
-            
 
-    
-    private String getImageResourceAbsolutePath(HttpServletRequest request){
+    private String getImageResourceAbsolutePath(HttpServletRequest request) {
         String appPath = request.getServletContext().getRealPath("");
-        String dist = "dist"+File.separator+"gfdeploy";
+        String dist = "dist" + File.separator + "gfdeploy";
         int distPosition = appPath.indexOf(dist);
         String projectPath = appPath.substring(0, distPosition - 1);
         String contextPath = request.getContextPath();
@@ -117,19 +123,19 @@ public class EditCategoryImages extends HttpServlet {
         String imageResourceAbsolutePath = projectPath + contextPath + imageResourcePath;
         return imageResourceAbsolutePath;
     }
-  
+
     private String extractFileName(Part part) {
-    String contentDisp = part.getHeader("content-disposition");
-    String[] items = contentDisp.split(";");
-        System.out.println("number of items : "+items.length);
-    for (String s : items) {
-        System.out.println("extracted string : "+s);
-        
-        if (s.trim().startsWith("filename")) {
-            return s.substring(s.indexOf("=") + 2, s.length()-1);
+        String contentDisp = part.getHeader("content-disposition");
+        String[] items = contentDisp.split(";");
+        System.out.println("number of items : " + items.length);
+        for (String s : items) {
+            System.out.println("extracted string : " + s);
+
+            if (s.trim().startsWith("filename")) {
+                return s.substring(s.indexOf("=") + 2, s.length() - 1);
+            }
         }
+        return "";
     }
-    return "";
-  }
 
 }

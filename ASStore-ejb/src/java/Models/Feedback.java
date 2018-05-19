@@ -44,7 +44,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Feedback.findByContents", query = "SELECT f FROM Feedback f WHERE f.contents = :contents")
     , @NamedQuery(name = "Feedback.findByCreateAt", query = "SELECT f FROM Feedback f WHERE f.createAt = :createAt")
     , @NamedQuery(name = "Feedback.findByUpdateAt", query = "SELECT f FROM Feedback f WHERE f.updateAt = :updateAt")
-    , @NamedQuery(name = "Feedback.findByEnabled", query = "SELECT f FROM Feedback f WHERE f.enabled = :enabled")})
+    , @NamedQuery(name = "Feedback.findByEnabled", query = "SELECT f FROM Feedback f WHERE f.enabled = :enabled ORDER BY f.createAt DESC")})
 public class Feedback implements Serializable {
 
     private static final long serialVersionUID = 1L;
