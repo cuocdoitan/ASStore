@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package controllers;
+package BusinessLogic;
 
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.awt.image.BufferedImage;
@@ -12,7 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -22,12 +24,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import org.json.simple.JSONArray;
 
 /**
  *
  * @author Tien Phat
  */
-@WebServlet(name = "uploadImages", urlPatterns = {"/uploadProductImages"})
+@WebServlet(name = "uploadProductImages", urlPatterns = {"/uploadProductImages"})
 @MultipartConfig(fileSizeThreshold=1024*1024*2, // 2MB
                  maxFileSize=1024*1024*10,      // 10MB
                  maxRequestSize=1024*1024*50)   // 50MB
@@ -60,7 +63,8 @@ public class UploadProductImages extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String imageResourceAbsolutePath = getImageResourceAbsolutePath(request);
+        response.setContentType("application/json");
+        String imageResourceAbsolutePath = getServletContext().getRealPath("assets/img/products/");
         for(Part part : request.getParts()){
             String imageName = extractFileName(part);
             imageName = new File(imageName).getName();
@@ -74,11 +78,11 @@ public class UploadProductImages extends HttpServlet {
                     BufferedImage e = ImageIO.read(inputStream);
                     ImageIO.write(e, "png", fileSaveDir);
                     inputStream.close();
+                    response.getWriter().print("{\"filename\":\"" + fileName + "\"}");
                 } catch (IOException fne) {
                     LOGGER.log(Level.SEVERE, "Problems during file upload. Error: {0}",
                         new Object[]{fne.getMessage()});
-                }
-                
+                }  
             }
         }
     }

@@ -6,6 +6,7 @@
 package SB;
 
 import Models.Product;
+import java.math.BigDecimal;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -30,6 +31,21 @@ public interface ProductFacadeLocal {
 
     int count();
     
+    public BigDecimal getHighestProductPrice();
+    
+    public List<Product> getListExistingProduct();
+    
     public List<Product> getListApprovingProduct();
     
+    public List<Product> getListProductSortedDesc();
+    
+    public List<Product> searchProductByName(String name);
+    
+    public List<Product> searchProductByUserPhoneNumber(String phoneNumber);
+    
+    public int createNewProduct(Product newProduct);
+    
+    public List<Product> searchProduct(String productName, Models.Anime animeId, Models.Category categoryId, BigDecimal minPrice, BigDecimal maxPrice);
+    
+    public List<Product> getRandomProductSameAnime(Product product);
 }

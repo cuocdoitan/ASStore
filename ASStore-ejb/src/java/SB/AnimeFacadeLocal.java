@@ -30,4 +30,8 @@ public interface AnimeFacadeLocal {
 
     int count();   
     
+    public List<Anime> getAll();
+    
+    public Anime findAnimeByName(String name);
+    
 }

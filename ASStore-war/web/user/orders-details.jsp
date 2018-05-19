@@ -23,6 +23,7 @@
               <th class="column-4 text-center">Quantity</th>
               <th class="column-5 text-center">Total</th>
             </tr>
+
             <c:forEach items="${details}" var="detail">
               <jsp:include page="/user/components/confirmOrder/cartItem.jsp">
                 <jsp:param name="image" value="${images.get(detail.productId.id)}" />
@@ -32,6 +33,7 @@
                 <jsp:param name="total" value="${detail.unitPrice * detail.quantity}" />
               </jsp:include>
             </c:forEach>
+
             <tr class="table-row">
               <td class="column-1"></td>
               <td class="column-2"></td>
