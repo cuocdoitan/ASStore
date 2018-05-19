@@ -8,6 +8,7 @@ package Models;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -57,6 +58,8 @@ public class Users implements Serializable {
   @Temporal(TemporalType.DATE)
   @Column(name = "UpdateAt")
   private Date updateAt;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+  private List<BankCard> bankCardList;
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -279,6 +282,16 @@ public class Users implements Serializable {
   @Override
   public String toString() {
     return "Models.Users[ id=" + id + " ]";
+  }
+
+
+  @XmlTransient
+  public List<BankCard> getBankCardList() {
+    return bankCardList;
+  }
+
+  public void setBankCardList(List<BankCard> bankCardList) {
+    this.bankCardList = bankCardList;
   }
 
   public Date getCreateAt() {

@@ -61,8 +61,10 @@
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.createAt}</td>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.status ? 'delivered' : 'delivering'}</td>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">
-                    <a href="<c:url value="/orders/details?order=${order.id}" />" style="color: #007bff">Details</a> || 
-                    <a href="<c:url value="/orders/delete?order=${order.id}" />" style="color: #c82333">Delete</a>
+                    <a href="<c:url value="/orders/details?order=${order.id}" />" style="color: #007bff">Details</a>
+                    <c:if test="${order.status}">
+                    || <a href="<c:url value="/orders/delete?order=${order.id}" />" style="color: #c82333">Delete</a>
+                    </c:if>
                   </td>
                 </tr>
               </c:if>

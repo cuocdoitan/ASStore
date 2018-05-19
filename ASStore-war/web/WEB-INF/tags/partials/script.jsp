@@ -42,4 +42,5 @@
 <script src="<c:url value='/assets/js/main.js'/>"></script>
 <script src="<c:url value='/assets/js/custom.js'/>"></script>
 <script src="<c:url value='/assets/js/feedback.js'/>"></script>
+<script src="<c:url value='/assets/js/checkout.js'/>"></script>
 <script src="<c:url value='/assets/js/product.js'/>"></script>

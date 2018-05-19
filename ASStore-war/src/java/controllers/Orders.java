@@ -71,18 +71,25 @@ public class Orders extends HttpServlet {
         break;
       case "/details":
         int orderId = Integer.parseInt(request.getParameter("order"));
-        List<Models.OrdersDetail> details = orderDetailFacade.findByOrder(orderId);
-        HashMap images = new HashMap();
-        BigDecimal total = new BigDecimal(0);
-        for (Models.OrdersDetail detail : details) {
-          total = total.add(detail.getUnitPrice().multiply(new BigDecimal(detail.getQuantity())));
-          images.put(detail.getProductId().getId(), mediaFacade.getFirstImageFromProduct(detail.getProductId()));
+        Models.Orders order = orderFacade.find(orderId);
+        if (!order.getEnabled()) {
+          request.setAttribute("orderId", order.getId());
+          request.getRequestDispatcher("/order-not-found.jsp").forward(request, response);
         }
-        request.setAttribute("orderTotal", total);
-        request.setAttribute("images", images);
-        request.setAttribute("details", details);
-        request.setAttribute("orderId", orderId);
-        request.getRequestDispatcher("/user/orders-details.jsp").forward(request, response);
+        else {
+          List<Models.OrdersDetail> details = orderDetailFacade.findByOrder(orderId);
+          HashMap images = new HashMap();
+          BigDecimal total = new BigDecimal(0);
+          for (Models.OrdersDetail detail : details) {
+            total = total.add(detail.getUnitPrice().multiply(new BigDecimal(detail.getQuantity())));
+            images.put(detail.getProductId().getId(), mediaFacade.getFirstImageFromProduct(detail.getProductId()));
+          }
+          request.setAttribute("orderTotal", total);
+          request.setAttribute("images", images);
+          request.setAttribute("details", details);
+          request.setAttribute("orderId", orderId);
+          request.getRequestDispatcher("/user/orders-details.jsp").forward(request, response);
+        }
         break;
       case "/delete":
         orderId = Integer.parseInt(request.getParameter("order"));

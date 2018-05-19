@@ -38,15 +38,15 @@
           Newest Products
         </h3>
       </div>
-        <div class="row">
-            <c:forEach items="${listProduct}" var="product">
-                <jsp:include page="components/index/productItem.jsp">
-                    <jsp:param name="productId" value="${product.id}"/>
-                    <jsp:param name="name" value="${product.name}"/>
-                    <jsp:param name="price" value="${product.price}"/>
-                </jsp:include>
-            </c:forEach>
-        </div>
+      <div class="row">
+        <c:forEach items="${listProduct}" var="product">
+          <jsp:include page="components/index/productItem.jsp">
+            <jsp:param name="productId" value="${product.id}"/>
+            <jsp:param name="name" value="${product.name}"/>
+            <jsp:param name="price" value="${product.price}"/>
+          </jsp:include>
+        </c:forEach>
+      </div>
         <a href="<c:url value="/products/list"/>">
             <span style="font-weight: bold">SEE ALL &gt; &gt;</span>
         </a>

@@ -7,6 +7,7 @@ package Models;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,7 +34,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Cart.findAll", query = "SELECT c FROM Cart c")
-    , @NamedQuery(name = "Cart.findById", query = "SELECT c FROM Cart c WHERE c.id = :id")})
+    , @NamedQuery(name = "Cart.findById", query = "SELECT c FROM Cart c WHERE c.id = :id"),
+ @NamedQuery(name = "Cart.findByUserId", query = "SELECT c FROM Cart c WHERE c.usersId = :id")})
 public class Cart implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,7 +49,7 @@ public class Cart implements Serializable {
     @ManyToOne(optional = false)
     private Users usersId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cartId")
-    private Collection<CartDetail> cartDetailCollection;
+    private List<CartDetail> cartDetails;
 
     public Cart() {
     }
@@ -72,14 +74,15 @@ public class Cart implements Serializable {
         this.usersId = usersId;
     }
 
-    @XmlTransient
-    public Collection<CartDetail> getCartDetailCollection() {
-        return cartDetailCollection;
+    public List<CartDetail> getCartDetails() {
+      return cartDetails;
     }
 
-    public void setCartDetailCollection(Collection<CartDetail> cartDetailCollection) {
-        this.cartDetailCollection = cartDetailCollection;
+    public void setCartDetails(List<CartDetail> cartDetails) {
+      this.cartDetails = cartDetails;
     }
+
+
 
     @Override
     public int hashCode() {

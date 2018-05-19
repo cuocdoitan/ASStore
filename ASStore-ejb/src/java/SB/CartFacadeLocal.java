@@ -23,6 +23,8 @@ public interface CartFacadeLocal {
     void remove(Cart cart);
 
     Cart find(Object id);
+    
+    Cart findByUserId(int id);
 
     List<Cart> findAll();
 
