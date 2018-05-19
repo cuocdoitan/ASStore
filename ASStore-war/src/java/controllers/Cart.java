@@ -5,19 +5,37 @@
  */
 package controllers;
 
+import Models.CartDetail;
+import Models.Coupons;
+import Models.OrdersDetail;
+import Models.Product;
+import Models.Users;
+import SB.BankCardFacadeLocal;
 import SB.CartDetailFacadeLocal;
+import SB.CartFacadeLocal;
+import SB.CouponsFacadeLocal;
 import SB.MediaFacadeLocal;
+import SB.OrdersDetailFacadeLocal;
+import SB.OrdersFacadeLocal;
+import SB.UsersFacadeLocal;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
+import java.util.regex.Pattern;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -27,9 +45,22 @@ import javax.servlet.http.HttpServletResponse;
 public class Cart extends HttpServlet {
 
   @EJB
+  private UsersFacadeLocal userFacade;
+  @EJB
   private MediaFacadeLocal mediaFacade;
   @EJB
   private CartDetailFacadeLocal cartDetailFacade;
+  @EJB
+  private CartFacadeLocal cartFacade;
+  @EJB
+  private OrdersFacadeLocal orderFacade;
+  @EJB
+  private OrdersDetailFacadeLocal orderDetailFacade;
+  @EJB
+  private BankCardFacadeLocal bankCardFacade;
+  @EJB
+  private CouponsFacadeLocal couponsFacade;
+
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
    * methods.
@@ -57,9 +88,15 @@ public class Cart extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     String clientRequest = request.getPathInfo();
-    switch(clientRequest) {
+    HttpSession sess = request.getSession();
+    switch (clientRequest) {
       case "/list":
-        java.util.List<Models.CartDetail> details = cartDetailFacade.findByCartId(1);
+        if (sess.getAttribute("userId") == null) {
+          request.getRequestDispatcher("/user/login.jsp").forward(request, response);
+          return;
+        }
+        int userId = (int)sess.getAttribute("userId");
+        java.util.List<Models.CartDetail> details = cartDetailFacade.findByCartId(cartFacade.findByUserId(userId).getId());
         HashMap images = new HashMap();
         BigDecimal total = new BigDecimal(0);
         for (Models.CartDetail detail : details) {
@@ -69,6 +106,7 @@ public class Cart extends HttpServlet {
         request.setAttribute("cartTotal", total);
         request.setAttribute("images", images);
         request.setAttribute("details", details);
+        request.setAttribute("userId", sess.getAttribute("userId") != null ? sess.getAttribute("userId").toString() : "guest");
         request.getRequestDispatcher("/user/cart.jsp").forward(request, response);
         break;
       case "/remove":
@@ -76,6 +114,11 @@ public class Cart extends HttpServlet {
         cartDetailFacade.remove(cartDetailFacade.find(detailId));
         response.sendRedirect("/cart/list");
     }
+  }
+
+  public String genPassCode() {
+    Random r = new Random(System.currentTimeMillis());
+    return Integer.toString((1 + r.nextInt(2)) * 10000 + r.nextInt(10000));
   }
 
   /**
@@ -89,7 +132,214 @@ public class Cart extends HttpServlet {
   @Override
   protected void doPost(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
-    processRequest(request, response);
+    String clientRequest = request.getPathInfo();
+    HttpSession sess = request.getSession();
+    switch (clientRequest) {
+      case "/addCoupon":
+        String detailId = request.getParameter("detailid");
+        String coupon = request.getParameter("coupon");
+        response.setContentType("application/json");
+        if (sess.getAttribute("userId") != null) {
+          CartDetail detail = cartDetailFacade.find(Integer.parseInt(detailId));
+          if (coupon.trim().equals("")) {
+            detail.setCoupon("");
+            cartDetailFacade.edit(detail);
+            return;
+          }
+          // TODO: validate coupon
+          
+          Coupons couponDetail = couponsFacade.findByCoupon(coupon);
+          if (couponDetail != null) {
+            Date current = new Date();
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+              Date expire = format.parse(couponDetail.getExpireDate());
+              if (expire.before(current)) {
+                response.getWriter().print("{ \"status\": \"expired\", \"mess\":\"Coupon expired!\" }");
+              }
+              else {
+                detail.setCoupon(coupon);
+                cartDetailFacade.edit(detail);
+                response.getWriter().print("{ \"status\": \"success\", \"mess\":\"Used coupon!\", \"percentage\" : \"" + couponDetail.getPercentage() + " \" }");
+              }
+            }catch(Exception e) {
+              response.getWriter().print("{ \"status\": \"failed\", \"mess\":\"Coupon not found!\" }");
+              e.printStackTrace();
+            }
+            
+          }
+          else {
+            response.getWriter().print("{ \"status\": \"failed\", \"mess\":\"Coupon not found!\" }");
+          }
+          
+        }
+        break;
+      case "/checkout":
+        String method = request.getParameter("method");
+        String address = request.getParameter("address");
+        String cardNumber = request.getParameter("cardNumber");
+        String cardSecurity = request.getParameter("cardSecurity");
+        String expiryDate = request.getParameter("expiryDate");
+        String phone = request.getParameter("phone");
+        String error = "";
+        boolean hasError = false;
+
+        // show product
+        java.util.List<Models.CartDetail> details = cartDetailFacade.findByCartId(1);
+        HashMap images = new HashMap();
+        BigDecimal total = new BigDecimal(0);
+        for (Models.CartDetail detail : details) {
+          total = total.add(detail.getProductId().getPrice().multiply(new BigDecimal(detail.getQuantity())));
+          images.put(detail.getProductId().getId(), mediaFacade.getFirstImageFromProduct(detail.getProductId()));
+        }
+        request.setAttribute("cartTotal", total);
+        request.setAttribute("images", images);
+        request.setAttribute("details", details);
+
+        if (phone.trim().equals("")) {
+          error = error.equals("") ? "Phone can't be blank!" : error;
+          hasError = true;
+        } else {
+          String p = "^0(1|8|9)\\d{8,9}$";
+          Pattern c = Pattern.compile(p);
+          if (!c.matcher(phone).matches()) {
+            error = error.equals("") ? "Phone must contains from 10 to 11 digits and begins with 0 and follow by 1, 8 or 9!" : error;
+            hasError = true;
+          } else {
+            request.setAttribute("phone", phone);
+          }
+        }
+        if (address.trim().equals("")) {
+          error = error.equals("") ? "Address can't be blank!" : error;
+          hasError = true;
+        } else {
+          request.setAttribute("address", address);
+        }
+        if (method.equals("cash")) {
+          if (!hasError) {
+            if (sess.getAttribute("userId") == null) {
+              Models.Users user = userFacade.getUsersByPhone("0000000000");
+              HashMap cartDetails = new HashMap();
+              java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
+
+              for (Models.CartDetail detail : cartDetailSess) {
+                cartDetails.put(detail.getId(), detail);
+              }
+              newOrder(user.getId(), genPassCode(), address, phone, cartDetails);
+              request.getRequestDispatcher("/user/checkout-success.jsp").forward(request, response);
+            } else {
+              Models.Users user = userFacade.find(sess.getAttribute("userId"));
+              HashMap cartDetails = new HashMap();
+              java.util.List<CartDetail> cardDetails = cartDetailFacade.findByCartId(cartFacade.findByUserId(user.getId()).getId());
+              for (CartDetail detail : cardDetails) {
+                cartDetails.put(detail.getId(), detail);
+              }
+
+              newOrder(user.getId(), genPassCode(), address, phone, cartDetails);
+              request.getRequestDispatcher("/user/checkout-success.jsp").forward(request, response);
+            }
+          }
+        } else {
+          request.setAttribute("isCard", true);
+
+          if (cardNumber.trim().equals("")) {
+            error = error.equals("") ? "Please enter card number" : error;
+            hasError = true;
+          } else {
+            request.setAttribute("cardNumber", cardNumber);
+          }
+          if (cardSecurity.trim().equals("")) {
+            error = error.equals("") ? "Please enter card security number" : error;
+            hasError = true;
+          } else {
+            request.setAttribute("cardSecurity", cardSecurity);
+          }
+          if (expiryDate.trim().equals("")) {
+            error = error.equals("") ? "Please enter your expiry date" : error;
+            hasError = true;
+          } else {
+            request.setAttribute("expiryDate", expiryDate);
+            Date current = new Date();
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+              Date expire = format.parse(expiryDate);
+              if (!bankCardFacade.isCorrectCardNumber(cardNumber.replaceAll(" ",""), cardSecurity, expiryDate)) {
+                error = error.equals("") ? "Card details is invalid !" : error;
+                hasError = true;
+              }
+              if (expire.before(current)) {
+                error = error.equals("") ? "Your card is expired!" : error;
+                hasError = true;
+              }
+              if (!bankCardFacade.hasEnoughMoney(cardNumber, total)) {
+                error = error.equals("") ? "Your card doesn't have enough money!" : error;
+                hasError = true;
+              }
+              if (!hasError) {
+                if (sess.getAttribute("userId") == null) {
+                  Models.Users user = userFacade.getUsersByPhone("0000000000");
+                  HashMap cartDetails = new HashMap();
+                  java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
+
+                  for (Models.CartDetail detail : cartDetailSess) {
+                    cartDetails.put(detail.getId(), detail);
+                  }
+                  newOrder(user.getId(), genPassCode(), address, phone, cartDetails);
+                  request.getRequestDispatcher("/user/checkout-success.jsp").forward(request, response);
+                } else {
+                  Models.Users user = userFacade.find(sess.getAttribute("userId"));
+                  HashMap cartDetails = new HashMap();
+                  java.util.List<CartDetail> cardDetails = cartDetailFacade.findByCartId(cartFacade.findByUserId(user.getId()).getId());
+                  for (CartDetail detail : cardDetails) {
+                    cartDetails.put(detail.getId(), detail);
+                  }
+
+                  newOrder(user.getId(), genPassCode(), address, phone, cartDetails);
+                  request.getRequestDispatcher("/user/checkout-success.jsp").forward(request, response);
+                }
+              }
+            } catch (Exception e) {
+              e.printStackTrace();
+            }
+            // TODO: CHECK CARD
+
+          }
+        }
+
+        if (hasError) {
+          request.setAttribute("error", error);
+          request.getRequestDispatcher("/user/cart.jsp").forward(request, response);
+        }
+    }
+  }
+
+  private void newOrder(int userId, String passcode, String address, String phone, HashMap cartDetails) {
+    Models.Orders order = new Models.Orders();
+    Models.Users user = new Users(userId);
+    order.setUsersId(user);
+    order.setAddress(address);
+    order.setPhone(phone);
+    order.setPassCode(passcode);
+    Models.Orders newOrder = orderFacade.createOrder(order);
+    Iterator entries = cartDetails.entrySet().iterator();
+    while (entries.hasNext()) {
+      Map.Entry entry = (Map.Entry) entries.next();
+      CartDetail detail = (CartDetail) entry.getValue();
+      Models.OrdersDetail details = new OrdersDetail();
+      details.setOrdersId(newOrder);
+      details.setProductId(detail.getProductId());
+      details.setQuantity(detail.getQuantity());
+      BigDecimal price = (BigDecimal) detail.getUnitPrice();
+      // apply coupon
+      if (detail.getCoupon() != null) {
+        Coupons coupon = couponsFacade.findByCoupon(detail.getCoupon());
+        BigDecimal percentage = new BigDecimal(coupon.getPercentage());
+        price = price.subtract(price.multiply(percentage).divide(new BigDecimal(100)));
+      }
+      details.setUnitPrice(price);
+      orderDetailFacade.create(details);
+    }
+
   }
 
   /**

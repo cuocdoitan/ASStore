@@ -61,4 +61,15 @@ public class OrdersFacade extends AbstractFacade<Orders> implements OrdersFacade
       Query query = em.createNamedQuery("Orders.findAll");
       return query.getResultList();
     }
+    
+    public Orders createOrder(Orders order) {
+      try {
+        em.persist(order);
+        return order;
+      } catch (Exception e) {
+        e.printStackTrace();
+        return null;
+      }
+      
+    }
 }

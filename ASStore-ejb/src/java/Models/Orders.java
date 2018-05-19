@@ -6,9 +6,6 @@
 package Models;
 
 import java.io.Serializable;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -32,13 +27,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "Orders")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o ORDER BY o.createAt DESC")
+  @NamedQuery(name = "Orders.findAll", query = "SELECT o FROM Orders o")
   , @NamedQuery(name = "Orders.findById", query = "SELECT o FROM Orders o WHERE o.id = :id")
   , @NamedQuery(name = "Orders.findByPassCode", query = "SELECT o FROM Orders o WHERE o.passCode = :passCode")
   , @NamedQuery(name = "Orders.findByCreateAt", query = "SELECT o FROM Orders o WHERE o.createAt = :createAt")
   , @NamedQuery(name = "Orders.findByEnabled", query = "SELECT o FROM Orders o WHERE o.enabled = :enabled")
   , @NamedQuery(name = "Orders.findByStatus", query = "SELECT o FROM Orders o WHERE o.status = :status")
-  , @NamedQuery(name = "Orders.findByAddress", query = "SELECT o FROM Orders o WHERE o.address = :address")})
+  , @NamedQuery(name = "Orders.findByAddress", query = "SELECT o FROM Orders o WHERE o.address = :address")
+  , @NamedQuery(name = "Orders.findByPhone", query = "SELECT o FROM Orders o WHERE o.phone = :phone")})
 public class Orders implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -54,9 +50,9 @@ public class Orders implements Serializable {
   private String passCode;
   @Basic(optional = false)
   @NotNull
-  @Temporal(TemporalType.DATE)
+  @Size(min = 1, max = 10)
   @Column(name = "CreateAt")
-  private Date createAt;
+  private String createAt;
   @Basic(optional = false)
   @NotNull
   @Column(name = "Enabled")
@@ -68,10 +64,14 @@ public class Orders implements Serializable {
   @Size(max = 600)
   @Column(name = "Address")
   private String address;
+  // @Pattern(regexp="^\\(?(\\d{3})\\)?[- ]?(\\d{3})[- ]?(\\d{4})$", message="Invalid phone/fax format, should be as xxx-xxx-xxxx")//if the field contains phone or fax number consider using this annotation to enforce field validation
+  @Size(max = 100)
+  @Column(name = "Phone")
+  private String phone;
   @JoinColumn(name = "UsersId", referencedColumnName = "Id")
   @ManyToOne(optional = false)
   private Users usersId;
-  
+
   public Orders() {
   }
 
@@ -79,7 +79,7 @@ public class Orders implements Serializable {
     this.id = id;
   }
 
-  public Orders(Integer id, String passCode, Date createAt, boolean enabled, boolean status) {
+  public Orders(Integer id, String passCode, String createAt, boolean enabled, boolean status) {
     this.id = id;
     this.passCode = passCode;
     this.createAt = createAt;
@@ -104,11 +104,10 @@ public class Orders implements Serializable {
   }
 
   public String getCreateAt() {
-    Format formatter = new SimpleDateFormat("dd / MM / yyyy");
-    return formatter.format(createAt);
+    return createAt;
   }
 
-  public void setCreateAt(Date createAt) {
+  public void setCreateAt(String createAt) {
     this.createAt = createAt;
   }
 
@@ -134,6 +133,14 @@ public class Orders implements Serializable {
 
   public void setAddress(String address) {
     this.address = address;
+  }
+
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
   }
 
   public Users getUsersId() {

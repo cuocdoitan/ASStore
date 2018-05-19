@@ -6,7 +6,6 @@
 package Models;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,16 +24,16 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author zerox
  */
 @Entity
-@Table(name = "CartDetail")
+@Table(name = "Coupons")
 @XmlRootElement
 @NamedQueries({
-  @NamedQuery(name = "CartDetail.findAll", query = "SELECT c FROM CartDetail c")
-  , @NamedQuery(name = "CartDetail.findById", query = "SELECT c FROM CartDetail c WHERE c.id = :id")
-  , @NamedQuery(name = "CartDetail.findByCartId", query = "SELECT c FROM CartDetail c WHERE c.cartId = :id")
-  , @NamedQuery(name = "CartDetail.findByQuantity", query = "SELECT c FROM CartDetail c WHERE c.quantity = :quantity")
-  , @NamedQuery(name = "CartDetail.findByUnitPrice", query = "SELECT c FROM CartDetail c WHERE c.unitPrice = :unitPrice")
-  , @NamedQuery(name = "CartDetail.findByCoupon", query = "SELECT c FROM CartDetail c WHERE c.coupon = :coupon")})
-public class CartDetail implements Serializable {
+  @NamedQuery(name = "Coupons.findAll", query = "SELECT c FROM Coupons c")
+  , @NamedQuery(name = "Coupons.findById", query = "SELECT c FROM Coupons c WHERE c.id = :id")
+  , @NamedQuery(name = "Coupons.findByUserId", query = "SELECT c FROM Coupons c WHERE c.userId = :userId")
+  , @NamedQuery(name = "Coupons.findByCoupon", query = "SELECT c FROM Coupons c WHERE c.coupon = :coupon")
+  , @NamedQuery(name = "Coupons.findByExpireDate", query = "SELECT c FROM Coupons c WHERE c.expireDate = :expireDate")
+  , @NamedQuery(name = "Coupons.findByPercentage", query = "SELECT c FROM Coupons c WHERE c.percentage = :percentage")})
+public class Coupons implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
@@ -44,31 +43,39 @@ public class CartDetail implements Serializable {
   private Integer id;
   @Basic(optional = false)
   @NotNull
-  @Column(name = "Quantity")
-  private int quantity;
-  // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-  @Column(name = "UnitPrice")
-  private BigDecimal unitPrice;
-  @Size(max = 100)
+  @Column(name = "UserId")
+  private int userId;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 100)
   @Column(name = "Coupon")
   private String coupon;
-  @JoinColumn(name = "CartId", referencedColumnName = "Id")
-  @ManyToOne(optional = false)
-  private Cart cartId;
+  @Basic(optional = false)
+  @NotNull
+  @Size(min = 1, max = 100)
+  @Column(name = "ExpireDate")
+  private String expireDate;
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "Percentage")
+  private int percentage;
   @JoinColumn(name = "ProductId", referencedColumnName = "Id")
   @ManyToOne(optional = false)
   private Product productId;
 
-  public CartDetail() {
+  public Coupons() {
   }
 
-  public CartDetail(Integer id) {
+  public Coupons(Integer id) {
     this.id = id;
   }
 
-  public CartDetail(Integer id, int quantity) {
+  public Coupons(Integer id, int userId, String coupon, String expireDate, int percentage) {
     this.id = id;
-    this.quantity = quantity;
+    this.userId = userId;
+    this.coupon = coupon;
+    this.expireDate = expireDate;
+    this.percentage = percentage;
   }
 
   public Integer getId() {
@@ -79,20 +86,12 @@ public class CartDetail implements Serializable {
     this.id = id;
   }
 
-  public int getQuantity() {
-    return quantity;
+  public int getUserId() {
+    return userId;
   }
 
-  public void setQuantity(int quantity) {
-    this.quantity = quantity;
-  }
-
-  public BigDecimal getUnitPrice() {
-    return unitPrice;
-  }
-
-  public void setUnitPrice(BigDecimal unitPrice) {
-    this.unitPrice = unitPrice;
+  public void setUserId(int userId) {
+    this.userId = userId;
   }
 
   public String getCoupon() {
@@ -103,12 +102,20 @@ public class CartDetail implements Serializable {
     this.coupon = coupon;
   }
 
-  public Cart getCartId() {
-    return cartId;
+  public String getExpireDate() {
+    return expireDate;
   }
 
-  public void setCartId(Cart cartId) {
-    this.cartId = cartId;
+  public void setExpireDate(String expireDate) {
+    this.expireDate = expireDate;
+  }
+
+  public int getPercentage() {
+    return percentage;
+  }
+
+  public void setPercentage(int percentage) {
+    this.percentage = percentage;
   }
 
   public Product getProductId() {
@@ -129,10 +136,10 @@ public class CartDetail implements Serializable {
   @Override
   public boolean equals(Object object) {
     // TODO: Warning - this method won't work in the case the id fields are not set
-    if (!(object instanceof CartDetail)) {
+    if (!(object instanceof Coupons)) {
       return false;
     }
-    CartDetail other = (CartDetail) object;
+    Coupons other = (Coupons) object;
     if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
       return false;
     }
@@ -141,7 +148,7 @@ public class CartDetail implements Serializable {
 
   @Override
   public String toString() {
-    return "Models.CartDetail[ id=" + id + " ]";
+    return "Models.Coupons[ id=" + id + " ]";
   }
   
 }

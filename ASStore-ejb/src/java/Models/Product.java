@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -48,6 +49,17 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Product.findByEnabled", query = "SELECT p FROM Product p WHERE p.enabled = :enabled")})
 public class Product implements Serializable {
 
+  @Basic(optional = false)
+  @NotNull
+  @Temporal(TemporalType.DATE)
+  @Column(name = "CreateAt")
+  private Date createAt;
+  @Temporal(TemporalType.DATE)
+  @Column(name = "UpdateAt")
+  private Date updateAt;
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "productId")
+  private List<Coupons> couponsList;
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -73,14 +85,6 @@ public class Product implements Serializable {
     @NotNull
     @Column(name = "Quantity")
     private int quantity;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "CreateAt")
-    @Temporal(TemporalType.DATE)
-    private Date createAt;
-    @Column(name = "UpdateAt")
-    @Temporal(TemporalType.DATE)
-    private Date updateAt;
     @Column(name = "Status")
     private Short status;
     @Size(max = 200)
@@ -165,21 +169,6 @@ public class Product implements Serializable {
         this.quantity = quantity;
     }
 
-    public Date getCreateAt() {
-        return createAt;
-    }
-
-    public void setCreateAt(Date createAt) {
-        this.createAt = createAt;
-    }
-
-    public Date getUpdateAt() {
-        return updateAt;
-    }
-
-    public void setUpdateAt(Date updateAt) {
-        this.updateAt = updateAt;
-    }
 
     public Short getStatus() {
         return status;
@@ -289,5 +278,34 @@ public class Product implements Serializable {
     public String toString() {
         return "Models.Product[ id=" + id + " ]";
     }
+
+
+
+  @XmlTransient
+  public List<Coupons> getCouponsList() {
+    return couponsList;
+  }
+
+  public void setCouponsList(List<Coupons> couponsList) {
+    this.couponsList = couponsList;
+  }
+
+  public Date getCreateAt() {
+    return createAt;
+  }
+
+  public void setCreateAt(Date createAt) {
+    this.createAt = createAt;
+  }
+
+  public Date getUpdateAt() {
+    return updateAt;
+  }
+
+  public void setUpdateAt(Date updateAt) {
+    this.updateAt = updateAt;
+  }
+
+  
     
 }

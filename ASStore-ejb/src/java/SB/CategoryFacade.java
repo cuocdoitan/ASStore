@@ -38,7 +38,5 @@ public class CategoryFacade extends AbstractFacade<Category> implements Category
         query.setParameter("enabled", true);
         return query.getResultList();
     }
-
- 
     
 }

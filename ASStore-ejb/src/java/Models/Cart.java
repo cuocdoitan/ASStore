@@ -31,7 +31,8 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Cart.findAll", query = "SELECT c FROM Cart c")
-    , @NamedQuery(name = "Cart.findById", query = "SELECT c FROM Cart c WHERE c.id = :id")})
+    , @NamedQuery(name = "Cart.findById", query = "SELECT c FROM Cart c WHERE c.id = :id"),
+ @NamedQuery(name = "Cart.findByUserId", query = "SELECT c FROM Cart c WHERE c.usersId = :id")})
 public class Cart implements Serializable {
 
     private static final long serialVersionUID = 1L;
