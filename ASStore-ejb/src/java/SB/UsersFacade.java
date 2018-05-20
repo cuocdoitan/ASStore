@@ -62,6 +62,14 @@ public class UsersFacade extends AbstractFacade<Users> implements UsersFacadeLoc
         return query.getResultList();
     }
 
-    
+    public Users getUserByEmail(String email) {
+        Query query = em.createNamedQuery("Users.findByEmail");
+        query.setParameter("email", email);
+        try {
+            return (Users)query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 }
