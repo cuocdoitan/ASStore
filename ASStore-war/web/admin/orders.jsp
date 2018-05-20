@@ -26,6 +26,7 @@
               <th class="text-center p-t-10 p-l-20 p-r-20 p-b-10">ID</th>
               <th class="text-center p-t-10 p-l-20 p-r-20 p-b-10">User</th>
               <th class="text-center p-t-10 p-l-20 p-r-20 p-b-10">Phone</th>
+              <th class="text-center p-t-10 p-l-20 p-r-20 p-b-10">Address</th>
               <th class="text-center p-t-10 p-l-20 p-r-20 p-b-10">Date</th>
               <th class="text-center p-t-10 p-l-20 p-r-20 p-b-10">Status</th>
               <th class="text-center p-t-10 p-l-20 p-r-20 p-b-10">Actions</th>
@@ -37,7 +38,8 @@
                 <tr>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.id}</td>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${users.get(order.id).firstName} ${users.get(order.id).lastName}</td>
-                  <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${users.get(order.id).phoneNumber}</td>
+                  <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.phone}</td>
+                  <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.address}</td>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.createAt}</td>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.status ? 'delivered' : 'delivering'}</td>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">

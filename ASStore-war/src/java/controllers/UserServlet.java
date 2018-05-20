@@ -387,6 +387,7 @@ public class UserServlet extends HttpServlet {
                 session.setAttribute("phone", loginedUser.getPhoneNumber());
                 session.setAttribute("role", loginedUser.getRolesId());
                 session.setAttribute("userid", loginedUser.getId());
+                session.setAttribute("userId", loginedUser.getId());
                 response.sendRedirect(request.getContextPath() + "/User/userinfo");
             } else {
                 request.setAttribute("phone", phone);
