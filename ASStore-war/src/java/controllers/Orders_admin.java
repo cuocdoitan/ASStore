@@ -8,6 +8,7 @@ package controllers;
 import SB.MediaFacadeLocal;
 import SB.OrdersDetailFacadeLocal;
 import SB.OrdersFacadeLocal;
+import SB.UsersFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -32,6 +34,8 @@ public class Orders_admin extends HttpServlet {
   private OrdersDetailFacadeLocal orderDetailFacade;
   @EJB
   private MediaFacadeLocal mediaFacade;
+  @EJB
+  private UsersFacadeLocal userFacade;
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -72,8 +76,17 @@ public class Orders_admin extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     String clientRequest = request.getPathInfo();
+    HttpSession sess = request.getSession();
+    Models.Users user = userFacade.getGuestUser();
+    if (sess.getAttribute("userId") != null) {
+      user = userFacade.find((int)sess.getAttribute("userId"));
+    }
     switch (clientRequest) {
       case "/list":
+        if (!user.getRolesId().getName().trim().equals("admin")){
+          request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
+          return;
+        }
         java.util.List<Models.Orders> orders = orderFacade.findAll();
         ArrayList<Models.Orders> filteredOrders = new ArrayList<>();
         if (request.getParameter("show_all") == null) {

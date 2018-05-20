@@ -26,34 +26,6 @@
             </tr>
           </thead>
           <tbody>
-
-            <tr>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">1</td>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">4/5/2018</td>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">Delivering</td>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">
-                <a href="#" style="color: #007bff">Details</a> || 
-                <a href="#" style="color: #c82333">Delete</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">2</td>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">1/5/2018</td>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">Delivered</td>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">
-                <a href="#" style="color: #007bff">Details</a> || 
-                <a href="#" style="color: #c82333">Delete</a>
-              </td>
-            </tr>
-            <tr>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">3</td>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">30/4/2018</td>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">Delivered</td>
-              <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">
-                <a href="#" style="color: #007bff">Details</a> || 
-                <a href="#" style="color: #c82333">Delete</a>
-              </td>
-            </tr>
             <c:forEach items="${orders}" var="order">
               <c:if test="${order.enabled}">
                 <tr>

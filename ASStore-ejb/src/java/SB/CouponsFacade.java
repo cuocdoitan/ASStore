@@ -33,6 +33,10 @@ public class CouponsFacade extends AbstractFacade<Coupons> implements CouponsFac
   public Coupons findByCoupon(String coupon) {
     Query query = em.createNamedQuery("Coupons.findByCoupon");
     query.setParameter("coupon", coupon);
-    return (Coupons)query.getSingleResult();
+    try {
+      return (Coupons)query.getSingleResult();
+    } catch (Exception e) {
+      return null;
+    }
   }
 }

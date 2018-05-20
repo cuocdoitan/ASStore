@@ -257,6 +257,9 @@ public class UserServlet extends HttpServlet {
                 if (cartFacade.findByUserId(loginedUser.getId()) == null) {
                   migrateCartToAccount(session, loginedUser);
                 }
+                else {
+                  migrateSessionCart(session, loginedUser);
+                }
                 request.getRequestDispatcher("/user/user-information.jsp").forward(request, response);
             } else {
                 request.setAttribute("phone", phone);
@@ -265,6 +268,17 @@ public class UserServlet extends HttpServlet {
                 request.getRequestDispatcher("/user/login.jsp").forward(request, response);
             }
         }
+    }
+    
+    private void migrateSessionCart(HttpSession sess, Users user) {
+      Models.Cart cart = cartFacade.findByUserId(user.getId());
+      if (sess.getAttribute("cart") != null) {
+        java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
+        for (Models.CartDetail detail : cartDetailSess) {
+          detail.setCartId(cart);
+          cartDetailFacade.create(detail);
+        }
+      }
     }
     
     private void migrateCartToAccount(HttpSession sess, Users user) {
@@ -295,7 +309,7 @@ public class UserServlet extends HttpServlet {
             request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
         } else {//account co ton tai
             //check password
-            if (loginedUser.getPassword().equals(password) && loginadmin.getId() == 1) {
+            if (loginedUser.getPassword().equals(password) && loginadmin.getName().equals("admin")) {
                 HttpSession session = request.getSession();
                 session.setAttribute("phone", loginedUser.getPhoneNumber());
                 session.setAttribute("role", loginedUser.getRolesId());

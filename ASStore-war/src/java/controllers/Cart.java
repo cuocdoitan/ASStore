@@ -91,24 +91,64 @@ public class Cart extends HttpServlet {
     HttpSession sess = request.getSession();
     switch (clientRequest) {
       case "/list":
-        if (sess.getAttribute("userId") == null) {
-          request.getRequestDispatcher("/user/login.jsp").forward(request, response);
-          return;
+        int userId = userFacade.getGuestUser().getId();
+        if (sess.getAttribute("userId") != null) {
+          userId = (int)sess.getAttribute("userId");
         }
-        int userId = (int)sess.getAttribute("userId");
+        Users user = userFacade.find(userId);
         int id = cartFacade.findByUserId(userId).getId();
         java.util.List<Models.CartDetail> details = cartDetailFacade.findByCartId(id);
         HashMap images = new HashMap();
+        HashMap stotals = new HashMap();
+        HashMap coupons = new HashMap();
         BigDecimal total = new BigDecimal(0);
         for (Models.CartDetail detail : details) {
-          total = total.add(detail.getProductId().getPrice().multiply(new BigDecimal(detail.getQuantity())));
+          BigDecimal dtotal = detail.getProductId().getPrice().multiply(new BigDecimal(detail.getQuantity()));
+          if (detail.getCoupon() != null && !detail.getCoupon().trim().equals("")) {
+            Coupons co = couponsFacade.findByCoupon(detail.getCoupon());
+            BigDecimal percentage = new BigDecimal(co.getPercentage());
+            dtotal = dtotal.subtract(dtotal.multiply(percentage).divide(new BigDecimal(100)));
+            coupons.put(detail.getCoupon(), co.getPercentage());
+          }
+          
+          stotals.put(detail.getId(), dtotal);
+          total = total.add(dtotal);
           images.put(detail.getProductId().getId(), mediaFacade.getFirstImageFromProduct(detail.getProductId()));
         }
+        request.setAttribute("coupons", coupons);
+        request.setAttribute("stotals", stotals);
         request.setAttribute("cartTotal", total);
         request.setAttribute("images", images);
         request.setAttribute("details", details);
         request.setAttribute("userId", sess.getAttribute("userId") != null ? sess.getAttribute("userId").toString() : "guest");
+        request.setAttribute("address", user.getAddress());
         request.getRequestDispatcher("/user/cart.jsp").forward(request, response);
+        break;
+      case "/getPrice":
+        int detailsId = Integer.parseInt(request.getParameter("detailid"));
+        CartDetail detaild = cartDetailFacade.find(detailsId);
+        response.setContentType("application/json");
+        response.getWriter().print("{\"price\": \"" + detaild.getUnitPrice().multiply(new BigDecimal(detaild.getQuantity())) + "\"}");
+        break;
+      case "/getTotal":
+        response.setContentType("application/json");
+        userId = userFacade.getGuestUser().getId();
+        if (sess.getAttribute("userId") != null) {
+          userId = (int)sess.getAttribute("userId");
+        }
+        id = cartFacade.findByUserId(userId).getId();
+        details = cartDetailFacade.findByCartId(id);
+        total = new BigDecimal(0);
+        for (Models.CartDetail detail : details) {
+          BigDecimal dtotal = detail.getProductId().getPrice().multiply(new BigDecimal(detail.getQuantity()));
+          if (detail.getCoupon() != null && !detail.getCoupon().trim().equals("")) {
+            Coupons co = couponsFacade.findByCoupon(detail.getCoupon());
+            BigDecimal percentage = new BigDecimal(co.getPercentage());
+            dtotal = dtotal.subtract(dtotal.multiply(percentage).divide(new BigDecimal(100)));
+          }
+          total = total.add(dtotal);
+        }
+        response.getWriter().print("{\"price\": \"" + total + "\"}");
         break;
       case "/remove":
         int detailId = Integer.parseInt(request.getParameter("detailId"));
@@ -317,16 +357,21 @@ public class Cart extends HttpServlet {
   private void newOrder(int userId, String passcode, String address, String phone, HashMap cartDetails) {
     Models.Orders order = new Models.Orders();
     Models.Users user = new Users(userId);
+    order.setId(0);
     order.setUsersId(user);
     order.setAddress(address);
     order.setPhone(phone);
     order.setPassCode(passcode);
+    order.setEnabled(true);
+    order.setStatus(false);
+    order.setCreateAt("2018-05-20");
     Models.Orders newOrder = orderFacade.createOrder(order);
     Iterator entries = cartDetails.entrySet().iterator();
     while (entries.hasNext()) {
       Map.Entry entry = (Map.Entry) entries.next();
       CartDetail detail = (CartDetail) entry.getValue();
       Models.OrdersDetail details = new OrdersDetail();
+      details.setId(0);
       details.setOrdersId(newOrder);
       details.setProductId(detail.getProductId());
       details.setQuantity(detail.getQuantity());

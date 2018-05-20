@@ -6,6 +6,7 @@
 package SB;
 
 import Models.Orders;
+import Models.Users;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -27,6 +28,8 @@ public interface OrdersFacadeLocal {
     Orders find(Object id);
 
     List<Orders> findAll();
+    
+    List<Orders> findByUser(Users user);
 
     List<Orders> findRange(int[] range);
     

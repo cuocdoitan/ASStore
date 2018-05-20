@@ -10,6 +10,7 @@ import SB.MediaFacadeLocal;
 import SB.OrdersDetailFacadeLocal;
 import SB.OrdersFacadeLocal;
 import SB.ProductFacadeLocal;
+import SB.UsersFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
@@ -21,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -35,6 +37,8 @@ public class Orders extends HttpServlet {
   private OrdersDetailFacadeLocal orderDetailFacade;
   @EJB
   private MediaFacadeLocal mediaFacade;
+  @EJB
+  private UsersFacadeLocal userFacade;
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
    * methods.
@@ -62,16 +66,26 @@ public class Orders extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
           throws ServletException, IOException {
     String clientRequest = request.getPathInfo();
-
+    HttpSession sess = request.getSession();
+    Models.Users user = userFacade.getGuestUser();
+    if (sess.getAttribute("userId") != null) {
+      user = userFacade.find((int)sess.getAttribute("userId"));
+    }
     switch (clientRequest) {
       case "/list":
-        List<Models.Orders> orders = orderFacade.findAll();
+        List<Models.Orders> orders = orderFacade.findByUser(user);
         request.setAttribute("orders", orders);
         request.getRequestDispatcher("/user/orders.jsp").forward(request, response);
         break;
       case "/details":
         int orderId = Integer.parseInt(request.getParameter("order"));
         Models.Orders order = orderFacade.find(orderId);
+        if (!order.getUsersId().getId().equals(user.getId()) && !user.getRolesId().getName().trim().equals("admin")) {
+          System.out.println(user.getFirstName());
+          request.setAttribute("orderId", order.getId());
+          request.getRequestDispatcher("/order-not-found.jsp").forward(request, response);
+          return;
+        }
         if (!order.getEnabled()) {
           request.setAttribute("orderId", order.getId());
           request.getRequestDispatcher("/order-not-found.jsp").forward(request, response);
