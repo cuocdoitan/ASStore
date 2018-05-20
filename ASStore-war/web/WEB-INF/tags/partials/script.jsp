@@ -42,5 +42,10 @@
 <script src="<c:url value='/assets/js/main.js'/>"></script>
 <script src="<c:url value='/assets/js/custom.js'/>"></script>
 <script src="<c:url value='/assets/js/feedback.js'/>"></script>
+<<<<<<< HEAD
 <script src="<c:url value='/assets/js/checkout.js'/>"></script>
 <script src="<c:url value='/assets/js/product.js'/>"></script>
+=======
+
+<script src="<c:url value='/assets/js/permission.js'/>"></script>
+>>>>>>> eede5d5c19c84b7408a4b2e79c09e4aec1a9c9b9
