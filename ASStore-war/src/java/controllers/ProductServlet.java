@@ -211,19 +211,25 @@ public class ProductServlet extends HttpServlet {
         String page = request.getParameter("page");
         PaginationHandler pagination = new PaginationHandler();
         int selectedPage = pagination.getSelectedPage(page);
-        int numberOfPage = pagination.countNumberOfPages(listProduct.size(), 9);
-        if(selectedPage < 0 || selectedPage > numberOfPage){
+        int maxPage = pagination.countNumberOfPages(listProduct.size(), 9);
+        if (selectedPage < 0 || selectedPage > maxPage) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND);
             return;
         }
-        int[] arrPages = pagination.arrayOfPages(numberOfPage);
         int[] range = pagination.getObjectPositionInSelectedPage(listProduct.size(), 9, selectedPage);
         List<Product> listProductInPage = listProduct.subList(range[0], range[1]);
-        
+
         request.setAttribute("listProduct", listProductInPage);
         request.setAttribute("categories", categoryFacade.findAll());
-        request.setAttribute("arrPages", arrPages);
+        request.setAttribute("numberOfPage", maxPage);
         request.setAttribute("selectedPage", selectedPage);
+
+        request.setAttribute("vproductName", productName);
+        request.setAttribute("vanimeName", animeName);
+        request.setAttribute("vcategory", category);
+        request.setAttribute("vminPrice", minPrice);
+        request.setAttribute("vmaxPrice", maxPrice);
+
         request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
         //</editor-fold>
     }

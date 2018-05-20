@@ -29,21 +29,27 @@ public class PaginationHandler {
 
     public int[] getObjectPositionInSelectedPage(int totalObjects, int numberObjectsPerPage, int selectedPage) {
         int lastPage = countNumberOfPages(totalObjects, numberObjectsPerPage);
-        int firstIndex, lastIndex;
-        if (selectedPage == lastPage) {
-            int exceededObjects = totalObjects % numberObjectsPerPage;
-            if (exceededObjects != 0) {
-                lastIndex = totalObjects;
-                firstIndex = lastIndex - exceededObjects + 1;
-            } else {
-                firstIndex = (numberObjectsPerPage * (selectedPage - 1)) + 1;
-                lastIndex = numberObjectsPerPage * selectedPage;
-            }
-        } else {
-            firstIndex = (numberObjectsPerPage * (selectedPage - 1)) + 1;
-            lastIndex = numberObjectsPerPage * selectedPage;
+        int fromIndex, toIndex;
+        fromIndex = (selectedPage - 1)*numberObjectsPerPage;
+        toIndex = fromIndex + numberObjectsPerPage;
+        if(toIndex >= totalObjects){
+            toIndex = totalObjects;
         }
-        int[] range = new int[]{firstIndex - 1, lastIndex};
+        
+//        if (selectedPage == lastPage) {
+//            int exceededObjects = totalObjects % numberObjectsPerPage;
+//            if (exceededObjects != 0) {
+//                lastIndex = totalObjects;
+//                firstIndex = lastIndex - exceededObjects + 1;
+//            } else {
+//                firstIndex = (numberObjectsPerPage * (selectedPage - 1)) + 1;
+//                lastIndex = numberObjectsPerPage * selectedPage;
+//            }
+//        } else {
+//            firstIndex = (numberObjectsPerPage * (selectedPage - 1)) + 1;
+//            lastIndex = numberObjectsPerPage * selectedPage;
+//        }
+        int[] range = new int[]{fromIndex, toIndex};
         return range;
     }
 

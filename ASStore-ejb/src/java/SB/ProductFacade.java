@@ -104,8 +104,9 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
             }
             
         }
-        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1"+condition, Product.class);
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.status = ?8"+condition, Product.class);
         query.setParameter(1, true);
+        query.setParameter(8, 1);
         if(productName  != null){
             query.setParameter(2, "%"+productName+"%");
         }
