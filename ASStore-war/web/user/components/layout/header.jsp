@@ -34,7 +34,7 @@
             </li>
 
             <li>
-                <a href="<c:url value="/anime"/>">Anime</a>
+                <a href="<c:url value="/anime/list"/>">Anime</a>
             </li>
 
             <li>

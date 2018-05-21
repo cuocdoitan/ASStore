@@ -46,9 +46,10 @@ public class UserServlet extends HttpServlet {
 
     @EJB
     private CartFacadeLocal cartFacade;
-    
+
     @EJB
     private CartDetailFacadeLocal cartDetailFacade;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -88,28 +89,42 @@ public class UserServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession sess = request.getSession();
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
         String clientRequest = request.getPathInfo();
 //        Roles role = (Roles)sess.getAttribute("role");
         switch (clientRequest) {
             case "/list":
+                if (sess.getAttribute("userid") == null) {
+                    response.sendRedirect(request.getContextPath() + "/User/loginadmin");
+                    return;
+                }
                 java.util.List<Models.Users> listaccount = usersFacade.getList();
                 request.setAttribute("userlist", listaccount);
                 request.getRequestDispatcher("/admin/user-accountlist.jsp").forward(request, response);
                 break;
             case "/login":
-                if(sess.getAttribute("userid") != null) {
+                if (sess.getAttribute("userid") != null) {
                     response.sendRedirect(request.getContextPath() + "/index");
                     return;
                 }
                 request.getRequestDispatcher("/user/login.jsp").forward(request, response);
                 break;
             case "/loginadmin":
-                request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
+                if (sess.getAttribute("userid") != null) {
+                    response.sendRedirect(request.getContextPath() + "/User/list");
+                } else {
+                    request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
+                }
                 break;
             case "/create":
                 request.getRequestDispatcher("/user/register.jsp").forward(request, response);
                 break;
             case "/detail":
+                if (sess.getAttribute("userid") == null) {
+                    response.sendRedirect(request.getContextPath() + "/User/login");
+                    return;
+                }
                 Models.Users user = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
                 List<Models.Product> listAvailableProduct = productFacade.getListAvailableProduct_User(user);
                 List<Models.Product> listCheckingProduct = productFacade.getListCheckingProduct_User(user);
@@ -145,9 +160,24 @@ public class UserServlet extends HttpServlet {
                 break;
             case "/delete":
                 Models.Users user1 = usersFacade.find(Integer.parseInt(request.getParameter("id")));
-                user1.setEnabled(false);
-                usersFacade.edit(user1);
-                request.getRequestDispatcher("/User/list").forward(request, response);
+                if (user1.getRolesId().getName().equals("admin")) {
+                    request.setAttribute("error", "Admin not delete");
+                    request.getRequestDispatcher("/User/list").forward(request, response);
+                } else {
+                    user1.setEnabled(false);
+                    usersFacade.edit(user1);
+                    request.getRequestDispatcher("/User/list").forward(request, response);
+                }
+
+                break;
+            case "/logout":
+                sess.invalidate();
+                response.sendRedirect(request.getContextPath() + "/User/login");
+                break;
+            case "/logoutadmin":
+                sess.invalidate();
+                response.sendRedirect(request.getContextPath() + "/User/loginadmin");
+
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -166,6 +196,7 @@ public class UserServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession sess = request.getSession();
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         String clientRequest = request.getPathInfo();
         switch (clientRequest) {
@@ -187,6 +218,16 @@ public class UserServlet extends HttpServlet {
             case "/Updateuserpass":
                 Updateuserpass(request, response);
                 break;
+//            case "/logout":
+//                sess.invalidate();
+//                response.sendRedirect(request.getContextPath() + "/User/login");
+//
+//                break;
+//            case "/logoutadmin":
+//                sess.invalidate();
+//                response.sendRedirect(request.getContextPath() + "/User/loginadmin");
+//
+//                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
@@ -320,17 +361,13 @@ public class UserServlet extends HttpServlet {
                 session.setAttribute("phone", loginedUser.getPhoneNumber());
                 session.setAttribute("role", loginedUser.getRolesId());
                 session.setAttribute("userid", loginedUser.getId());
-                session.setAttribute("userId", loginedUser.getId());
                 request.setAttribute("user", loginedUser);
                 if (cartFacade.findByUserId(loginedUser.getId()) == null) {
-                  migrateCartToAccount(session, loginedUser);
+                    migrateCartToAccount(session, loginedUser);
+                } else {
+                    migrateSessionCart(session, loginedUser);
                 }
-                else {
-                  migrateSessionCart(session, loginedUser);
-                }
-                request.getRequestDispatcher("/user/user-information.jsp").forward(request, response);
-                session.setAttribute("user", loginedUser);
-                request.setAttribute("user", loginedUser);
+
                 response.sendRedirect(request.getContextPath() + "/User/detail");
             } else {
                 request.setAttribute("phone", phone);
@@ -341,30 +378,30 @@ public class UserServlet extends HttpServlet {
         }
         //<editor-fold>
     }
-    
+
     private void migrateSessionCart(HttpSession sess, Users user) {
-      Models.Cart cart = cartFacade.findByUserId(user.getId());
-      if (sess.getAttribute("cart") != null) {
-        java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
-        for (Models.CartDetail detail : cartDetailSess) {
-          detail.setCartId(cart);
-          cartDetailFacade.create(detail);
+        Models.Cart cart = cartFacade.findByUserId(user.getId());
+        if (sess.getAttribute("cart") != null) {
+            java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
+            for (Models.CartDetail detail : cartDetailSess) {
+                detail.setCartId(cart);
+                cartDetailFacade.create(detail);
+            }
         }
-      }
     }
-    
+
     private void migrateCartToAccount(HttpSession sess, Users user) {
-      Models.Cart cart = new Models.Cart();
-      cart.setId(0);
-      cart.setUsersId(user);
-      cartFacade.create(cart);
-      if (sess.getAttribute("cart") != null) {
-        java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
-        for (Models.CartDetail detail : cartDetailSess) {
-          detail.setCartId(cart);
-          cartDetailFacade.create(detail);
+        Models.Cart cart = new Models.Cart();
+        cart.setId(0);
+        cart.setUsersId(user);
+        cartFacade.create(cart);
+        if (sess.getAttribute("cart") != null) {
+            java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
+            for (Models.CartDetail detail : cartDetailSess) {
+                detail.setCartId(cart);
+                cartDetailFacade.create(detail);
+            }
         }
-      }
     }
 
     protected void loginadmin(HttpServletRequest request, HttpServletResponse response)
@@ -388,7 +425,7 @@ public class UserServlet extends HttpServlet {
                 session.setAttribute("role", loginedUser.getRolesId());
                 session.setAttribute("userid", loginedUser.getId());
                 session.setAttribute("userId", loginedUser.getId());
-                response.sendRedirect(request.getContextPath() + "/User/userinfo");
+                response.sendRedirect(request.getContextPath() + "/User/list");
             } else {
                 request.setAttribute("phone", phone);
                 request.setAttribute("pass", password);
@@ -423,18 +460,16 @@ public class UserServlet extends HttpServlet {
             if (inputlastname.trim().equals("")) {
                 errorMess = errorMess.equals("") ? "Lastname can't be blank" : errorMess;
                 error = true;
-            } 
-            
+            }
+
 //            if (userEmail != null) {
 //                errorMess = errorMess.equals("") ? "Email exits" : errorMess;
 //                error = true;
 //            }
-           
             if (error == true) {
                 request.setAttribute("error", errorMess);
                 request.getRequestDispatcher("/user/user-information-update.jsp").forward(request, response);
-            }
-            else {
+            } else {
                 user.setFirstName(inputfirstname);
                 user.setLastName(inputlastname);
 //                user.setEmail(inputemail);

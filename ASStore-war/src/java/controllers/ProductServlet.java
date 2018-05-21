@@ -125,6 +125,7 @@ public class ProductServlet extends HttpServlet {
             request.setAttribute("categories", categoryFacade.findAll());
             request.setAttribute("listProduct", listProduct);
             request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
+            return;
         } else {
             boolean error = false;
             String sProductName = productName;

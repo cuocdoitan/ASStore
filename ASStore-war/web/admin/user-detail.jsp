@@ -26,6 +26,7 @@
         <div class="m-b-10">
           Email: ${userid.email}
         </div>
+        
       </div>
     </div>
   </div> 
