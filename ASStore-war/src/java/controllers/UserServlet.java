@@ -17,6 +17,7 @@ import SB.RolesFacadeLocal;
 import SB.UsersFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -343,6 +344,8 @@ public class UserServlet extends HttpServlet {
     }
     
     private void migrateSessionCart(HttpSession sess, Users user) {
+      System.out.println(user);
+      
       Models.Cart cart = cartFacade.findByUserId(user.getId());
       if (sess.getAttribute("cart") != null) {
         java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
@@ -351,6 +354,7 @@ public class UserServlet extends HttpServlet {
           cartDetailFacade.create(detail);
         }
       }
+      
     }
     
     private void migrateCartToAccount(HttpSession sess, Users user) {
@@ -358,7 +362,7 @@ public class UserServlet extends HttpServlet {
       cart.setId(0);
       cart.setUsersId(user);
       cartFacade.create(cart);
-      if (sess.getAttribute("cart") != null) {
+      if (((List<CartDetail>)sess.getAttribute("cart")).size() > 0) {
         java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
         for (Models.CartDetail detail : cartDetailSess) {
           detail.setCartId(cart);
@@ -384,10 +388,17 @@ public class UserServlet extends HttpServlet {
             //check password
             if (loginedUser.getPassword().equals(password) && (loginedUser.getRolesId().getName().equals("admin") || loginedUser.getRolesId().getName().equals("moderator"))) {
                 HttpSession session = request.getSession();
+                session.setAttribute("cart", new ArrayList());
                 session.setAttribute("phone", loginedUser.getPhoneNumber());
                 session.setAttribute("role", loginedUser.getRolesId());
                 session.setAttribute("userid", loginedUser.getId());
                 session.setAttribute("userId", loginedUser.getId());
+                if (cartFacade.findByUserId(loginedUser.getId()) == null) {
+                  migrateCartToAccount(session, loginedUser);
+                }
+                else {
+                  migrateSessionCart(session, loginedUser);
+                }
                 response.sendRedirect(request.getContextPath() + "/User/userinfo");
             } else {
                 request.setAttribute("phone", phone);

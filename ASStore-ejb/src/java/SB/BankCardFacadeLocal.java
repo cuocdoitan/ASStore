@@ -34,4 +34,6 @@ public interface BankCardFacadeLocal {
   boolean isCorrectCardNumber(String number, String security, String expiryDate);
   
   boolean hasEnoughMoney(String number, BigDecimal money);
+  
+  boolean pay(String number, BigDecimal money);
 }

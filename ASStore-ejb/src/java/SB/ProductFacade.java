@@ -174,4 +174,10 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         return query.getResultList();
 
     }
+    
+    public List<Product> getListProductOfUser(Models.Users user) {
+      TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.usersId = ?1", Models.Product.class);
+      query.setParameter(1, user);
+      return query.getResultList();
+    }
 }

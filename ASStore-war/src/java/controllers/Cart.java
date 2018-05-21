@@ -17,15 +17,17 @@ import SB.CouponsFacadeLocal;
 import SB.MediaFacadeLocal;
 import SB.OrdersDetailFacadeLocal;
 import SB.OrdersFacadeLocal;
+import SB.ProductFacadeLocal;
 import SB.UsersFacadeLocal;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Locale;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Pattern;
@@ -60,6 +62,8 @@ public class Cart extends HttpServlet {
   private BankCardFacadeLocal bankCardFacade;
   @EJB
   private CouponsFacadeLocal couponsFacade;
+  @EJB
+  private ProductFacadeLocal productFacade;
 
   /**
    * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -91,13 +95,21 @@ public class Cart extends HttpServlet {
     HttpSession sess = request.getSession();
     switch (clientRequest) {
       case "/list":
-        int userId = userFacade.getGuestUser().getId();
+        Users user = userFacade.getGuestUser();
+        java.util.List<Models.CartDetail> details = null;
         if (sess.getAttribute("userId") != null) {
-          userId = (int)sess.getAttribute("userId");
+          int userId = (int)sess.getAttribute("userId");
+          user = userFacade.find(userId);
+          int id = cartFacade.findByUserId(userId).getId();
+          details = cartDetailFacade.findByCartId(id);
         }
-        Users user = userFacade.find(userId);
-        int id = cartFacade.findByUserId(userId).getId();
-        java.util.List<Models.CartDetail> details = cartDetailFacade.findByCartId(id);
+        else {
+          if (sess.getAttribute("cart") == null) {
+            sess.setAttribute("cart", new ArrayList<>());
+          }
+          details = (java.util.List<Models.CartDetail>)sess.getAttribute("cart");
+        }
+        
         HashMap images = new HashMap();
         HashMap stotals = new HashMap();
         HashMap coupons = new HashMap();
@@ -121,7 +133,7 @@ public class Cart extends HttpServlet {
         request.setAttribute("images", images);
         request.setAttribute("details", details);
         request.setAttribute("userId", sess.getAttribute("userId") != null ? sess.getAttribute("userId").toString() : "guest");
-        request.setAttribute("address", user.getAddress());
+        request.setAttribute("address", sess.getAttribute("userId") != null ? user.getAddress() : "");
         request.getRequestDispatcher("/user/cart.jsp").forward(request, response);
         break;
       case "/getPrice":
@@ -132,11 +144,11 @@ public class Cart extends HttpServlet {
         break;
       case "/getTotal":
         response.setContentType("application/json");
-        userId = userFacade.getGuestUser().getId();
+        int userId = userFacade.getGuestUser().getId();
         if (sess.getAttribute("userId") != null) {
           userId = (int)sess.getAttribute("userId");
         }
-        id = cartFacade.findByUserId(userId).getId();
+        int id = cartFacade.findByUserId(userId).getId();
         details = cartDetailFacade.findByCartId(id);
         total = new BigDecimal(0);
         for (Models.CartDetail detail : details) {
@@ -151,9 +163,20 @@ public class Cart extends HttpServlet {
         response.getWriter().print("{\"price\": \"" + total + "\"}");
         break;
       case "/remove":
-        int detailId = Integer.parseInt(request.getParameter("detailId"));
-        cartDetailFacade.remove(cartDetailFacade.find(detailId));
-        response.sendRedirect("/cart/list");
+        int detailId = Integer.parseInt(request.getParameter("id"));
+        if (sess.getAttribute("userId") == null) {
+          ArrayList<CartDetail> cart = (ArrayList<CartDetail>)sess.getAttribute("cart");
+          for (CartDetail c : cart) {
+            if (c.getId().equals(detailId)) {
+              cart.remove(c);
+              break;
+            }
+          }
+        }
+        else {
+          cartDetailFacade.remove(cartDetailFacade.find(detailId));
+        }
+        response.sendRedirect(request.getContextPath() + "/cart/list");
     }
   }
 
@@ -180,6 +203,7 @@ public class Cart extends HttpServlet {
         String detailId = request.getParameter("detailid");
         String coupon = request.getParameter("coupon");
         response.setContentType("application/json");
+        
         if (sess.getAttribute("userId") != null) {
           CartDetail detail = cartDetailFacade.find(Integer.parseInt(detailId));
           if (coupon.trim().equals("")) {
@@ -199,9 +223,15 @@ public class Cart extends HttpServlet {
                 response.getWriter().print("{ \"status\": \"expired\", \"mess\":\"Coupon expired!\" }");
               }
               else {
-                detail.setCoupon(coupon);
-                cartDetailFacade.edit(detail);
-                response.getWriter().print("{ \"status\": \"success\", \"mess\":\"Used coupon!\", \"percentage\" : \"" + couponDetail.getPercentage() + " \" }");
+                if (detail.getProductId().getId().equals(couponDetail.getProductId().getId())) {
+                  detail.setCoupon(coupon);
+                  cartDetailFacade.edit(detail);
+                  response.getWriter().print("{ \"status\": \"success\", \"mess\":\"Used coupon!\", \"percentage\" : \"" + couponDetail.getPercentage() + " \" }");
+                }
+                else {
+                  response.getWriter().print("{\"status\": \"noapply\"}");
+                }
+                
               }
             }catch(Exception e) {
               response.getWriter().print("{ \"status\": \"failed\", \"mess\":\"Coupon not found!\" }");
@@ -215,6 +245,49 @@ public class Cart extends HttpServlet {
           
         }
         break;
+      case "/addToCart":
+        int productId = Integer.parseInt(request.getParameter("productid"));
+        int quantity = Integer.parseInt(request.getParameter("quantity"));
+        BigDecimal unitPrice = new BigDecimal(request.getParameter("unitprice"));
+        if (sess.getAttribute("userId") == null) {
+          if (sess.getAttribute("cart") == null) {
+            sess.setAttribute("cart", new ArrayList<>());
+          }
+          ArrayList<CartDetail> cart = (ArrayList<CartDetail>) sess.getAttribute("cart");
+          CartDetail de = new CartDetail();
+          Product p = productFacade.find(productId);
+          de.setId(0);
+          de.setCoupon("");
+          de.setProductId(p);
+          de.setQuantity(quantity);
+          de.setUnitPrice(unitPrice);
+          cart.add(de);
+        }
+        else {
+          Models.Cart ca = cartFacade.findByUserId((int)sess.getAttribute("userId"));
+          CartDetail de = new CartDetail();
+          de.setCartId(ca);
+          de.setId(0);
+          de.setCoupon("");
+          de.setProductId(new Product(productId));
+          de.setQuantity(quantity);
+          de.setUnitPrice(unitPrice);
+          try {
+            cartDetailFacade.create(de);
+          } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json");
+            response.getWriter().print("{ \"status\": \"failed\" }");
+            return;
+          }
+        }
+        Product ps = productFacade.find(productId);
+        ps.setQuantity(ps.getQuantity() - quantity);
+        productFacade.edit(ps);
+        response.setContentType("application/json");
+        response.getWriter().print("{ \"status\": \"success\" }");
+        break;
+        
       case "/checkout":
         String method = request.getParameter("method");
         String address = request.getParameter("address");
@@ -224,18 +297,41 @@ public class Cart extends HttpServlet {
         String phone = request.getParameter("phone");
         String error = "";
         boolean hasError = false;
-
+        java.util.List<Models.CartDetail> details = null;
+        Models.Users useri = userFacade.getGuestUser();
         // show product
-        java.util.List<Models.CartDetail> details = cartDetailFacade.findByCartId(1);
+        if (sess.getAttribute("userId") != null){
+          useri = userFacade.find(sess.getAttribute("userId"));
+          details = cartDetailFacade.findByCartId(cartFacade.findByUserId((int)sess.getAttribute("userId")).getId());
+        }
+        else {
+          details = (List<CartDetail>)sess.getAttribute("cart");
+        }
         HashMap images = new HashMap();
+        HashMap stotals = new HashMap();
+        HashMap coupons = new HashMap();
         BigDecimal total = new BigDecimal(0);
+        
         for (Models.CartDetail detail : details) {
-          total = total.add(detail.getProductId().getPrice().multiply(new BigDecimal(detail.getQuantity())));
+          BigDecimal dtotal = detail.getProductId().getPrice().multiply(new BigDecimal(detail.getQuantity()));
+          if (detail.getCoupon() != null && !detail.getCoupon().trim().equals("")) {
+            Coupons co = couponsFacade.findByCoupon(detail.getCoupon());
+            BigDecimal percentage = new BigDecimal(co.getPercentage());
+            dtotal = dtotal.subtract(dtotal.multiply(percentage).divide(new BigDecimal(100)));
+            coupons.put(detail.getCoupon(), co.getPercentage());
+          }
+          
+          stotals.put(detail.getId(), dtotal);
+          total = total.add(dtotal);
           images.put(detail.getProductId().getId(), mediaFacade.getFirstImageFromProduct(detail.getProductId()));
         }
+        request.setAttribute("coupons", coupons);
+        request.setAttribute("stotals", stotals);
         request.setAttribute("cartTotal", total);
         request.setAttribute("images", images);
         request.setAttribute("details", details);
+        request.setAttribute("userId", sess.getAttribute("userId") != null ? sess.getAttribute("userId").toString() : "guest");
+        request.setAttribute("address", sess.getAttribute("userId") != null ? useri.getAddress() : "");
 
         if (phone.trim().equals("")) {
           error = error.equals("") ? "Phone can't be blank!" : error;
@@ -259,14 +355,18 @@ public class Cart extends HttpServlet {
         if (method.equals("cash")) {
           if (!hasError) {
             if (sess.getAttribute("userId") == null) {
-              Models.Users user = userFacade.getUsersByPhone("0000000000");
+              Models.Users user = userFacade.getGuestUser();
               HashMap cartDetails = new HashMap();
               java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
 
               for (Models.CartDetail detail : cartDetailSess) {
                 cartDetails.put(detail.getId(), detail);
               }
-              newOrder(user.getId(), genPassCode(), address, phone, cartDetails);
+              String passcode = genPassCode();
+              newOrder(user.getId(), passcode, address, phone, cartDetails);
+              sess.setAttribute("cart", new ArrayList<>());
+              request.setAttribute("isGuest", true);
+              request.setAttribute("orderCode", passcode);
               request.getRequestDispatcher("/user/checkout-success.jsp").forward(request, response);
             } else {
               Models.Users user = userFacade.find(sess.getAttribute("userId"));
@@ -275,8 +375,13 @@ public class Cart extends HttpServlet {
               for (CartDetail detail : cardDetails) {
                 cartDetails.put(detail.getId(), detail);
               }
-
-              newOrder(user.getId(), genPassCode(), address, phone, cartDetails);
+              String passcode = genPassCode();
+              newOrder(user.getId(), passcode, address, phone, cartDetails);
+              for (CartDetail detail : cardDetails) {
+                cartDetailFacade.remove(detail);
+              }
+              request.setAttribute("isGuest", false);
+              request.setAttribute("orderCode", passcode);
               request.getRequestDispatcher("/user/checkout-success.jsp").forward(request, response);
             }
           }
@@ -312,20 +417,25 @@ public class Cart extends HttpServlet {
                 error = error.equals("") ? "Your card is expired!" : error;
                 hasError = true;
               }
-              if (!bankCardFacade.hasEnoughMoney(cardNumber, total)) {
+              if (!bankCardFacade.hasEnoughMoney(cardNumber.replaceAll(" ",""), total)) {
                 error = error.equals("") ? "Your card doesn't have enough money!" : error;
                 hasError = true;
               }
               if (!hasError) {
                 if (sess.getAttribute("userId") == null) {
-                  Models.Users user = userFacade.getUsersByPhone("0000000000");
+                  Models.Users user = userFacade.getGuestUser();
                   HashMap cartDetails = new HashMap();
                   java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
 
                   for (Models.CartDetail detail : cartDetailSess) {
                     cartDetails.put(detail.getId(), detail);
                   }
-                  newOrder(user.getId(), genPassCode(), address, phone, cartDetails);
+                  String passcode = genPassCode();
+                  newOrder(user.getId(), passcode, address, phone, cartDetails);
+                  sess.setAttribute("cart", new ArrayList<>());
+                  bankCardFacade.pay(cardNumber.replaceAll(" ",""), total);
+                  request.setAttribute("isGuest", true);
+                  request.setAttribute("orderCode", passcode);
                   request.getRequestDispatcher("/user/checkout-success.jsp").forward(request, response);
                 } else {
                   Models.Users user = userFacade.find(sess.getAttribute("userId"));
@@ -334,8 +444,14 @@ public class Cart extends HttpServlet {
                   for (CartDetail detail : cardDetails) {
                     cartDetails.put(detail.getId(), detail);
                   }
-
-                  newOrder(user.getId(), genPassCode(), address, phone, cartDetails);
+                  String passcode = genPassCode();
+                  newOrder(user.getId(), passcode, address, phone, cartDetails);
+                  for (CartDetail detail : cardDetails) {
+                    cartDetailFacade.remove(detail);
+                  }
+                  bankCardFacade.pay(cardNumber.replaceAll(" ",""), total);
+                  request.setAttribute("isGuest", false);
+                  request.setAttribute("orderCode", passcode);
                   request.getRequestDispatcher("/user/checkout-success.jsp").forward(request, response);
                 }
               }
@@ -364,7 +480,7 @@ public class Cart extends HttpServlet {
     order.setPassCode(passcode);
     order.setEnabled(true);
     order.setStatus(false);
-    order.setCreateAt("2018-05-20");
+    order.setCreateAt(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
     Models.Orders newOrder = orderFacade.createOrder(order);
     Iterator entries = cartDetails.entrySet().iterator();
     while (entries.hasNext()) {
@@ -377,7 +493,7 @@ public class Cart extends HttpServlet {
       details.setQuantity(detail.getQuantity());
       BigDecimal price = (BigDecimal) detail.getUnitPrice();
       // apply coupon
-      if (detail.getCoupon() != null) {
+      if (detail.getCoupon() != null && !detail.getCoupon().trim().equals("")) {
         Coupons coupon = couponsFacade.findByCoupon(detail.getCoupon());
         BigDecimal percentage = new BigDecimal(coupon.getPercentage());
         price = price.subtract(price.multiply(percentage).divide(new BigDecimal(100)));

@@ -49,6 +49,8 @@ public interface ProductFacadeLocal {
     
     public List<Product> searchProductByUserPhoneNumber(String phoneNumber);
     
+    public List<Product> getListProductOfUser(Models.Users user);
+    
     public int createNewProduct(Product newProduct);
     
     public List<Product> searchProduct(String productName, Models.Anime animeId, Models.Category categoryId, BigDecimal minPrice, BigDecimal maxPrice);

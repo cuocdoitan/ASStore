@@ -70,4 +70,17 @@ public class BankCardFacade extends AbstractFacade<BankCard> implements BankCard
     }
   }
   
+  public boolean pay(String number, BigDecimal money) {
+    Query query = em.createNamedQuery("BankCard.findByNumber");
+    query.setParameter("number", number);
+    try {
+      BankCard card = (BankCard)query.getSingleResult();
+      card.setBalance(card.getBalance().subtract(money));
+      em.merge(card);
+      return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
 }

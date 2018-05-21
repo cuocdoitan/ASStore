@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -30,15 +32,19 @@ import javax.xml.bind.annotation.XmlRootElement;
   @NamedQuery(name = "Coupons.findAll", query = "SELECT c FROM Coupons c")
   , @NamedQuery(name = "Coupons.findById", query = "SELECT c FROM Coupons c WHERE c.id = :id")
   , @NamedQuery(name = "Coupons.findByUserId", query = "SELECT c FROM Coupons c WHERE c.userId = :userId")
-  , @NamedQuery(name = "Coupons.findByCoupon", query = "SELECT c FROM Coupons c WHERE c.coupon = :coupon")
+  , @NamedQuery(name = "Coupons.findByUserIdAndEnabled", query = "SELECT c FROM Coupons c WHERE c.userId = :userId AND c.enabled = :enabled")
+  , @NamedQuery(name = "Coupons.findByCoupon", query = "SELECT c FROM Coupons c WHERE c.coupon = :coupon AND c.enabled = :enabled")
   , @NamedQuery(name = "Coupons.findByExpireDate", query = "SELECT c FROM Coupons c WHERE c.expireDate = :expireDate")
-  , @NamedQuery(name = "Coupons.findByPercentage", query = "SELECT c FROM Coupons c WHERE c.percentage = :percentage")})
+  , @NamedQuery(name = "Coupons.findByProduct", query = "SELECT c FROM Coupons c WHERE c.productId = :product AND c.enabled = :enabled")
+  , @NamedQuery(name = "Coupons.findByPercentage", query = "SELECT c FROM Coupons c WHERE c.percentage = :percentage")
+  , @NamedQuery(name = "Coupons.findByEnabled", query = "SELECT c FROM Coupons c WHERE c.enabled = :enabled")})
 public class Coupons implements Serializable {
 
   private static final long serialVersionUID = 1L;
   @Id
   @Basic(optional = false)
   @NotNull
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "Id")
   private Integer id;
   @Basic(optional = false)
@@ -59,6 +65,8 @@ public class Coupons implements Serializable {
   @NotNull
   @Column(name = "Percentage")
   private int percentage;
+  @Column(name = "Enabled")
+  private Boolean enabled;
   @JoinColumn(name = "ProductId", referencedColumnName = "Id")
   @ManyToOne(optional = false)
   private Product productId;
@@ -116,6 +124,14 @@ public class Coupons implements Serializable {
 
   public void setPercentage(int percentage) {
     this.percentage = percentage;
+  }
+
+  public Boolean getEnabled() {
+    return enabled;
+  }
+
+  public void setEnabled(Boolean enabled) {
+    this.enabled = enabled;
   }
 
   public Product getProductId() {

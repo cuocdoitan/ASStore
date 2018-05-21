@@ -73,6 +73,9 @@ function addCoupon(url, detailId) {
         else if (data.status === "expired") {
           swal("Error !", "Coupon: " + coupon + " has expired !", "error");
         }
+        else if (data.status === "noapply") {
+          swal("Error !", "Coupon: " + coupon + " can't apply for this product !", "error");
+        }
         else {
           swal("Error !", "Coupon: " + coupon + " not found !", "error");
         }
