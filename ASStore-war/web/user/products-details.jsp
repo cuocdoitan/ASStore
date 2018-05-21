@@ -19,13 +19,13 @@
 
                     <!--Images -->
                     <div class="slick3">
-                        <c:forEach items="${product.mediaCollection}" var="media">
-                            <div class="item-slick3" data-thumb="<c:url value='/assets/img/products/${media.urlImage}'/>">
+                        <c:forEach items="${images}" var="image">
+                            <div class="item-slick3" data-thumb="<c:url value='/assets/img/products/${image}'/>">
                                 <div class="wrap-pic-w">
-                                    <img src="<c:url value='/assets/img/products/${media.urlImage}'/>" alt="IMG-PRODUCT">
+                                    <img src="<c:url value='/assets/img/products/${image}'/>" alt="IMG-PRODUCT">
                                 </div>
                             </div>
-                        </c:forEach> 
+                        </c:forEach>
                     </div>
 
 

@@ -204,7 +204,7 @@ public class ProductServlet extends HttpServlet {
                 listProduct = productFacade.getListProductSortedDesc();
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             } else {
-                listProduct = productFacade.searchProduct(sProductName, sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);
+                listProduct = productFacade.searchProduct(sProductName.trim(), sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             }
         }
@@ -229,7 +229,14 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("vcategory", category);
         request.setAttribute("vminPrice", minPrice);
         request.setAttribute("vmaxPrice", maxPrice);
-
+        request.setAttribute("vsorting", sorting);
+        String queryString = request.getQueryString();
+        if (page != null) {
+            int indexOfPage = request.getQueryString().indexOf("&page=");
+            String queryStringWithoutPage = request.getQueryString().substring(0, indexOfPage);
+            queryString = queryStringWithoutPage;
+        }
+        request.setAttribute("queryString", queryString);
         request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
         //</editor-fold>
     }
@@ -241,13 +248,14 @@ public class ProductServlet extends HttpServlet {
         request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
         //</editor-fold>
     }
-
+    
     protected void detailsPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to details page">
         int productId_detail = Integer.parseInt(request.getParameter("id"));
         Product product = productFacade.find(productId_detail);
         request.setAttribute("product", product);
+        request.setAttribute("images", mediaFacade.getImagesFromProduct(product));
         request.setAttribute("similarProducts", productFacade.getRandomProductSameAnime(product));
         Integer sessionUserId = (Integer) request.getSession().getAttribute("userid");
         if (sessionUserId != null) {
@@ -286,8 +294,8 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("categories", categoryFacade.findAll());
         String[] arrImage_edit = {"", "", "", ""};
         int i = 0;
-        for (Media media : product_edit.getMediaCollection()) {
-            arrImage_edit[i] = media.getUrlImage();
+        for (String image : mediaFacade.getImagesFromProduct(product_edit)) {
+            arrImage_edit[i] = image;
             i++;
         }
         request.setAttribute("images", arrImage_edit);
@@ -316,8 +324,8 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("categories", categoryFacade.findAll());
         String[] arrImage = {"", "", "", ""};
         int j = 0;
-        for (Media media : product_repair.getMediaCollection()) {
-            arrImage[j] = media.getUrlImage();
+        for (String image : mediaFacade.getImagesFromProduct(product_repair)) {
+            arrImage[j] = image;
             j++;
         }
         request.setAttribute("images", arrImage);

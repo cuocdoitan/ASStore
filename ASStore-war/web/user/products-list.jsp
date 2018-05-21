@@ -90,8 +90,8 @@
                             <div class="rs2-select2 bo4 of-hidden w-size12 m-t-5 m-b-5 m-r-10">
                                 <select class="selection-2" name="sorting">
                                     <option value="">Sort by price</option>
-                                    <option value="lowToHigh">Low to high</option>
-                                    <option value="highToLow">High to low</option>
+                                    <option value="lowToHigh" <c:if test="${vsorting eq 'lowToHigh'}">selected</c:if>>Low to high</option>
+                                    <option value="highToLow" <c:if test="${vsorting eq 'highToLow'}">selected</c:if>>High to low</option>
                                 </select>
                             </div>
                         </div>

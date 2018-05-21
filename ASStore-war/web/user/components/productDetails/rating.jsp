@@ -2,8 +2,50 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <h3>Average Rating</h3>
-${product.productRatingCollection.size()} voters <br/>
-${product.averageStars()}/5 stars
+<style>
+    /*---------- star rating ----------*/
+.star-rating {
+    display: flex;
+    align-items: center;
+    font-size: 2em;
+    justify-content: left;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.back-stars {
+    display: flex;
+    color: #bb5252;
+    position: relative;
+    text-shadow: 4px 4px 10px #843a3a;
+}
+.front-stars {
+    display: flex;
+    color: #FFBC0B;
+    overflow: hidden;
+    position: absolute;
+    text-shadow: 2px 2px 5px #d29b09;
+    top: 0;
+}
+</style>
+<div class="star-rating" title="75%">
+    <div class="back-stars">
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+        <i class="fa fa-star" aria-hidden="true"></i>
+
+        <div class="front-stars">
+            <i class="fa fa-star" aria-hidden="true"></i>
+            <i class="fa fa-star" aria-hidden="true"></i>
+            <i class="fa fa-star" aria-hidden="true"></i>
+            <i class="fa fa-star" aria-hidden="true"></i>
+            <i class="fa fa-star" aria-hidden="true"></i>
+        </div>
+    </div>
+</div> 
+<p>${product.productRatingCollection.size()} voters </p>
+<p class="totalRating">${product.averageStars()}/5 stars</p>
 <hr/>
 <c:choose>
     <c:when test="${sessionScope.userid == null}">

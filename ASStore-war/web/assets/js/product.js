@@ -2,11 +2,6 @@
  * ************************************USER*************************************
  */
 
-
-$("#formInsertProduct").submit(function (e) {
-
-});
-
 $(function () {
     $('#categoryRadioField input[type=radio]').change(function () {
         $("input[name=category]").val($(this).val());
@@ -107,56 +102,18 @@ function clearErrorTexts() {
 }
 
 
-//$("#buttonSearchListProduct").click(function () {
-//    $("#errAnime").text("");
-//    var anime_name = $("input[name=anime_name]").val();
-//    $.get($("#urlProject").val() + "/checkIfAnimeExist",
-//            {
-//                animeName: anime_name
-//            },
-//            function (result) {
-//                var exist = result.exist;
-//                if (exist === "false") {
-//                    $("#errAnime").text("This anime isn't exist");
-//                } else {
-//                    //search product
-//                    getProductList();
-//                }
-//            }
-//    );
-//});
-//
-//$("#pagination li").click(function (){
-//    getProductList();
-//});
-//
-//
-//function getProductList() {
-//    var productName = $("input[name=productName]").val();
-//    var anime_name = $("input[name=anime_name]").val();
-//    var minPrice = $("input[name=minPrice]").val();
-//    var maxPrice = $("input[name=maxPrice]").val();
-//    var category = $("input[name=category]").val();
-//    var sorting = $("select[name=sorting]").val();
-//    var page = $("#pagination li").text();
-//    $.ajax({
-//        url: $("#urlProject").val() + '/products_Search',
-//        type: 'post',
-//        data: {
-//            productName: productName,
-//            anime_name: anime_name,
-//            minPrice: minPrice,
-//            maxPrice: maxPrice,
-//            category: category,
-//            sorting: sorting,
-//            page : page
-//        },
-//        success: function (data, textStatus, jqXHR) {
-//            $("#ProductListContent_User").html(data);
-//        }
-//    });
-//}
-
+setTimeout(function (){
+    for (var i = 0; i < $(".front-stars").length; i++) {
+        var frontStars = $(".front-stars")[i];
+        var valueElement = $(".totalRating")[i];
+        var stars = parseFloat(valueElement.text());
+        var percentage = 100 / 5 * stars;
+        frontStars.style.width = percentage + "%";
+        
+        var rating = document.getElementsByClassName("star-rating")[i];
+        rating.title = +(stars.toFixed(2)) + " out of " + 5;
+    }
+},100);
 
 /* 
  * ************************************ADMIN*************************************
