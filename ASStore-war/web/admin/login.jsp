@@ -17,7 +17,7 @@
             <h4 class="m-text26 p-b-36 p-t-15">
               Login to AS Store
             </h4>
-
+              <p style="color: red" class="m-b-20">${error}</p>
             <div class="bo4 of-hidden size15 m-b-20">
               <input class="sizefull s-text7 p-l-22 p-r-22" type="phone" name="phone" placeholder="Phone number">
             </div>

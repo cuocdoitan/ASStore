@@ -6,6 +6,7 @@
 package SB;
 
 import Models.Orders;
+import Models.Users;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -56,10 +57,25 @@ public class OrdersFacade extends AbstractFacade<Orders> implements OrdersFacade
         return false;
       }
     }
+    
+    public List<Orders> findByUser(Users user) {
+      Query query = em.createNamedQuery("Orders.findByUser");
+      query.setParameter("user", user);
+      try {
+        return query.getResultList();
+      } catch (Exception e) {
+        return null;
+      }
+    }
+    
     @Override
     public List<Orders> findAll() {
       Query query = em.createNamedQuery("Orders.findAll");
-      return query.getResultList();
+      try {
+        return query.getResultList();
+      } catch (Exception e) {
+        return null;
+      }
     }
     
     public Orders createOrder(Orders order) {

@@ -12,19 +12,19 @@
     <div class="row">
       <div class="col-6 m-t-20 m-l-r-auto">
         <div class="m-b-10">
-          Phone number: ${user.phoneNumber}
+          Phone number: ${userid.phoneNumber}
         </div>
         <div class="m-b-10">
-          First name: ${user.firstName}
+          First name: ${userid.firstName}
         </div>
         <div class="m-b-10">
-          Last name: ${user.lastName}
+          Last name: ${userid.lastName}
         </div> 
         <div class="m-b-10">
-          Address: ${user.address}
+          Address: ${userid.address}
         </div>
         <div class="m-b-10">
-          Email: ${user.email}
+          Email: ${userid.email}
         </div>
       </div>
     </div>

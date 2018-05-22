@@ -310,4 +310,5 @@ public class Users implements Serializable {
     this.updateAt = updateAt;
   }
 
+  
 }

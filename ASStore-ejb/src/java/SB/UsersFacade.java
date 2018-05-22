@@ -10,6 +10,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 /**
@@ -43,6 +44,16 @@ public class UsersFacade extends AbstractFacade<Users> implements UsersFacadeLoc
             return list.get(0);
         }
     }
+    
+    public Users getGuestUser() {
+      Query query = em.createNamedQuery("Users.findByPhoneNumber");
+      query.setParameter("phoneNumber", "0000000000");
+      try {
+        return (Users)query.getSingleResult();
+      } catch (Exception e) {
+        return null;
+      }
+    }
 
     @Override
     public List<Users> getList() {
@@ -51,6 +62,14 @@ public class UsersFacade extends AbstractFacade<Users> implements UsersFacadeLoc
         return query.getResultList();
     }
 
-    
+    public Users getUserByEmail(String email) {
+        Query query = em.createNamedQuery("Users.findByEmail");
+        query.setParameter("email", email);
+        try {
+            return (Users)query.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
 }

@@ -31,7 +31,7 @@
                                         ${user.firstName}
                                     </td>  
                                     <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                                        <a href="<c:url value='/User/detail?id=${user.id}' />" style="color: #3498db" >Details</a>
+                                        <a href="<c:url value='/User/userinfo?id=${user.id}' />" style="color: #3498db" >Details</a>
                                         ||
                                         <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
                                         <a href="<c:url value='/User/delete?id=${user.id}' />" style="color: #e74c3c"  onclick="return confirm('Are you sure ?')">Delete</a>

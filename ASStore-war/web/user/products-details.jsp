@@ -58,8 +58,8 @@
 
                         <div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
                             <!-- Button -->
-                            <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">
-                                <a href="#">Add to Cart</a>
+                            <button class="flex-c-m sizefull bg1 bo-rad-23 hov0 s-text1 trans-0-4" onclick="addToCart(${product.id}, ${product.price})">
+                               Add to cart
                             </button>
                         </div>
                     </div>
@@ -114,5 +114,6 @@
             </div>
         </div>          
     </div>
+            <input name="addCartURL" value="<c:url value="/cart/addToCart" />" />
     <link href="<c:url value="/assets/css/star.css"/>" rel="stylesheet" type="text/css"/>
 </t:layout>

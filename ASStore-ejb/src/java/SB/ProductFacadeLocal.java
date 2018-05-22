@@ -25,9 +25,9 @@ public interface ProductFacadeLocal {
 
     Product find(Object id);
 
-    List<Product> findAll();
+    List<Models.Product> findAll();
 
-    List<Product> findRange(int[] range);
+    List<Models.Product> findRange(int[] range);
 
     int count();
     
@@ -37,11 +37,19 @@ public interface ProductFacadeLocal {
     
     public List<Product> getListApprovingProduct();
     
+    public List<Models.Product> getListAvailableProduct_User(Models.Users user);
+    
+    public List<Models.Product> getListCheckingProduct_User(Models.Users user);
+    
+    public List<Models.Product> getListUnavailableProduct_User(Models.Users user);
+    
     public List<Product> getListProductSortedDesc();
     
     public List<Product> searchProductByName(String name);
     
     public List<Product> searchProductByUserPhoneNumber(String phoneNumber);
+    
+    public List<Product> getListProductOfUser(Models.Users user);
     
     public int createNewProduct(Product newProduct);
     

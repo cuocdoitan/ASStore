@@ -41,6 +41,7 @@ public class CartDetail implements Serializable {
   @Id
   @Basic(optional = false)
   @NotNull
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "Id")
   private Integer id;
   @Basic(optional = false)
@@ -54,7 +55,7 @@ public class CartDetail implements Serializable {
   @Column(name = "Coupon")
   private String coupon;
   @JoinColumn(name = "CartId", referencedColumnName = "Id")
-  @ManyToOne(optional = false)
+  @ManyToOne(optional = true)
   private Cart cartId;
   @JoinColumn(name = "ProductId", referencedColumnName = "Id")
   @ManyToOne(optional = false)

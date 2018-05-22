@@ -6,6 +6,9 @@
 package SB;
 
 import Models.Coupons;
+import Models.Product;
+import Models.Users;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -33,6 +36,43 @@ public class CouponsFacade extends AbstractFacade<Coupons> implements CouponsFac
   public Coupons findByCoupon(String coupon) {
     Query query = em.createNamedQuery("Coupons.findByCoupon");
     query.setParameter("coupon", coupon);
-    return (Coupons)query.getSingleResult();
+    query.setParameter("enabled", true);
+    try {
+      return (Coupons)query.getSingleResult();
+    } catch (Exception e) {
+      return null;
+    }
+  }
+  
+  public List<Coupons> findEnableCoupons() {
+    Query query = em.createNamedQuery("Coupons.findByEnabled");
+    query.setParameter("enabled", true);
+    try {
+      return (List<Coupons>)query.getResultList();
+    } catch (Exception e) {
+      return null;
+    }
+  }
+  
+  public List<Coupons> findEnableCouponsOfUser(int user) {
+    Query query = em.createNamedQuery("Coupons.findByUserIdAndEnabled");
+    query.setParameter("userId", user);
+    query.setParameter("enabled", true);
+    try {
+      return (List<Coupons>)query.getResultList();
+    } catch (Exception e) {
+      return null;
+    }
+  }
+  
+  public Coupons findByProduct(Product product) {
+    Query query = em.createNamedQuery("Coupons.findByProduct");
+    query.setParameter("product", product);
+    query.setParameter("enabled", true);
+    try {
+      return (Coupons)query.getSingleResult();
+    } catch (Exception e) {
+      return null;
+    }
   }
 }

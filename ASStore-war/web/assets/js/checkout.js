@@ -55,31 +55,60 @@ $("#phone").keydown(function (e) {
 function addCoupon(url, detailId) {
   swal({
     text: 'Enter coupon for this product',
-    content: "input",
-    attributes: {
-      value: $("#coupon-p-" + detailId).attr("value")
+    content: {
+      element: "input",
+      attributes: {
+        placeholder: "Type your coupon",
+        value: $("#coupon-p-" + detailId).attr("value"),
+      }
     }
   }).then(function(coupon) {
-    $.post(url, { detailid: detailId, coupon: coupon }).done(function(data) {
-      if (data.status === "success") {
-        swal("Success !", "Used coupon: " + coupon, "success");
-        $("#coupon-p-" + detailId).attr("value", coupon);
-        applyCoupon();
-      }
-      else if (data.status === "expired") {
-        swal("Error !", "Coupon: " + coupon + " has expired !", "error");
-      }
-      else {
-        swal("Error !", "Coupon: " + coupon + " not found !", "error");
-      }
-    }).fail(function() {
-      swal("Can't use coupon: " + coupon);
-    });
+    if (coupon !== null) {
+      $.post(url, { detailid: detailId, coupon: coupon }).done(function(data) {
+        if (data.status === "success") {
+          swal("Success !", "Used coupon: " + coupon, "success");
+          $("#coupon-p-" + detailId).attr("value", coupon);
+          applyCoupon(detailId, data.percentage);
+        }
+        else if (data.status === "expired") {
+          swal("Error !", "Coupon: " + coupon + " has expired !", "error");
+        }
+        else if (data.status === "noapply") {
+          swal("Error !", "Coupon: " + coupon + " can't apply for this product !", "error");
+        }
+        else {
+          swal("Error !", "Coupon: " + coupon + " not found !", "error");
+        }
+      }).fail(function() {
+        swal("Removed coupon");
+        unapplyCoupon(detailId);
+      });
+    }
   });
+  //$('.sweet-alert input[type=text]:first' ).val($("#coupon-p-" + detailId).attr("value"));
+}
+
+function unapplyCoupon (id) {
+  var url = $("input[name='getPriceURL']").val();
+  $.get(url, { detailid: id }).done(function(data) {
+    $("#ps-" + id).html(data.price);
+    $("#ds-" + id).html("0");
+  });
+  $("#coupon-pe-" + id).attr("value", "");
+  updateTotal();
 }
 
 function applyCoupon (id, percentage) {
   var price = parseInt($("#ps-" + id).html());
   var newPrice = price - (price * percentage / 100);
-  $("#ps-" + id).html(price + "-" + percentage + "=" + newPrice);
+  $("#ps-" + id).html(newPrice);
+  $("#ds-" + id).html(percentage);
+  updateTotal();
+}
+
+function updateTotal () {
+  var url = $("input[name='getTotalURL']").val();
+  $.get(url, {}).done(function(data){
+    $("#ctotal").html(data.price);
+  });
 }

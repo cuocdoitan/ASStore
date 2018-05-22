@@ -39,11 +39,11 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         em.flush();
         return newProduct.getId();
     }
-    
-    public List<Product> getListApprovingProduct(){
+
+    public List<Product> getListApprovingProduct() {
         List<Product> listApprovinProduct = new ArrayList<>();
-        for(Product product : this.getListExistingProduct()){
-            if(product.getStatus()==0){
+        for (Product product : this.findAll()) {
+            if (product.getStatus() == 0) {
                 listApprovinProduct.add(product);
             }
         }
@@ -155,5 +155,38 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
             return randomResult;
         }
     }
+
+    @Override
+    public List<Models.Product> getListAvailableProduct_User(Models.Users user) {
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.status = ?2 and p.usersId = ?3", Models.Product.class);
+        query.setParameter(1, true);
+        query.setParameter(2, 1);
+        query.setParameter(3, user);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Models.Product> getListCheckingProduct_User(Models.Users user) {
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.status = ?2 and p.usersId = ?3", Models.Product.class);
+        query.setParameter(1, true);
+        query.setParameter(2, 0);
+        query.setParameter(3, user);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Models.Product> getListUnavailableProduct_User(Models.Users user) {
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.status = ?2 and p.usersId = ?3", Models.Product.class);
+        query.setParameter(1, true);
+        query.setParameter(2, 2);
+        query.setParameter(3, user);
+        return query.getResultList();
+
+    }
     
+    public List<Product> getListProductOfUser(Models.Users user) {
+      TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.usersId = ?1", Models.Product.class);
+      query.setParameter(1, user);
+      return query.getResultList();
+    }
 }
