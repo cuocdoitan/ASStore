@@ -14,7 +14,7 @@
                 <div class="col-12 m-t-30">
                     <div class="w-size25">
                         <!-- Button -->
-                        <a href="<c:url value='/User/logoutadmin'/>" class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
+                        <a href="<c:url value='/admin/user/logoutadmin'/>" class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
                             Log Out
                         </a>
                     </div>
@@ -38,10 +38,10 @@
                                         ${user.firstName}
                                     </td>  
                                     <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                                        <a href="<c:url value='/User/userinfo?id=${user.id}' />" style="color: #3498db" >Details</a>
+                                        <a href="<c:url value='/admin/user/userinfo?id=${user.id}' />" style="color: #3498db" >Details</a>
                                         ||
                                         <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
-                                        <a href="<c:url value='/User/delete?id=${user.id}' />" style="color: #e74c3c"  onclick="return confirm('Are you sure ?')">Delete</a>
+                                        <a href="<c:url value='/admin/user/delete?id=${user.id}' />" style="color: #e74c3c"  onclick="return confirm('Are you sure ?')">Delete</a>
                                     </td>
                                 </tr>
                             </c:forEach>

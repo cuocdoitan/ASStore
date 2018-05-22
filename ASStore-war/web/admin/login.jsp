@@ -13,7 +13,7 @@
     <div class="container">
       <div class="row">
         <div class="col-md-6 p-b-30 p-t-30 p-l-30 p-r-30 bgwhite">
-          <form method="post" action="<c:url value='/User/loginadmin'/>">
+          <form method="post" action="<c:url value='/admin/user/loginadmin'/>">
             <h4 class="m-text26 p-b-36 p-t-15">
               Login to AS Store admin
             </h4>

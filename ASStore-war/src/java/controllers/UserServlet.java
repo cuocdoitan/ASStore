@@ -50,32 +50,6 @@ public class UserServlet extends HttpServlet {
     @EJB
     private CartDetailFacadeLocal cartDetailFacade;
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet User</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet User at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
-    }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -94,90 +68,27 @@ public class UserServlet extends HttpServlet {
         String clientRequest = request.getPathInfo();
 //        Roles role = (Roles)sess.getAttribute("role");
         switch (clientRequest) {
-            case "/list":
-                if (sess.getAttribute("userid") == null) {
-                    response.sendRedirect(request.getContextPath() + "/User/loginadmin");
-                    return;
-                }
-                java.util.List<Models.Users> listaccount = usersFacade.getList();
-                request.setAttribute("userlist", listaccount);
-                request.getRequestDispatcher("/admin/user-accountlist.jsp").forward(request, response);
-                break;
             case "/login":
-                if (sess.getAttribute("userid") != null) {
-                    response.sendRedirect(request.getContextPath() + "/index");
-                    return;
-                }
-                request.getRequestDispatcher("/user/login.jsp").forward(request, response);
-                break;
-            case "/loginadmin":
-                if (sess.getAttribute("userid") != null) {
-                    response.sendRedirect(request.getContextPath() + "/User/list");
-                } else {
-                    request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
-                }
+                loginPage(request, response);
                 break;
             case "/create":
                 request.getRequestDispatcher("/user/register.jsp").forward(request, response);
                 break;
             case "/detail":
-                if (sess.getAttribute("userid") == null) {
-                    response.sendRedirect(request.getContextPath() + "/User/login");
-                    return;
-                }
-                Models.Users user = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
-                List<Models.Product> listAvailableProduct = productFacade.getListAvailableProduct_User(user);
-                List<Models.Product> listCheckingProduct = productFacade.getListCheckingProduct_User(user);
-                List<Models.Product> listUnavailableProduct = productFacade.getListUnavailableProduct_User(user);
-                request.setAttribute("listAvailableProduct", listAvailableProduct);
-                request.setAttribute("listCheckingProduct", listCheckingProduct);
-                request.setAttribute("listUnavailableProduct", listUnavailableProduct);
-                request.setAttribute("user", user);
-                request.getRequestDispatcher("/user/user-information.jsp").forward(request, response);
-                break;
-            case "/userinfo":
-                Models.Users userinfo = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
-                request.setAttribute("userid", userinfo);
-                request.getRequestDispatcher("/admin/user-detail.jsp").forward(request, response);
+                detailPage(request, response);
                 break;
             case "/update":
-                //HttpSession sess = request.getSession();
-                Models.Users userupdate = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
-                request.setAttribute("user", userupdate);
-                request.getRequestDispatcher("/user/user-information-update.jsp").forward(request, response);
+                updatePage(request, response);
                 break;
             case "/updatephone":
-                //HttpSession sess = request.getSession();
-                Models.Users userupdatephone = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
-                request.setAttribute("user", userupdatephone);
-                request.getRequestDispatcher("/user/user-information-updatephone.jsp").forward(request, response);
+                updatePhonePage(request, response);
                 break;
             case "/updatepass":
-                //HttpSession sess = request.getSession();
-                Models.Users userupdatepass = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
-                request.setAttribute("user", userupdatepass);
-                request.getRequestDispatcher("/user/user-information-changepass.jsp").forward(request, response);
-                break;
-            case "/delete":
-                Models.Users user1 = usersFacade.find(Integer.parseInt(request.getParameter("id")));
-                if (user1.getRolesId().getName().equals("admin")) {
-                    request.setAttribute("error", "Admin not delete");
-                    request.getRequestDispatcher("/User/list").forward(request, response);
-                } else {
-                    user1.setEnabled(false);
-                    usersFacade.edit(user1);
-                    request.getRequestDispatcher("/User/list").forward(request, response);
-                }
-
+                updatePassPage(request, response);
                 break;
             case "/logout":
                 sess.invalidate();
                 response.sendRedirect(request.getContextPath() + "/User/login");
-                break;
-            case "/logoutadmin":
-                sess.invalidate();
-                response.sendRedirect(request.getContextPath() + "/User/loginadmin");
-
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -185,6 +96,69 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    protected void loginPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="go to create product page">
+        HttpSession sess = request.getSession();
+        if (sess.getAttribute("userid") != null) {
+            response.sendRedirect(request.getContextPath() + "/index");
+            return;
+        }
+        request.getRequestDispatcher("/user/login.jsp").forward(request, response);
+        //</editor-fold>
+    }
+
+    protected void detailPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="go to create product page">
+        HttpSession sess = request.getSession();
+        if (sess.getAttribute("userid") == null) {
+            response.sendRedirect(request.getContextPath() + "/User/login");
+            return;
+        }
+        Models.Users user = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+        List<Models.Product> listAvailableProduct = productFacade.getListAvailableProduct_User(user);
+        List<Models.Product> listCheckingProduct = productFacade.getListCheckingProduct_User(user);
+        List<Models.Product> listUnavailableProduct = productFacade.getListUnavailableProduct_User(user);
+        request.setAttribute("listAvailableProduct", listAvailableProduct);
+        request.setAttribute("listCheckingProduct", listCheckingProduct);
+        request.setAttribute("listUnavailableProduct", listUnavailableProduct);
+        request.setAttribute("user", user);
+        request.getRequestDispatcher("/user/user-information.jsp").forward(request, response);
+        //</editor-fold>
+    }
+
+    protected void updatePage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="go to create product page">
+        HttpSession sess = request.getSession();
+        Models.Users userupdate = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+        request.setAttribute("user", userupdate);
+        request.getRequestDispatcher("/user/user-information-update.jsp").forward(request, response);
+        //</editor-fold>
+    }
+
+    protected void updatePhonePage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="go to create product page">
+        HttpSession sess = request.getSession();
+        Models.Users userupdatephone = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+        request.setAttribute("user", userupdatephone);
+        request.getRequestDispatcher("/user/user-information-updatephone.jsp").forward(request, response);
+        //</editor-fold>
+    }
+
+    protected void updatePassPage(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="go to create product page">
+        HttpSession sess = request.getSession();
+        Models.Users userupdatepass = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+        request.setAttribute("user", userupdatepass);
+        request.getRequestDispatcher("/user/user-information-changepass.jsp").forward(request, response);
+        //</editor-fold>
+    }
+
+    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -206,9 +180,6 @@ public class UserServlet extends HttpServlet {
             case "/login":
                 login(request, response);
                 break;
-            case "/loginadmin":
-                loginadmin(request, response);
-                break;
             case "/Updateuser":
                 Updateuser(request, response);
                 break;
@@ -218,25 +189,15 @@ public class UserServlet extends HttpServlet {
             case "/Updateuserpass":
                 Updateuserpass(request, response);
                 break;
-//            case "/logout":
-//                sess.invalidate();
-//                response.sendRedirect(request.getContextPath() + "/User/login");
-//
-//                break;
-//            case "/logoutadmin":
-//                sess.invalidate();
-//                response.sendRedirect(request.getContextPath() + "/User/loginadmin");
-//
-//                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
         }
     }
-
+    
     protected void registerNewUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // <editor-fold defaultstate="collapsed" desc="register new user">
+        //<editor-fold defaultstate="collapsed" desc="action terminate rating product">
         String phone = request.getParameter("phone");
         String firstname = request.getParameter("first_name");
         String lastname = request.getParameter("last_name");
@@ -339,7 +300,7 @@ public class UserServlet extends HttpServlet {
             e.printStackTrace();
         }
         response.sendRedirect(request.getContextPath() + "/User/create");
-        // <editor-fold>
+        //</editor-fold> 
     }
 
     protected void login(HttpServletRequest request, HttpServletResponse response)
@@ -376,10 +337,11 @@ public class UserServlet extends HttpServlet {
                 request.getRequestDispatcher("/user/login.jsp").forward(request, response);
             }
         }
-        //<editor-fold>
+        //</editor-fold> 
     }
 
     private void migrateSessionCart(HttpSession sess, Users user) {
+        //<editor-fold defaultstate="collapsed" desc="login user">
         Models.Cart cart = cartFacade.findByUserId(user.getId());
         if (sess.getAttribute("cart") != null) {
             java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
@@ -388,9 +350,11 @@ public class UserServlet extends HttpServlet {
                 cartDetailFacade.create(detail);
             }
         }
+        //</editor-fold> 
     }
 
     private void migrateCartToAccount(HttpSession sess, Users user) {
+        //<editor-fold defaultstate="collapsed" desc="login user">
         Models.Cart cart = new Models.Cart();
         cart.setId(0);
         cart.setUsersId(user);
@@ -402,46 +366,14 @@ public class UserServlet extends HttpServlet {
                 cartDetailFacade.create(detail);
             }
         }
+        //</editor-fold> 
     }
 
-    protected void loginadmin(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        // <editor-fold defaultstate="collapsed" desc="login admin">
-        String phone = request.getParameter("phone");
-        String password = request.getParameter("password");
-        Users loginedUser = usersFacade.getUsersByPhone(phone);
-        Roles loginadmin = rolesFacade.find(1);
-        if (loginedUser == null) {
-            //account khong ton tai
-            request.setAttribute("phone", phone);
-            request.setAttribute("pass", password);
-            request.setAttribute("error", "Account not exist");
-            request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
-        } else {//account co ton tai
-            //check password
-            if (loginedUser.getPassword().equals(password) && (loginedUser.getRolesId().getName().equals("admin") || loginedUser.getRolesId().getName().equals("moderator"))) {
-                HttpSession session = request.getSession();
-                session.setAttribute("phone", loginedUser.getPhoneNumber());
-                session.setAttribute("role", loginedUser.getRolesId());
-                session.setAttribute("userid", loginedUser.getId());
-                session.setAttribute("userId", loginedUser.getId());
-                response.sendRedirect(request.getContextPath() + "/User/list");
-            } else {
-                request.setAttribute("phone", phone);
-                request.setAttribute("pass", password);
-                if (loginedUser.getRolesId().getName().equals("admin") && loginedUser.getRolesId().getName().equals("moderator")) {
-                    request.setAttribute("error", "You don't have permission to access this page");
-                } else {
-                    request.setAttribute("error", "This account is Invalid!");
-                }
-                request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
-            }
-        }
-    }
+    
 
     protected void Updateuser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // <editor-fold defaultstate="collapsed" desc="update user">
+        //<editor-fold defaultstate="collapsed" desc="login user">
         String inputfirstname = request.getParameter("firstname");
         String inputlastname = request.getParameter("lastname");
         String inputaddress = request.getParameter("address");
@@ -461,6 +393,10 @@ public class UserServlet extends HttpServlet {
                 errorMess = errorMess.equals("") ? "Lastname can't be blank" : errorMess;
                 error = true;
             }
+            if (inputaddress.trim().equals("")) {
+                errorMess = errorMess.equals("") ? "Address can't be blank" : errorMess;
+                error = true;
+            }
 
 //            if (userEmail != null) {
 //                errorMess = errorMess.equals("") ? "Email exits" : errorMess;
@@ -468,6 +404,7 @@ public class UserServlet extends HttpServlet {
 //            }
             if (error == true) {
                 request.setAttribute("error", errorMess);
+                request.setAttribute("user", user);
                 request.getRequestDispatcher("/user/user-information-update.jsp").forward(request, response);
             } else {
                 user.setFirstName(inputfirstname);
@@ -481,11 +418,12 @@ public class UserServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //</editor-fold> 
     }
 
     protected void Updateuserphone(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // <editor-fold defaultstate="collapsed" desc="update user phone">
+        //<editor-fold defaultstate="collapsed" desc="login user">
         HttpSession sess = request.getSession();
         String inputPass = request.getParameter("pass");
         String inputNewPhone = request.getParameter("new_phone");
@@ -529,11 +467,12 @@ public class UserServlet extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        //</editor-fold>
     }
 
     protected void Updateuserpass(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // <editor-fold defaultstate="collapse+d" desc="update user phone">
+        //<editor-fold defaultstate="collapsed" desc="login user">
         HttpSession sess = request.getSession();
         String inputPass = request.getParameter("old_pass");
         String inputNewpass = request.getParameter("new_pass");
@@ -573,5 +512,5 @@ public class UserServlet extends HttpServlet {
             e.printStackTrace();
         }
     }
-    // </editor-fold>
+    //</editor-fold> 
 }

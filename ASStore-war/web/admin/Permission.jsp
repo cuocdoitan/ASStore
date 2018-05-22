@@ -33,13 +33,13 @@
                                     ${user.phoneNumber}
                                 </td>
                                 <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">
-                                    <input name="permission${user.id}" class="pcheck" ${user.rolesId.id == 1 ? "checked" : ""} pid="1" uid="${user.id}" url="<c:url value="/permissionServlet" />" type="radio" />
+                                    <input name="permission${user.id}" class="pcheck" ${user.rolesId.id == 1 ? "checked" : ""} pid="1" uid="${user.id}" url="<c:url value="/admin/permissionServlet" />" type="radio" />
                                 </td>
                                 <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">
-                                    <input name="permission${user.id}" class="pcheck" ${user.rolesId.id == 2 ? "checked" : ""} pid="2" uid="${user.id}" url="<c:url value="/permissionServlet" />" type="radio" />
+                                    <input name="permission${user.id}" class="pcheck" ${user.rolesId.id == 2 ? "checked" : ""} pid="2" uid="${user.id}" url="<c:url value="/admin/permissionServlet" />" type="radio" />
                                 </td>
                                 <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">
-                                    <input name="permission${user.id}" class="pcheck" ${user.rolesId.id == 3 ? "checked" : ""} pid="3" uid="${user.id}" url="<c:url value="/permissionServlet" />" type="radio" />
+                                    <input name="permission${user.id}" class="pcheck" ${user.rolesId.id == 3 ? "checked" : ""} pid="3" uid="${user.id}" url="<c:url value="/admin/permissionServlet" />" type="radio" />
                                 </td>
                             </tr>
                         </c:forEach>

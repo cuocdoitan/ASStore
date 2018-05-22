@@ -21,7 +21,7 @@
         </div>
         <div class="w-size25">
             <!-- Button -->
-            <form action="<c:url value='/User/logout'/>" method="post">
+            <form action="<c:url value='/User/logout'/>" method="get">
                 <input type="submit" value="Log Out"/>
             </form>
         </div>

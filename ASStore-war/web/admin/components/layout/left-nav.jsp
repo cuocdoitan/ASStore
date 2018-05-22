@@ -31,10 +31,10 @@
         <a href="<c:url value="/admin/orders/list"></c:url>" style="font-size: 1.1rem">Orders list</a>
       </li>
       <li class="m-b-5">
-        <a href="#" style="font-size: 1.1rem">User list</a>
+        <a href="<c:url value="/admin/user/list"></c:url>" style="font-size: 1.1rem">User list</a>
       </li>
       <li class="m-b-5">
-        <a href="#" style="font-size: 1.1rem">User role</a>
+        <a href="<c:url value="/admin/permissionServlet/list"></c:url>" style="font-size: 1.1rem">Permission</a>
       </li>
     </ul>
   </div>
