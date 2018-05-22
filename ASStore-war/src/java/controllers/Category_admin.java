@@ -82,23 +82,16 @@ public class Category_admin extends HttpServlet {
                 request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
                 break;
             case "/edit":
-                Models.Category category = categoryFacade.find(Integer.parseInt(request.getParameter("id")));
-                request.setAttribute("category", category);
+                int catEditId = Integer.parseInt(request.getParameter("id"));
+                Models.Category category = categoryFacade.find(catEditId);
+                request.setAttribute("cateId", catEditId);
+                request.setAttribute("cateName", category.getName());
+                request.setAttribute("cateImage", category.getPicture());
+                request.setAttribute("cate", category.getEnabled());
+//                request.setAttribute("category", category);
                 request.getRequestDispatcher("/admin/category-edit.jsp").forward(request, response);
                 break;
-            case "/delete":
-                int idcate = Integer.parseInt(request.getParameter("id"));
-                List<Models.Product> cateProduct = productFacade.getProductbyCate(idcate);
-                if (cateProduct == null) {
-                    Models.Category category1 = categoryFacade.find(idcate);
-//                    category1.setEnabled(false);
-                    categoryFacade.remove(category1);
-                    request.getRequestDispatcher("/admin/category/list").forward(request, response);
-                } else {
-                    request.setAttribute("error", "Category can not be deleted. Category existing products...!");
-                    request.getRequestDispatcher("/admin/category/list").forward(request, response);
-                    break;
-                }
+
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
@@ -117,6 +110,7 @@ public class Category_admin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+//         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         System.out.println("do post");
         String adminRequest = request.getPathInfo();
         switch (adminRequest) {
@@ -124,7 +118,22 @@ public class Category_admin extends HttpServlet {
                 request.getRequestDispatcher("/category_uploadFile").forward(request, response);
                 break;
             case "/edit":
-                request.getRequestDispatcher("/EditCategoryImages").forward(request, response);
+                request.getRequestDispatcher("/categoryEdit_uploadFile").forward(request, response);
+                break;
+            case "/delete":
+                int idcate = Integer.parseInt(request.getParameter("id"));
+                List<Models.Product> cateProduct = productFacade.getProductbyCate(idcate);
+                if (cateProduct == null) {
+                    Models.Category category1 = categoryFacade.find(idcate);
+//                    category1.setEnabled(false);
+                    categoryFacade.remove(category1);
+                    response.sendRedirect(request.getContextPath() + "/admin/category/list");
+                } else {
+                    request.setAttribute("error", "Category can not be deleted. Category existing products...!");
+//                    response.sendRedirect(request.getContextPath() + "/admin/category/list");
+                    response.sendRedirect(request.getContextPath() + "/admin/category/list");
+                    
+                }
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);

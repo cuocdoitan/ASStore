@@ -45,12 +45,14 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
 //            if (product.getStatus() == 0) {
 //            }
     
+    @Override
     public int createNewProduct(Product newProduct){
         em.persist(newProduct);
         em.flush();
         return newProduct.getId();
     }
     
+    @Override
     public List<Product> getListApprovingProduct(){
         List<Product> listApprovinProduct = new ArrayList<>();
         for(Product product : this.getListExistingProduct()){
@@ -62,16 +64,20 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         return listApprovinProduct;
     }
 
-
+    
     @Override
-    public List<Product> getProductbyCategory(int proCateId) {
-        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.categoryId.id = ?1 and p.enabled = ?2 and p.status = ?3", Product.class);
+    public List<Product> getProductbyCategoryStatictiscal(int proCateId,Date fromDate, Date toDate) {
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.categoryId.id = ?1 and p.enabled = ?2 and p.status = ?3 and p.createAt between ?4 and ?5", Product.class);
         query.setParameter(1, proCateId);
         query.setParameter(2, true);
         query.setParameter(3, 1);
+        query.setParameter(4, fromDate);
+        query.setParameter(5, toDate);
         List<Product> list = query.getResultList();
         return list;
     }
+    
+    
 
     @Override
     public List<Product> getProductbyCate(int proCateId) {

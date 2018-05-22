@@ -57,10 +57,6 @@ public class Category extends HttpServlet {
                 request.setAttribute("listCategory", listCategory);
                 request.getRequestDispatcher("/user/categoryList.jsp").forward(request, response);
                 break;
-            case "detailsproduct":
-                List<Models.Product> listproductbycate = productFacade.getProductbyCategory(Integer.parseInt(request.getParameter("category")));
-                request.setAttribute("", listproductbycate);
-                request.getRequestDispatcher("/product/list").forward(request, response);
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;

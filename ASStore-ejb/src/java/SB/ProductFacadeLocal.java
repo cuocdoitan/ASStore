@@ -10,6 +10,7 @@ import Models.Product;
 import Models.Users;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 import java.util.List;
 import javax.ejb.Local;
@@ -41,7 +42,7 @@ public interface ProductFacadeLocal {
 
     public List<Product> getListApprovingProduct();
 
-    public List<Product> getProductbyCategory(int proCateId);
+    public List<Product> getProductbyCategoryStatictiscal(int proCateId,Date fromDate, Date toDate);
 
     public List<Product> getProductbyCate(int proCateId);
 

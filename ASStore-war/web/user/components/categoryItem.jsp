@@ -14,7 +14,7 @@
 
     <div class="block1-wrapbtn w-size2">
       <!-- Button -->
-      <a href="<c:url value='/category/detailsproduct?category=${param.id}' />" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
+      <a href="<c:url value='/products/list?category=${param.id}' />" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
         ${param.name}
       </a>
     </div>

@@ -15,8 +15,37 @@ import java.util.Date;
  */
 public class StatisticProductCategory {
     private String Name;
-    private int totalProduct, totalQuantityProduct;
-    private Date date;
+    private int totalProduct, totalQuantityProduct, soldQuantity;
+    private Date dateFrom, dateTo;
+    private int currentQuantityProducts;
+
+    public int getCurrentQuantityProducts() {
+        return currentQuantityProducts;
+    }
+
+    public void setCurrentQuantityProducts(int currentQuantityProducts) {
+        this.currentQuantityProducts = currentQuantityProducts;
+    }
+
+  
+
+    public String getDateFrom() {
+        Format formatter = new SimpleDateFormat("dd / MM / yyyy");
+        return formatter.format(dateFrom);
+    }
+
+    public void setDateFrom(Date dateFrom) {
+        this.dateFrom = dateFrom;
+    }
+
+    public String getDateTo() {
+        Format formatter = new SimpleDateFormat("dd / MM / yyyy");
+        return formatter.format(dateTo);
+    }
+
+    public void setDateTo(Date dateTo) {
+        this.dateTo = dateTo;
+    }
     
     public StatisticProductCategory(){
         
@@ -46,14 +75,14 @@ public class StatisticProductCategory {
         this.totalQuantityProduct = totalQuantityProduct;
     }
 
-    public String getDate() {
-        Format formatter = new SimpleDateFormat("dd / MM / yyyy");
-        return formatter.format(this.date);
+    public int getSoldQuantity() {
+        return soldQuantity;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setSoldQuantity(int soldQuantity) {
+        this.soldQuantity = soldQuantity;
     }
+
     
     
     

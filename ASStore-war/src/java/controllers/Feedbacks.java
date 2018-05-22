@@ -116,10 +116,15 @@ public class Feedbacks extends HttpServlet {
         if (content.trim().equals("")) {
             errorMess = errorMess.equals("") ? "Content Feedback can't be blank" : errorMess;
             error = true;
+        }
+        if (content.trim().length() < 20) {
+            errorMess = errorMess.equals("") ? "Content Feedback 20 character" : errorMess;
+            error = true;
         } else {
             request.setAttribute("content", content);
             feedback.setContents(content);
         }
+        
         if (error) {
             request.setAttribute("error", errorMess);
             request.getRequestDispatcher("/user/feedback-create.jsp").forward(request, response);
@@ -191,9 +196,13 @@ public class Feedbacks extends HttpServlet {
                 request.getRequestDispatcher("/user/feedback.jsp").forward(request, response);
                 break;
             case "/create":
-                request.getRequestDispatcher("/User/login").forward(request, response);
+//                response.sendRedirect(request.getContextPath() + "/User/login");
+                response.sendRedirect(request.getContextPath() + "/User/login");
+                break;
             case "/details":
-                request.getRequestDispatcher("/User/login").forward(request, response);
+//                response.sendRedirect(request.getContextPath() + "/User/login");
+                response.sendRedirect(request.getContextPath() + "/User/login");
+                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;

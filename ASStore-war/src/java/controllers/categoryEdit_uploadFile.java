@@ -29,9 +29,9 @@ import javax.servlet.http.Part;
  *
  * @author zerox
  */
-@WebServlet(name = "category_uploadFile", urlPatterns = {"/category_uploadFile"})
+@WebServlet(name = "categoryEdit_uploadFile", urlPatterns = {"/categoryEdit_uploadFile"})
 @MultipartConfig
-public class category_uploadFile extends HttpServlet {
+public class categoryEdit_uploadFile extends HttpServlet {
 
     @EJB
     private CategoryFacadeLocal categoryFacade;
@@ -80,39 +80,42 @@ public class category_uploadFile extends HttpServlet {
                 filecontent.close();
             }
         }
-        //post new category
+        //post edit category
         String image = fileName;
         String name = request.getParameter("name");
-        String errorMess = "";
-        Models.Category getcate = (Models.Category) categoryFacade.getCateByName(name);
-        Models.Category category = new Models.Category();
-        category.setId(0);
-        category.setEnabled(true);
+        int id = Integer.parseInt(request.getParameter("id"));
+        Models.Category category = categoryFacade.find(id);
+        request.setAttribute("cateId", id);
+        request.setAttribute("cateName", category.getName());
+        request.setAttribute("cateImage", category.getPicture());
+        request.setAttribute("cate", category.getEnabled());
+        Models.Category cateByName = categoryFacade.getCateByName(name);
         boolean error = false;
-        if (name.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Name Category can't be blank" : errorMess;
-            error = true;
-        } else {
-            if (getcate != null) {
+        String errorMess = "";
+        if (name.trim().isEmpty()) {
+            category.setName(categoryFacade.find(id).getName());
+        }
+        if (cateByName != null) {
+            if (!category.getName().equals(name)) {
                 errorMess = errorMess.equals("") ? "Name Category exist" : errorMess;
                 error = true;
-            } else {
-                request.setAttribute("name", name);
-                category.setName(name);
             }
+        } else {
+            category.setName(name);
         }
-
-        request.setAttribute("image", image);
-        category.setPicture(image);
+        if (image == null) {
+            category.setPicture(categoryFacade.find(id).getPicture());
+        } else {
+            category.setPicture(image);
+        }
 
         if (error) {
             request.setAttribute("error", errorMess);
-            request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
+            request.getRequestDispatcher("/admin/category-edit.jsp").forward(request, response);
             return;
         }
-
         try {
-            categoryFacade.create(category);
+            categoryFacade.edit(category);
         } catch (Exception e) {
             System.out.println(e.toString());
         }

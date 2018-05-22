@@ -39,15 +39,26 @@
                         <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
                             <a href="<c:url value="/admin/category/edit?id=${category.id}"/>" style="color: #3498db">Edit</a>
                             ||
+                            <form method="post" action="<c:url value='/admin/category/delete?id=${category.id}'/>" id="formDeleteCategory">
                             <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
-                            <a href="<c:url value='/admin/category/delete?id=${category.id}' />" style="color: #e74c3c"  onclick="return confirm('Are you sure ?')">Delete</a>
+                            <p style="color: #e74c3c"  onclick="lastCheck(this)">Delete</p>
+                            </form>
                         </td>
                     </tr>
                 </c:forEach>
             </data>
         </table>
     </div>
-</div>
+<script>
+    function lastCheck(e){
+        if(confirm('Are you sure ?')){
+            console.log(e)
+            e.parentElement.submit();
+        }else{
+            return false;
+        }
+    }
+</script>
 </t:adminLayout>
 
 

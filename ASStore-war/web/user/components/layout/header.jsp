@@ -40,6 +40,9 @@
             <li>
                 <a href="<c:url value="/feedbacks/list"/>">Feedback</a>
             </li>
+            <li>
+                <a href="<c:url value="/statisticals/listcate"/>">Statistical</a>
+            </li>
           </ul>
         </nav>
       </div>

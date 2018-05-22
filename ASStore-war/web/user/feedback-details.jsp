@@ -24,9 +24,12 @@
 
                 <br/>
                 <br/>
-                <div>
-                    <input type="hidden" id="idfeedbackdelete" name="idfeedbackdelete" value="${feedback.id}" >
-                </div>
+                <c:if test="${sessionScope.role == roleId}">
+                    <div>
+                        <p>STT:</p> <input type="text" id="idfeedbackdelete" name="idfeedbackdelete" value="${feedback.id}" readonly="true">
+                    </div>
+                </c:if>
+                <br/>
                 <h2 class="m-b-10">${feedback.title}</h2>
                 <label>${feedback.createAt}</label>
                 <br/>

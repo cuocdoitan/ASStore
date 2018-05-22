@@ -7,77 +7,135 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<t:pureLayout>
+<t:layout>
     <div class="container">
         <div class="row">
             <div class="col-12 m-t-30">
-                <h1 class="m-b-30 text-center">Thống Kê Số Lượng Đăng Bán, Mua Product Từng Category</h1>
+                <h1 class="m-b-30 text-center">Statistical Total Post Product, Total Quantity Product, Current Quantity Product, Total Quantity Sold Product Of Category</h1>
                 <div class="flex-sb-m flex-w p-b-35 p-t-20">
-                    <div class="flex-w">
-                        <div class="">
-                            <p>Năm</p>
-                            <select class="" name="year">
-                                <option>2018</option>           
-                            </select>
-                        </div>
+                    <form method="post" action="<c:url value='/statisticals/listcate'/>">
+                        <div class="flex-w">
 
-                        <div class="">
-                            <p>Tháng</p>
-                            <select class="" name="month">
-                                <option>1</option>
-                                <option>2</option> 
-                                <option>3</option> 
-                                <option>4</option> 
-                                <option>5</option> 
-                                <option>6</option> 
-                                <option>7</option> 
-                                <option>8</option> 
-                                <option>9</option> 
-                                <option>10</option> 
-                                <option>11</option> 
-                                <option>12</option> 
-                            </select>
+                            <div class="">
+                                <p>Year</p>
+                                <select class="" name="yearFrom">
+                                    <option>2018</option>           
+                                </select>
+                            </div>
+                            <div class="">
+                                <p>Month From</p>
+                                <select class="" name="monthFrom">
+                                    <option>1</option>
+                                    <option>2</option> 
+                                    <option>3</option> 
+                                    <option>4</option> 
+                                    <option>5</option> 
+                                    <option>6</option> 
+                                    <option>7</option> 
+                                    <option>8</option> 
+                                    <option>9</option> 
+                                    <option>10</option> 
+                                    <option>11</option> 
+                                    <option>12</option> 
+                                </select>
+                            </div>
+                            <div class="">
+                                <p>Day From</p>
+                                <select class="" name="dayFrom">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                    <option>25</option>
+                                    <option>26</option>
+                                    <option>27</option>
+                                    <option>28</option>
+                                    <option>29</option>
+                                    <option>30</option>
+                                    <option>31</option>
+                                </select>
+                            </div>
+                            
+                            <div class="">
+                                <p>Month To</p>
+                                <select class="" name="monthTo">
+                                    <option>1</option>
+                                    <option>2</option> 
+                                    <option>3</option> 
+                                    <option>4</option> 
+                                    <option>5</option> 
+                                    <option>6</option> 
+                                    <option>7</option> 
+                                    <option>8</option> 
+                                    <option>9</option> 
+                                    <option>10</option> 
+                                    <option>11</option> 
+                                    <option>12</option> 
+                                </select>
+                            </div>
+                            
+                            <div class="">
+                                <p>Day To</p>
+                                <select class="" name="dayTo">
+                                    <option>1</option>
+                                    <option>2</option>
+                                    <option>3</option>
+                                    <option>4</option>
+                                    <option>5</option>
+                                    <option>6</option>
+                                    <option>7</option>
+                                    <option>8</option>
+                                    <option>9</option>
+                                    <option>10</option>
+                                    <option>11</option>
+                                    <option>12</option>
+                                    <option>13</option>
+                                    <option>14</option>
+                                    <option>15</option>
+                                    <option>16</option>
+                                    <option>17</option>
+                                    <option>18</option>
+                                    <option>19</option>
+                                    <option>20</option>
+                                    <option>21</option>
+                                    <option>22</option>
+                                    <option>23</option>
+                                    <option>24</option>
+                                    <option>25</option>
+                                    <option>26</option>
+                                    <option>27</option>
+                                    <option>28</option>
+                                    <option>29</option>
+                                    <option>30</option>
+                                    <option>31</option>
+                                </select>
+                            </div>
                         </div>
-
-                        <div class="">
-                            <p>Ngày</p>
-                            <select class="" name="day">
-                                <option>1</option>
-                                <option>2</option>
-                                <option>3</option>
-                                <option>4</option>
-                                <option>5</option>
-                                <option>6</option>
-                                <option>7</option>
-                                <option>8</option>
-                                <option>9</option>
-                                <option>10</option>
-                                <option>11</option>
-                                <option>12</option>
-                                <option>13</option>
-                                <option>14</option>
-                                <option>15</option>
-                                <option>16</option>
-                                <option>17</option>
-                                <option>18</option>
-                                <option>19</option>
-                                <option>20</option>
-                                <option>21</option>
-                                <option>22</option>
-                                <option>23</option>
-                                <option>24</option>
-                                <option>25</option>
-                                <option>26</option>
-                                <option>27</option>
-                                <option>28</option>
-                                <option>29</option>
-                                <option>30</option>
-                                <option>31</option>
-                            </select>
-                        </div>
-                    </div>
+                        <br/>
+                        <button style="width: 200px;" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
+                            Statistical
+                        </button>
+                    </form>
                 </div>
                 <div class="flex-sb-m flex-w p-b-35 p-t-20">
 
@@ -90,10 +148,11 @@
                     <thead>
                         <tr>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Category</th>
-                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Post Product</th>
-                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Quantity Product</th>
-                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Số lượng product được bán</th>
-                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Ngày</th>
+                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Post Product</th>
+                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Product</th>
+                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Current Quantity Product</th>
+                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Sold Product</th>             
+                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Date</th>
                         </tr>
                     </thead>
                     <c:forEach items="${listStatisticDetails}" var="statistic">
@@ -109,11 +168,14 @@
                                     ${statistic.totalQuantityProduct}
                                 </td>
                                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                                    50
+                                    ${statistic.currentQuantityProducts}
                                 </td>
                                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                                    ${statistic.date}
-                                </td> 
+                                    ${statistic.soldQuantity}
+                                </td>
+                                <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
+                                    ${statistic.dateFrom} - ${statistic.dateTo}
+                                </td>
                             </tr>   
                         </tbody>
                     </c:forEach>
@@ -121,52 +183,43 @@
             </div>
         </div>
     </div>
+    <br/>
+    <br/>
     <div id="Chart"></div>
 
     <script>
-        $(function () {
-            Highcharts.chart('Chart', {
-                chart: {
-                    type: 'column'
-                },
+        Highcharts.chart('Chart', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Statistical Product of Category'
+            },
+            xAxis: {
+                categories: [${categoryListChart}]
+            },
+            yAxis: {
+                min: 0,
                 title: {
-                    text: 'Product\' number of Category'
-                },
-                xAxis: {
-                    type: 'category',
-                    labels: {
-                        rotation: -45,
-                        style: {
-                            fontSize: '18px',
-                            fontFamily: 'Verdana, sans-serif'
-                        }
-                    }
-                },
-                yAxis: {
-                    title: {
-                        text: 'Number of products'
-                    }
-                },
-                series: [
-                    {
-                        name: 'number of products',
-                        data: [],
-                        dataLabels: {
-                            enabled: true,
-                            rotation: 0,
-                            color: '#FFFFFF',
-                            align: 'right',
-                            format: '{point.y:.1f}', // one decimal
-                            y: 20, // 10 pixels down from the top
-                            style: {
-                                fontSize: '20px',
-                                fontFamily: 'Verdana, sans-serif'
-                            }
-                        }
-                    }
-                ]
-            });
+                    text: 'Total Quantity Product'
+                }
+            },
+            tooltip: {
+                pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.percentage:.0f}%)<br/>',
+                shared: true
+            },
+            plotOptions: {
+                column: {
+                    stacking: 'percent'
+                }
+            },
+            series: [{
+                    name: 'Current Quantity Product',
+                    data: [${totalCurrentChart}]
+                }, {
+                    name: 'Total Quantity Sold Product',
+                    data: [${totalQuantitySoldProductChart}]
+                }]
         });
-        //document.getElementById("Chart").value = myChart;
     </script>
-</t:pureLayout>
+</t:layout>
