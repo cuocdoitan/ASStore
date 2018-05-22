@@ -59,7 +59,6 @@ public class Product implements Serializable {
   @Temporal(TemporalType.DATE)
   @Column(name = "CreateAt")
   private Date createAt;
-  @Size(max = 10)
   @Temporal(TemporalType.DATE)
   @Column(name = "UpdateAt")
   private Date updateAt;

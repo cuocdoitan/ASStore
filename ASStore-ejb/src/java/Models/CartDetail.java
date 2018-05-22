@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
   @NamedQuery(name = "CartDetail.findAll", query = "SELECT c FROM CartDetail c")
   , @NamedQuery(name = "CartDetail.findById", query = "SELECT c FROM CartDetail c WHERE c.id = :id")
   , @NamedQuery(name = "CartDetail.findByCartId", query = "SELECT c FROM CartDetail c WHERE c.cartId = :id")
+  , @NamedQuery(name = "CartDetail.findByCartIdAndProductId", query = "SELECT c FROM CartDetail c WHERE c.cartId = :cid AND c.productId = :pid")
   , @NamedQuery(name = "CartDetail.findByQuantity", query = "SELECT c FROM CartDetail c WHERE c.quantity = :quantity")
   , @NamedQuery(name = "CartDetail.findByUnitPrice", query = "SELECT c FROM CartDetail c WHERE c.unitPrice = :unitPrice")
   , @NamedQuery(name = "CartDetail.findByCoupon", query = "SELECT c FROM CartDetail c WHERE c.coupon = :coupon")})

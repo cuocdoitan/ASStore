@@ -71,7 +71,7 @@
   <!-- Header Mobile -->
   <div class="wrap_header_mobile">
     <!-- Logo moblie -->
-    <a href="index" class="logo-mobile">
+    <a href="<c:url value="/index"/>" class="logo-mobile">
       <img src="<c:url value='/assets/img/asstore-logo.png'/>" alt="IMG-LOGO">
     </a>
 

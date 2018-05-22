@@ -164,18 +164,27 @@ public class Cart extends HttpServlet {
         break;
       case "/remove":
         int detailId = Integer.parseInt(request.getParameter("id"));
+        int productId = -1;
+        int quantity = 0;
         if (sess.getAttribute("userId") == null) {
           ArrayList<CartDetail> cart = (ArrayList<CartDetail>)sess.getAttribute("cart");
           for (CartDetail c : cart) {
             if (c.getId().equals(detailId)) {
               cart.remove(c);
+              productId = c.getProductId().getId();
+              quantity = c.getQuantity();
               break;
             }
           }
         }
         else {
           cartDetailFacade.remove(cartDetailFacade.find(detailId));
+          productId = cartDetailFacade.find(detailId).getProductId().getId();
+          quantity = cartDetailFacade.find(detailId).getQuantity();
         }
+        Product ps = productFacade.find(productId);
+        ps.setQuantity(ps.getQuantity() + quantity);
+        productFacade.edit(ps);
         response.sendRedirect(request.getContextPath() + "/cart/list");
     }
   }
@@ -255,31 +264,73 @@ public class Cart extends HttpServlet {
           }
           ArrayList<CartDetail> cart = (ArrayList<CartDetail>) sess.getAttribute("cart");
           CartDetail de = new CartDetail();
-          Product p = productFacade.find(productId);
-          de.setId(0);
-          de.setCoupon("");
-          de.setProductId(p);
-          de.setQuantity(quantity);
-          de.setUnitPrice(unitPrice);
-          cart.add(de);
+          boolean isInCart = false;
+          int cartPos = -1;
+          for (int i = 0; i < cart.size(); i++) {
+            CartDetail det = cart.get(i);
+            if (det.getProductId().getId() == productId) {
+              isInCart = true;
+              de = det;
+              cartPos = i;
+            }
+          }
+          if (!isInCart) {
+            Product p = productFacade.find(productId);
+            de.setId(0);
+            de.setCoupon("");
+            de.setProductId(p);
+            de.setQuantity(quantity);
+            de.setUnitPrice(unitPrice);
+            cart.add(de);
+          }
+          else {
+            de.setQuantity(de.getQuantity() + quantity);
+            cart.set(cartPos, de);
+          }
         }
         else {
           Models.Cart ca = cartFacade.findByUserId((int)sess.getAttribute("userId"));
           CartDetail de = new CartDetail();
-          de.setCartId(ca);
-          de.setId(0);
-          de.setCoupon("");
-          de.setProductId(new Product(productId));
-          de.setQuantity(quantity);
-          de.setUnitPrice(unitPrice);
-          try {
-            cartDetailFacade.create(de);
-          } catch (Exception e) {
-            e.printStackTrace();
-            response.setContentType("application/json");
-            response.getWriter().print("{ \"status\": \"failed\" }");
-            return;
+          boolean isInCart = false;
+          int cartPos = -1;
+          
+          for (int i = 0; i < ca.getCartDetails().size(); i++) {
+            CartDetail det = ca.getCartDetails().get(i);
+            if (det.getProductId().getId() == productId) {
+              isInCart = true;
+              de = det;
+              cartPos = i;
+            }
           }
+          if (!isInCart) {
+            de.setCartId(ca);
+            de.setId(0);
+            de.setCoupon("");
+            de.setProductId(new Product(productId));
+            de.setQuantity(quantity);
+            de.setUnitPrice(unitPrice);
+            try {
+              cartDetailFacade.create(de);
+            } catch (Exception e) {
+              e.printStackTrace();
+              response.setContentType("application/json");
+              response.getWriter().print("{ \"status\": \"failed\" }");
+              return;
+            }
+          }
+          else {
+            de.setQuantity(de.getQuantity() + quantity);
+            try {
+            cartDetailFacade.edit(de);
+            } catch (Exception e) {
+              e.printStackTrace();
+              response.setContentType("application/json");
+              response.getWriter().print("{ \"status\": \"failed\" }");
+              return;
+            }
+          }
+          
+          
         }
         Product ps = productFacade.find(productId);
         ps.setQuantity(ps.getQuantity() - quantity);
