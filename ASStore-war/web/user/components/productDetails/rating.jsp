@@ -45,7 +45,7 @@
     </div>
 </div> 
 <p>${product.productRatingCollection.size()} voters </p>
-<p class="totalRating">${product.averageStars()}/5 stars</p>
+<p><span class="totalRating">${product.averageStars()}</span>/5 stars</p>
 <hr/>
 <c:choose>
     <c:when test="${sessionScope.userid == null}">
@@ -95,7 +95,8 @@
                         <label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
                     </fieldset>
                     <input type="hidden" name="ratingId" value="${ratedStars.id}"/>
-                Your rating : ${ratedStars.rating}/5 stars
+                <br/>
+                <p>Your rating : ${ratedStars.rating}/5 stars</p>
                 <br/>
                 <button id="cancelRating">Cancel</button>
             </c:otherwise>

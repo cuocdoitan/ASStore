@@ -146,7 +146,7 @@ public class ProductServlet extends HttpServlet {
                     }
                 }
             }
-
+            
             //category
             if (category != null) {
                 if (!category.equals("")) {
@@ -201,7 +201,8 @@ public class ProductServlet extends HttpServlet {
             }
 
             if (error == true) {
-                listProduct = productFacade.getListProductSortedDesc();
+                listProduct = new ArrayList<>();
+                request.setAttribute("noResult", "No Result Found");
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             } else {
                 listProduct = productFacade.searchProduct(sProductName.trim(), sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);

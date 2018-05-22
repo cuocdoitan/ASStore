@@ -106,7 +106,7 @@ setTimeout(function (){
     for (var i = 0; i < $(".front-stars").length; i++) {
         var frontStars = $(".front-stars")[i];
         var valueElement = $(".totalRating")[i];
-        var stars = parseFloat(valueElement.text());
+        var stars = parseFloat($(valueElement).html());
         var percentage = 100 / 5 * stars;
         frontStars.style.width = percentage + "%";
         

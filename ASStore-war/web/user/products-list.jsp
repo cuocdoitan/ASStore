@@ -103,6 +103,7 @@
                     <!--  -->
 
                     <!-- Product -->
+                    <p>${noResult}</p>
                     <div class="row" id="ProductListContent_User">
                         <jsp:include page="/user/components/productList/list.jsp"/>
                     </div>
