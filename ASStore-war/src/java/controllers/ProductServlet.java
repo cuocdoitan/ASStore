@@ -146,7 +146,7 @@ public class ProductServlet extends HttpServlet {
                     }
                 }
             }
-            
+
             //category
             if (category != null) {
                 if (!category.equals("")) {
@@ -202,12 +202,14 @@ public class ProductServlet extends HttpServlet {
 
             if (error == true) {
                 listProduct = new ArrayList<>();
-                request.setAttribute("noResult", "No Result Found");
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             } else {
                 listProduct = productFacade.searchProduct(sProductName.trim(), sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             }
+        }
+        if (listProduct.isEmpty()) {
+            request.setAttribute("noResult", "No Result Found");
         }
         String page = request.getParameter("page");
         PaginationHandler pagination = new PaginationHandler();
@@ -249,7 +251,7 @@ public class ProductServlet extends HttpServlet {
         request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
         //</editor-fold>
     }
-    
+
     protected void detailsPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to details page">
@@ -448,6 +450,8 @@ public class ProductServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
         HttpSession session = request.getSession();
         if (session.getAttribute("role") == null) {
             response.sendRedirect(request.getContextPath() + "/User/login");

@@ -12,7 +12,7 @@
     .star-rating {
         display: flex;
         align-items: center;
-        font-size: 2em;
+        font-size: 1.5em;
         justify-content: left;
         margin-top: 10px;
         margin-bottom: 10px;
