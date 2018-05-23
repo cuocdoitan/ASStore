@@ -39,6 +39,10 @@ public class checkIfAnimeExist extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("application/json");
         String animeName = request.getParameter("animeName");
+        if(animeName.equals("")){
+            response.getWriter().print("{\"exist\":\"" + true + "\"}");
+            return;
+        }
         Models.Anime result = animeFacade.findAnimeByName(animeName);
         if(result == null){
             response.getWriter().print("{\"exist\":\"" + false + "\"}");

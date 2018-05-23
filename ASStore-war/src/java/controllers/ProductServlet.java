@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import BusinessLogic.PaginationHandler;
 import Models.Media;
 import Models.Product;
 import Models.Users;
@@ -21,6 +22,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -119,13 +121,11 @@ public class ProductServlet extends HttpServlet {
         String category = request.getParameter("category");
         String minPrice = request.getParameter("minPrice");
         String maxPrice = request.getParameter("maxPrice");
-        if (productName == null && animeName == null && category == null && minPrice == null && maxPrice == null) {
-            java.util.List<Product> listProduct = productFacade.getListProductSortedDesc();
+        String sorting = request.getParameter("sorting");
+        java.util.List<Product> listProduct = new ArrayList<>();
+        if (productName == null && animeName == null && category == null && minPrice == null && maxPrice == null && sorting == null) {
+            listProduct = productFacade.getListProductSortedDesc();
             request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
-            request.setAttribute("categories", categoryFacade.findAll());
-            request.setAttribute("listProduct", listProduct);
-            request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
-            return;
         } else {
             boolean error = false;
             String sProductName = productName;
@@ -133,6 +133,7 @@ public class ProductServlet extends HttpServlet {
             Models.Category sCategoryId = null;
             BigDecimal sMinPrice = null;
             BigDecimal sMaxPrice = null;
+            String sSorting = null;
             //anime
             if (animeName != null) {
                 if (!animeName.equals("")) {
@@ -145,7 +146,7 @@ public class ProductServlet extends HttpServlet {
                     }
                 }
             }
-
+            
             //category
             if (category != null) {
                 if (!category.equals("")) {
@@ -187,27 +188,57 @@ public class ProductServlet extends HttpServlet {
                 }
             }
 
-            if (error == true) {
-                java.util.List<Product> listProduct = productFacade.getListProductSortedDesc();
-                request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
-                request.setAttribute("listProduct", listProduct);
-                return;
-            } else {
-                java.util.List<Product> listProduct = productFacade.searchProduct(sProductName, sAnimeId, sCategoryId, sMinPrice, sMaxPrice);
-                request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
-                request.setAttribute("listProduct", listProduct);
-
+            //sorting
+            if (sorting != null) {
+                if (!sorting.equals("")) {
+                    if (sorting.equals("lowToHigh")) {
+                        sSorting = "ASC";
+                    }
+                    if (sorting.equals("highToLow")) {
+                        sSorting = "DESC";
+                    }
+                }
             }
-            request.setAttribute("vproductName", productName);
-            request.setAttribute("vanimeName", animeName);
-            request.setAttribute("vcategory", category);
-            request.setAttribute("vminPrice", minPrice);
-            request.setAttribute("vmaxPrice", maxPrice);
-            request.setAttribute("categories", categoryFacade.findAll());
-            request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
 
+            if (error == true) {
+                listProduct = new ArrayList<>();
+                request.setAttribute("noResult", "No Result Found");
+                request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
+            } else {
+                listProduct = productFacade.searchProduct(sProductName.trim(), sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);
+                request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
+            }
         }
+        String page = request.getParameter("page");
+        PaginationHandler pagination = new PaginationHandler();
+        int selectedPage = pagination.getSelectedPage(page);
+        int maxPage = pagination.countNumberOfPages(listProduct.size(), 9);
+        if (selectedPage < 0 || selectedPage > maxPage) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return;
+        }
+        int[] range = pagination.getObjectPositionInSelectedPage(listProduct.size(), 9, selectedPage);
+        List<Product> listProductInPage = listProduct.subList(range[0], range[1]);
 
+        request.setAttribute("listProduct", listProductInPage);
+        request.setAttribute("categories", categoryFacade.findAll());
+        request.setAttribute("numberOfPage", maxPage);
+        request.setAttribute("selectedPage", selectedPage);
+
+        request.setAttribute("vproductName", productName);
+        request.setAttribute("vanimeName", animeName);
+        request.setAttribute("vcategory", category);
+        request.setAttribute("vminPrice", minPrice);
+        request.setAttribute("vmaxPrice", maxPrice);
+        request.setAttribute("vsorting", sorting);
+        String queryString = request.getQueryString();
+        if (page != null) {
+            int indexOfPage = request.getQueryString().indexOf("&page=");
+            String queryStringWithoutPage = request.getQueryString().substring(0, indexOfPage);
+            queryString = queryStringWithoutPage;
+        }
+        request.setAttribute("queryString", queryString);
+        request.getRequestDispatcher("/user/products-list.jsp").forward(request, response);
         //</editor-fold>
     }
 
@@ -218,13 +249,14 @@ public class ProductServlet extends HttpServlet {
         request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
         //</editor-fold>
     }
-
+    
     protected void detailsPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to details page">
         int productId_detail = Integer.parseInt(request.getParameter("id"));
         Product product = productFacade.find(productId_detail);
         request.setAttribute("product", product);
+        request.setAttribute("images", mediaFacade.getImagesFromProduct(product));
         request.setAttribute("similarProducts", productFacade.getRandomProductSameAnime(product));
         Integer sessionUserId = (Integer) request.getSession().getAttribute("userid");
         if (sessionUserId != null) {
@@ -244,13 +276,18 @@ public class ProductServlet extends HttpServlet {
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to edit page">
         HttpSession session = request.getSession();
-        int sUserId = (int) session.getAttribute("userid");
+        int sessionUserId = (int) session.getAttribute("userid");
 
         int productId_edit = Integer.parseInt(request.getParameter("id"));
         Product product_edit = productFacade.find(productId_edit);
 
-        if (product_edit.getUsersId().getId() != sUserId) {
+        if (product_edit.getUsersId().getId() != sessionUserId) {
             response.sendRedirect(request.getContextPath() + "/User/login");
+            return;
+        }
+
+        if (product_edit.getStatus() != 1) {
+            response.sendRedirect(request.getHeader("referer"));
             return;
         }
 
@@ -258,8 +295,8 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("categories", categoryFacade.findAll());
         String[] arrImage_edit = {"", "", "", ""};
         int i = 0;
-        for (Media media : product_edit.getMediaCollection()) {
-            arrImage_edit[i] = media.getUrlImage();
+        for (String image : mediaFacade.getImagesFromProduct(product_edit)) {
+            arrImage_edit[i] = image;
             i++;
         }
         request.setAttribute("images", arrImage_edit);
@@ -271,11 +308,11 @@ public class ProductServlet extends HttpServlet {
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to repair page">
         HttpSession session = request.getSession();
-        int sUserId = (int) session.getAttribute("userid");
+        int sessionUserId = (int) session.getAttribute("userid");
 
         int productId_repair = Integer.parseInt(request.getParameter("id"));
         Product product_repair = productFacade.find(productId_repair);
-        if (product_repair.getUsersId().getId() != sUserId) {
+        if (product_repair.getUsersId().getId() != sessionUserId) {
             response.sendRedirect(request.getContextPath() + "/User/login");
             return;
         }
@@ -288,8 +325,8 @@ public class ProductServlet extends HttpServlet {
         request.setAttribute("categories", categoryFacade.findAll());
         String[] arrImage = {"", "", "", ""};
         int j = 0;
-        for (Media media : product_repair.getMediaCollection()) {
-            arrImage[j] = media.getUrlImage();
+        for (String image : mediaFacade.getImagesFromProduct(product_repair)) {
+            arrImage[j] = image;
             j++;
         }
         request.setAttribute("images", arrImage);
@@ -345,6 +382,9 @@ public class ProductServlet extends HttpServlet {
         }
 
         //check price
+        if (price.length() > 10) {
+            errPrice = errPrice.equals("") ? "Too long" : errPrice;
+        }
         if (price.trim().equals("")) {
             errPrice = errPrice.equals("") ? "This field cannot be blank" : errPrice;
         }
@@ -484,6 +524,7 @@ public class ProductServlet extends HttpServlet {
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="action upload images">
         productId.getMediaCollection().clear();
+        System.out.println("size : " + productId.getMediaCollection().size());
         String image1 = request.getParameter("image1").trim();
         String image2 = request.getParameter("image2").trim();
         String image3 = request.getParameter("image3").trim();
@@ -507,6 +548,7 @@ public class ProductServlet extends HttpServlet {
 
             }
         }
+
         return productId;
         //</editor-fold>
     }
