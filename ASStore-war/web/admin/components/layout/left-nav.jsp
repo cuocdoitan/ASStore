@@ -30,7 +30,7 @@
                 <li class="m-b-5">
                     <a href="<c:url value="/admin/orders/list"></c:url>" style="font-size: 1.1rem">Orders list</a>
                 </li>
-            <c:if test="${sessionScope.role == roleId}">
+            <c:if test="${sessionScope.role.id == 1}">
                 <li class="m-b-5">
                     <a href="<c:url value="/admin/user/list"></c:url>" style="font-size: 1.1rem">User list</a>
                     </li>

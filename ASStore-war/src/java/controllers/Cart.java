@@ -206,9 +206,10 @@ public class Cart extends HttpServlet {
             }
           }
           else {
-            cartDetailFacade.remove(cartDetailFacade.find(detailId));
             productId = cartDetailFacade.find(detailId).getProductId().getId();
             quantity = cartDetailFacade.find(detailId).getQuantity();
+            cartDetailFacade.remove(cartDetailFacade.find(detailId));
+            
           }
         }
         Product ps = productFacade.find(productId);
