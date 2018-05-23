@@ -7,7 +7,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:layout>
-    <form>  
         PhoneNumber: <input type="number" name="phone" value="${user.phoneNumber}"/> <br/>
         Password: <input type="password" name="pass" value="${user.password}" readonly/> <br/>
         FirstName: <input type="text" name="firstname" value="${user.firstName}" /> <br/> 
@@ -20,7 +19,13 @@
                 Update infomation
             </a>
         </div>
-    </form> 
+        <div class="w-size25">
+            <!-- Button -->
+            <form action="<c:url value='/User/logout'/>" method="post">
+                <input type="submit" value="Log Out"/>
+            </form>
+        </div>
+     
     <h3>Selling Products</h3>
     <table border="1" style="width: 100%" class="anime-list">
         <thead>
@@ -78,7 +83,7 @@
                         ${unavailableProduct.name}
                     </td>
                     <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                        <a href="<c:url value='/products/details?repair-product=${unavailableProduct.id}'/>" style="color: #3498db">Repair</a>
+                        <a href="<c:url value='/products/repair-product?id=${unavailableProduct.id}'/>" style="color: #3498db">Repair</a>
                     </td>
                 </tr>
             </c:forEach>

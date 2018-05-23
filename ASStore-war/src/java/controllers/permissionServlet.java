@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
  *
  * @author leminhtung
  */
-@WebServlet(name = "permissionServlet", urlPatterns = {"/permissionServlet/*"})
+@WebServlet(name = "permissionServlet", urlPatterns = {"/admin/permissionServlet/*"})
 public class permissionServlet extends HttpServlet {
 
     @EJB
@@ -80,6 +80,7 @@ public class permissionServlet extends HttpServlet {
              case "/list":
                 java.util.List<Models.Users> listaccount = usersFacade.getList();
                 request.setAttribute("userlist", listaccount);
+                listaccount.remove(usersFacade.find(1));
                 request.getRequestDispatcher("/admin/Permission.jsp").forward(request, response);
                 break;
             default:

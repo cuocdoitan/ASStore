@@ -34,28 +34,38 @@
             </li>
 
             <li>
-              <a href="<c:url value="/anime"/>">Anime</a>
+              <a href="<c:url value="/anime/list"/>">Anime</a>
             </li>
 
             <li>
               <a href="<c:url value="/coupon/list"/>">Coupons</a>
             </li>
-            
+
             <li>
               <a href="<c:url value="/feedbacks/list"/>">Feedback</a>
             </li>
           </ul>
         </nav>
       </div>
-
       <!-- Header Icon -->
+
       <div class="header-icons">
-        <a href="<c:url value="/products/new-product"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
-          <button>NEW POST</button>   
-        </a>
-        <a href="#" class="header-wrapicon1 dis-block">
-          <img src="<c:url value='/assets/img/icons/icon-header-01.png'/>" class="header-icon1" alt="ICON">
-        </a>
+        <c:choose>
+          <c:when test="${sessionScope.userid == null}">
+            <a href="<c:url value="/User/login"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
+              <button>LOG IN</button>   
+            </a>
+          </c:when>
+          <c:otherwise>
+            <a href="<c:url value="/products/new-product"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
+              <button>NEW POST</button>   
+            </a>
+            <a href="<c:url value="/User/detail"/>" class="header-wrapicon1 dis-block">
+              <img src="<c:url value='/assets/img/icons/icon-header-01.png'/>" class="header-icon1" alt="ICON">
+            </a>
+          </c:otherwise>
+        </c:choose>
+
 
         <span class="linedivide1"></span>
 
@@ -79,9 +89,21 @@
     <div class="btn-show-menu">
       <!-- Header Icon mobile -->
       <div class="header-icons-mobile">
-        <a href="#" class="header-wrapicon1 dis-block">
-          <img src="<c:url value='/assets/img/icons/icon-header-01.png'/>" class="header-icon1" alt="ICON">
-        </a>
+        <c:choose>
+          <c:when test="${sessionScope.userid == null}">
+            <a href="<c:url value="/User/login"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
+              <button>LOG IN</button>   
+            </a>
+          </c:when>
+          <c:otherwise>
+            <a href="<c:url value="/products/new-product"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
+              <button>NEW POST</button>   
+            </a>
+            <a href="<c:url value="/User/detail"/>" class="header-wrapicon1 dis-block">
+              <img src="<c:url value='/assets/img/icons/icon-header-01.png'/>" class="header-icon1" alt="ICON">
+            </a>
+          </c:otherwise>
+        </c:choose>
 
         <span class="linedivide2"></span>
 
