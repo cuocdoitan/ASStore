@@ -164,23 +164,52 @@ public class Cart extends HttpServlet {
         break;
       case "/remove":
         int detailId = Integer.parseInt(request.getParameter("id"));
+        int amount = 0;
+        if (request.getParameter("amount") != null) {
+          amount = Integer.parseInt(request.getParameter("amount"));
+        }
         int productId = -1;
         int quantity = 0;
         if (sess.getAttribute("userId") == null) {
           ArrayList<CartDetail> cart = (ArrayList<CartDetail>)sess.getAttribute("cart");
           for (CartDetail c : cart) {
             if (c.getId().equals(detailId)) {
-              cart.remove(c);
-              productId = c.getProductId().getId();
-              quantity = c.getQuantity();
+              if (amount > 0) {
+                c.setQuantity(c.getQuantity() - amount);
+                if (c.getQuantity() == 0) {
+                  cart.remove(c);
+                }
+                productId = c.getProductId().getId();
+                quantity = amount;
+              }
+              else {
+                cart.remove(c);
+                productId = c.getProductId().getId();
+                quantity = c.getQuantity();
+              }
+              
               break;
             }
           }
         }
         else {
-          cartDetailFacade.remove(cartDetailFacade.find(detailId));
-          productId = cartDetailFacade.find(detailId).getProductId().getId();
-          quantity = cartDetailFacade.find(detailId).getQuantity();
+          if (amount > 0) {
+            CartDetail c = cartDetailFacade.find(detailId);
+            c.setQuantity(c.getQuantity() - amount);
+            productId = cartDetailFacade.find(detailId).getProductId().getId();
+            quantity = amount;
+            if (c.getQuantity() == 0) {
+              cartDetailFacade.remove(c);
+            }
+            else {
+              cartDetailFacade.edit(c);
+            }
+          }
+          else {
+            cartDetailFacade.remove(cartDetailFacade.find(detailId));
+            productId = cartDetailFacade.find(detailId).getProductId().getId();
+            quantity = cartDetailFacade.find(detailId).getQuantity();
+          }
         }
         Product ps = productFacade.find(productId);
         ps.setQuantity(ps.getQuantity() + quantity);

@@ -23,6 +23,6 @@
       
       <p style="color: #007bff; cursor: pointer" onclick="addCoupon('<c:url value="/cart/addCoupon" />', ${param.id})">Coupon</p>
     </c:if>
-    <a href="<c:url value="/cart/remove?id=${param.id}" />" onclick="return confirm('Are you sure?')" style="color: #bd4147">Remove</a>
+      <p onclick="removeFromCart('<c:url value="/cart/remove?id=" />', ${param.id}, ${param.quantity})" style="color: #bd4147">Remove</p>
   </td>
 </tr>
