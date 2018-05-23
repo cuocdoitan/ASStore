@@ -6,6 +6,8 @@
 package Models;
 
 import java.io.Serializable;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -101,8 +103,9 @@ public class FeedbackComment implements Serializable {
         this.contents = contents;
     }
 
-    public Date getCreateAt() {
-        return createAt;
+    public String getCreateAt() {
+        Format formattercmt = new SimpleDateFormat("dd / MM / yyyy");
+        return formattercmt.format(createAt);
     }
 
     public void setCreateAt(Date createAt) {

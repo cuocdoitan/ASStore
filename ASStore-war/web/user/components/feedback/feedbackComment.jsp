@@ -11,12 +11,18 @@
     <div class="row">
         <div class="col-sm-11 col-md-11 col-lg-11">
             <div>
-                <p style="font-size: 1.1em;">${requestScope.attribute.usersId.firstName} ${requestScope.attribute.usersId.lastName}</p>
+                <p style="font-size: 1.1em;">${requestScope.attribute.usersId.firstName} ${requestScope.attribute.usersId.lastName} </p>
+                <p>${requestScope.attribute.createAt}</p>
                 <br/>
                 <p style="font-size: 1.1em; color: black;">
                     ${requestScope.attribute.contents}
                 </p>
             </div>
         </div>
+        <c:if test="${requestScope.attribute.usersId.id == requestScope.userid}">
+            <p onclick="deleteFeedbackComment(${requestScope.attribute.id}, ${requestScope.attribute.feedbackId.id}, '<c:url value="/feedbacks/deletecomment" />')">
+               Delete
+            </p>
+        </c:if>
     </div>
 </div>

@@ -38,5 +38,20 @@ public class FeedbackCommentFacade extends AbstractFacade<FeedbackComment> imple
         query.setParameter("enabled", true);
         return query.getResultList();
     }
+
+    @Override
+    public List<FeedbackComment> getListComment(int feedbackIdCmt) {
+        TypedQuery query = em.createQuery("SELECT f FROM FeedbackComment f WHERE f.feedbackId.id = ?1 and f.enabled = ?2", FeedbackComment.class);
+        query.setParameter(1, feedbackIdCmt);
+        query.setParameter(2, true);
+        List<FeedbackComment> list = query.getResultList();
+        System.out.println("=====================================");
+        System.out.println("list = "+list.toString());
+        if(list.isEmpty()){
+            return null;
+        }else{
+            return list;
+        }
+    }
     
 }

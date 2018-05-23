@@ -50,39 +50,7 @@ public class UploadCategoryImages extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
-        String image = getImageName(request, response);
-        String name = request.getParameter("name");
-        String errorMess = "";
-        Models.Category category = new Models.Category();
-        category.setId(0);
-        category.setEnabled(true);
-        boolean error = false;
-        if (name.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Name Category can't be blank" : errorMess;
-            error = true;
-        } else {
-            request.setAttribute("name", name);
-            category.setName(name);
-        }
-        if (image.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Image Category can't be blank" : errorMess;
-            error = true;
-        }else{
-            request.setAttribute("image", image);
-            category.setPicture(image);
-        }
-        if(error){
-            request.setAttribute("error", errorMess);
-            request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
-        }
-        
-        try {
-            categoryFacade.create(category);
-        } catch (Exception e) {
-            System.out.println(e.toString());
-        }
-        response.sendRedirect(request.getContextPath() + "/admin/category/list");
+
     }
 
     /**
@@ -96,10 +64,11 @@ public class UploadCategoryImages extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
         String image = getImageName(request, response);
         String name = request.getParameter("name");
         String errorMess = "";
+        Models.Category getcate = (Models.Category) categoryFacade.getCateByName(name);
         Models.Category category = new Models.Category();
         category.setId(0);
         category.setEnabled(true);
@@ -108,21 +77,23 @@ public class UploadCategoryImages extends HttpServlet {
             errorMess = errorMess.equals("") ? "Name Category can't be blank" : errorMess;
             error = true;
         } else {
-            request.setAttribute("name", name);
-            category.setName(name);
+            if (getcate != null) {
+                errorMess = errorMess.equals("") ? "Name Category exist" : errorMess;
+                error = true;
+            } else {
+                request.setAttribute("name", name);
+                category.setName(name);
+            }
         }
-        if (image.trim().equals("")) {
-            errorMess = errorMess.equals("") ? "Image Category can't be blank" : errorMess;
-            error = true;
-        }else{
-            request.setAttribute("image", image);
-            category.setPicture(image);
-        }
-        if(error){
+        
+        request.setAttribute("image", image);
+        category.setPicture(image);
+
+        if (error) {
             request.setAttribute("error", errorMess);
             request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
         }
-        
+
         try {
             categoryFacade.create(category);
         } catch (Exception e) {

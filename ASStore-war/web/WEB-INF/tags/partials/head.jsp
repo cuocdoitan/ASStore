@@ -43,4 +43,5 @@
 <link rel="stylesheet" type="text/css" href="<c:url value='/assets/css/basic.css'/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value='/assets/css/util.css'/>"/>
 <link rel="stylesheet" type="text/css" href="<c:url value='/assets/css/main.css'/>"/>
+<script src="<c:url value='/assets/js/highcharts.js'/>"></script>
 <!--===============================================================================================-->
