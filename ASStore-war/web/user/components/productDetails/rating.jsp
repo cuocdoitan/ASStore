@@ -95,10 +95,12 @@
                         <label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
                     </fieldset>
                     <input type="hidden" name="ratingId" value="${ratedStars.id}"/>
-                <br/>
-                <p>Your rating : ${ratedStars.rating}/5 stars</p>
-                <br/>
-                <button id="cancelRating">Cancel</button>
+                    <br>
+                    <br>
+                    <div style="margin-left: 5px">
+                      <p>Your rating : ${ratedStars.rating}/5 stars</p>
+                      <button id="cancelRating">Cancel</button>
+                    </div>
             </c:otherwise>
         </c:choose>
 

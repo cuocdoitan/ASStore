@@ -77,7 +77,7 @@
         </div>
     </c:forEach>
 
-
+    <div style="width: 100%; display: flex">
     <c:choose>
         <c:when test="${selectedPage - 2 le 1}"><!--IN RANGE OF FIRST--><!--1 2 3 4 5-->
 
@@ -201,4 +201,4 @@
 
             </c:otherwise>            
         </c:choose>
-
+        </div>
