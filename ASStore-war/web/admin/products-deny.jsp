@@ -11,7 +11,7 @@
 <t:adminLayout>
     <section class="bgwhite p-t-70 p-b-100">
         <div class="container">
-            <form method="POST" action="<c:url value='/admin/products/deny'/>" onsubmit="event.preventDefault(); validateNote();">
+            <form method="POST" action="<c:url value='/admin/products/deny'/>" onsubmit="return validateNote(event);">
                 <h2>Send Note for this Product</h2><br><br>
                 <input type="hidden" name="productId" value="${product.id}"/>
                 <label>Product name</label>

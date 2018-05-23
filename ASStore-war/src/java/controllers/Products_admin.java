@@ -9,6 +9,7 @@ import Models.Product;
 import SB.CategoryFacadeLocal;
 import SB.MediaFacadeLocal;
 import SB.ProductFacadeLocal;
+import SB.UsersFacadeLocal;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.util.List;
 import java.io.IOException;
@@ -30,6 +31,9 @@ import javax.servlet.http.HttpServletResponse;
 public class Products_admin extends HttpServlet {
 
     @EJB
+    private UsersFacadeLocal usersFacade;
+
+    @EJB
     private CategoryFacadeLocal categoryFacade;
 
     @EJB
@@ -37,6 +41,8 @@ public class Products_admin extends HttpServlet {
 
     @EJB
     private ProductFacadeLocal productFacade;
+    
+    
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -163,6 +169,9 @@ public class Products_admin extends HttpServlet {
         product.setStatus(Short.parseShort("1"));
         try {
             productFacade.edit(product);
+            Models.Users user = product.getUsersId();
+            user.setNumberOfNotification(user.getNumberOfNotification() + 1);
+            usersFacade.edit(user);
             request.setAttribute("listApprovingProduct", productFacade.getListApprovingProduct());
             request.getRequestDispatcher("/admin/components/productApprovingList/list.jsp").forward(request, response);
         } catch (Exception e) {
@@ -180,6 +189,9 @@ public class Products_admin extends HttpServlet {
         product.setStatus(Short.parseShort("2"));
         try {
             productFacade.edit(product);
+            Models.Users user = product.getUsersId();
+            user.setNumberOfNotification(user.getNumberOfNotification() + 1);
+            usersFacade.edit(user);
             response.sendRedirect(request.getContextPath() + "/admin/products/approving-list");
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Problems during denying product", e.getMessage());

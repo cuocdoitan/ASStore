@@ -12,7 +12,7 @@
     <section class="bgwhite p-t-70 p-b-50">
         <div class="container">
 
-            <form action="<c:url value="/products/repair-product"/>"  method="post" id="formSubmitProduct">    
+            <form action="<c:url value="/products/repair-product"/>"  method="post" id="formSubmitProduct" onsubmit="return lastCheck(event);">    
                 <h2>Repair your product</h2><br><br>
                 <input type="hidden" value="${sessionScope.userid}" name="userId"/>
                 <input type="hidden" name="productId" value="${product.id}"/>
@@ -88,8 +88,12 @@
         </div>
     </section>
     <script>
-        function submitRepairProductForm() {
-            document.getElementById("formRepairProduct").submit();
+        function lastCheck() {
+            if(confirm("Last check !")){
+                return true;
+            }else{
+                return false;
+            }
         }
     </script>
 </t:layout>

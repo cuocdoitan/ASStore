@@ -66,6 +66,8 @@
             <a href="<c:url value="/User/detail"/>" class="header-wrapicon1 dis-block">
               <img src="<c:url value='/assets/img/icons/icon-header-01.png'/>" class="header-icon1" alt="ICON">
             </a>
+              <input type="hidden" id="hiddenuserid" value="${sessionScope.userid}"/>
+              <p class="numberNotification" style="color: red"></p>
           </c:otherwise>
         </c:choose>
 

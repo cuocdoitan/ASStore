@@ -115,6 +115,8 @@ public class UserServlet extends HttpServlet {
             return;
         }
         Models.Users user = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+        user.setNumberOfNotification(0);
+        usersFacade.edit(user);
         List<Models.Product> listAvailableProduct = productFacade.getListAvailableProduct_User(user);
         List<Models.Product> listCheckingProduct = productFacade.getListCheckingProduct_User(user);
         List<Models.Product> listUnavailableProduct = productFacade.getListUnavailableProduct_User(user);

@@ -82,9 +82,7 @@ function validateProductSubmit_user() {
                 $("#errDescription").text(result.errDescription);
                 $("#errImage").text(result.errImage);
                 if (result.errName === "" && result.errQuantity === "" && result.errPrice === "" && result.errAnime === "" && result.errDescription === "" && result.errImage === "") {
-                    if (confirm("Last check !")) {
                         $("#formSubmitProduct").submit();
-                    }
                 }
             }
 
@@ -156,11 +154,13 @@ function searchProductAndReloadPage_admin() {
 }
 
 function validateNote() {
-    var txtNote = $("input[name=alertNote]").text();
+    var txtNote = $("textarea[name=alertNote]").val();
     var trimmedNote = $.trim(txtNote);
     if (trimmedNote.length < 10 || trimmedNote.length > 200) {
         document.getElementById("errNote").innerHTML = "Must input at least 10 characters.Max is 200 characters";
         return false;
+    }else{
+        return true;
     }
 }
 

@@ -10,7 +10,6 @@
 <t:adminLayout>
     <div class="container">
         <a href="javascript:history.back()" class="s-text2">&lt; Back</a>
-
         <div>
             <p style="font-weight: bold">Seller phone number</p>
             <p>${product.usersId.phoneNumber}</p>
