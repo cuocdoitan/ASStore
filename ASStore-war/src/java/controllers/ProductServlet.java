@@ -207,7 +207,7 @@ public class ProductServlet extends HttpServlet {
                 listProduct = new ArrayList<>();
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             } else {
-                listProduct = productFacade.searchProduct(sProductName.trim(), sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);
+                listProduct = productFacade.searchProduct(sProductName, sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             }
         }
