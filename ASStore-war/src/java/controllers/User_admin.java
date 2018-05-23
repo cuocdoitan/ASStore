@@ -11,6 +11,8 @@ import SB.RolesFacadeLocal;
 import SB.UsersFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,8 +33,6 @@ public class User_admin extends HttpServlet {
 
     @EJB
     private UsersFacadeLocal usersFacade;
-    
-    
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
@@ -46,10 +46,19 @@ public class User_admin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        HttpSession sess = request.getSession();
         String adminRequest = request.getPathInfo();
         switch (adminRequest) {
             case "/list":
+                Roles role = (Roles) sess.getAttribute("role");
+                if (!role.getName().equals("admin")) {
+                    request.getRequestDispatcher("/admin/no-permission.jsp").forward(request, response);
+                    return;
+                }
                 listAdminPage(request, response);
+                break;
+            case "/searchByPhone":
+                searchByPhone(request, response);
                 break;
             case "/userinfo":
                 userInfoPage(request, response);
@@ -92,6 +101,20 @@ public class User_admin extends HttpServlet {
         //</editor-fold>
     }
 
+    protected void searchByPhone(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        //<editor-fold defaultstate="collapsed" desc="search by phone">
+        String phone = request.getParameter("phone");
+        Users u = usersFacade.getUsersByPhone(phone);
+        List<Users> userlist = new ArrayList<>();
+        if (u != null) {
+            userlist.add(u);
+        }
+        request.setAttribute("userlist", userlist);
+        request.getRequestDispatcher("/admin/Permission.jsp").forward(request, response);
+        //</editor-fold>
+    }
+
     protected void userInfoPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to create product page">
@@ -117,8 +140,7 @@ public class User_admin extends HttpServlet {
         response.sendRedirect(request.getContextPath() + "/admin/user/loginadmin");
         //</editor-fold>
     }
-    
-    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -133,13 +155,13 @@ public class User_admin extends HttpServlet {
         HttpSession sess = request.getSession();
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         String clientRequest = request.getPathInfo();
-        switch (clientRequest){
+        switch (clientRequest) {
             case "/loginadmin":
                 loginadmin(request, response);
-                break;   
+                break;
         }
     }
-    
+
     protected void loginadmin(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="action terminate rating product">
@@ -161,11 +183,12 @@ public class User_admin extends HttpServlet {
                 session.setAttribute("role", loginedUser.getRolesId());
                 session.setAttribute("userid", loginedUser.getId());
                 session.setAttribute("userId", loginedUser.getId());
-                response.sendRedirect(request.getContextPath() + "/admin/user/list");
+                session.setAttribute("roleId", loginadmin);
+                response.sendRedirect(request.getContextPath() + "/admin/products/list");
             } else {
                 request.setAttribute("phone", phone);
                 request.setAttribute("pass", password);
-                if (loginedUser.getRolesId().getName().equals("admin") && loginedUser.getRolesId().getName().equals("moderator")) {
+                if (loginedUser.getRolesId().getId().equals("admin") && loginedUser.getRolesId().getName().equals("moderator")) {
                     request.setAttribute("error", "You don't have permission to access this page");
                 } else {
                     request.setAttribute("error", "This account is Invalid!");

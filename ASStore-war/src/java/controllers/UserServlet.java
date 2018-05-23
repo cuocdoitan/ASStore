@@ -67,12 +67,12 @@ public class UserServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         String clientRequest = request.getPathInfo();
-//        Roles role = (Roles)sess.getAttribute("role");
+        
         switch (clientRequest) {
             case "/login":
                 loginPage(request, response);
                 break;
-            case "/create":
+            case "/register":
                 request.getRequestDispatcher("/user/register.jsp").forward(request, response);
                 break;
             case "/detail":

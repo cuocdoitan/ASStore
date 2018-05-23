@@ -12,12 +12,12 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 m-t-30">
-                    <div class="w-size25">
-                        <!-- Button -->
+<!--                    <div class="w-size25">
+                         Button 
                         <a href="<c:url value='/admin/user/logoutadmin'/>" class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
                             Log Out
                         </a>
-                    </div>
+                    </div>-->
                     <p style="color: red" class="m-b-20">${error}</p>
                     <h1 class="m-b-30 text-center">Account list</h1>
                     <table border="1" style="width: 100%" class="anime-list">
