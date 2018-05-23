@@ -73,13 +73,9 @@ public class Anime_admin extends HttpServlet {
             throws ServletException, IOException {
         String clientRequest = request.getPathInfo();
         HttpSession sess = request.getSession();
-        Roles role = (Roles)sess.getAttribute("role");
-        if (!role.getName().equals("admin")) {
-            request.getRequestDispatcher("/admin/no-permission.jsp").forward(request, response);
-            return;
-        }
+        
         switch (clientRequest) {
-            case "/list":               
+            case "/list":
                 List<Anime> listAnime = animeFacade.findAll();
                 request.setAttribute("animeList", listAnime);
                 request.getRequestDispatcher("/admin/anime-list.jsp").forward(request, response);
@@ -92,18 +88,12 @@ public class Anime_admin extends HttpServlet {
                 request.setAttribute("animes", animee);
                 request.getRequestDispatcher("/admin/anime-list-update.jsp").forward(request, response);
                 break;
-            case "/delete":
-                Models.Anime anime = animeFacade.find(Integer.parseInt(request.getParameter("anime")));
-                
-                animeFacade.remove(anime);
-                response.sendRedirect("list");
-                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
         }
     }
-    
+
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -112,8 +102,6 @@ public class Anime_admin extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -124,6 +112,12 @@ public class Anime_admin extends HttpServlet {
                 break;
             case "/update":
                 request.getRequestDispatcher("/Anime_Edit").forward(request, response);
+                break;
+            case "/delete":
+                Models.Anime anime = animeFacade.find(Integer.parseInt(request.getParameter("anime")));
+                
+                animeFacade.remove(anime);
+                response.sendRedirect("list");
                 break;
 
             default:

@@ -104,19 +104,17 @@ public class AdminPageFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest) request;
         HttpServletResponse res = (HttpServletResponse) response;
-        HttpSession session = req.getSession();
-
-        Models.Roles role = (Models.Roles) session.getAttribute("role");
-        if (role == null) {
-            res.sendRedirect(req.getContextPath() + "/User/loginadmin");
+        HttpSession session = req.getSession(false);
+        String loginURL = req.getContextPath() + "/admin/user/loginadmin";
+        
+        boolean loggedIn = session != null && session.getAttribute("role") != null;
+        boolean loginRequest = loginURL.equals(req.getRequestURI());
+        
+        if (loggedIn || loginRequest) {
+            chain.doFilter(request, response);
         } else {
-            if (role.getId() == 3) {
-                res.sendRedirect(req.getContextPath() + "/User/loginadmin");
-            } else {
-                chain.doFilter(req, res); // Logged-in user found, so just continue request.
-            }
+            res.sendRedirect(loginURL);
         }
-
     }
 
     /**
