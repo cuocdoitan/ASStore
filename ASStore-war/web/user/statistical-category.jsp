@@ -11,11 +11,11 @@
     <div class="container">
         <div class="row">
             <div class="col-12 m-t-30">
-                <h1 class="m-b-30 text-center">Statistical Total Post Product, Total Quantity Product, Current Quantity Product, Total Quantity Sold Product Of Category</h1>
+                <h1 class="m-b-30 text-center">Statistical Total Post, Total Quantity, Current Quantity, Total Quantity Sold Product Of Category</h1>
                 <div class="flex-sb-m flex-w p-b-35 p-t-20">
                     <form method="post" action="<c:url value='/statisticals/listcate'/>">
                         <div class="flex-w">
-
+                            <p style="color: red">${error}</p>
                             <div class="">
                                 <p>Year</p>
                                 <select class="" name="yearFrom">
@@ -75,7 +75,7 @@
                                     <option>31</option>
                                 </select>
                             </div>
-                            
+
                             <div class="">
                                 <p>Month To</p>
                                 <select class="" name="monthTo">
@@ -93,7 +93,7 @@
                                     <option>12</option> 
                                 </select>
                             </div>
-                            
+
                             <div class="">
                                 <p>Day To</p>
                                 <select class="" name="dayTo">

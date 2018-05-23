@@ -107,12 +107,24 @@ public class Statistical_category extends HttpServlet {
                 String dayFrom = request.getParameter("dayFrom");
                 String dayTo = request.getParameter("dayTo");
                 String monthTo = request.getParameter("monthTo");
-                Date dateFrom, dateTo;
+                Date dateFrom,
+                 dateTo;
                 if (yearFrom == null && monthFrom == null && dayFrom == null && dayTo == null && monthTo == null) {
                     Date today = new Date();
                     dateFrom = today;
                     dateTo = today;
                 } else {
+                    if (Integer.parseInt(monthTo) < Integer.parseInt(monthFrom)) {
+                        request.setAttribute("error", "Undefined Statistics, Month To lower Month From");
+                        request.getRequestDispatcher("/user/statistical-category.jsp").forward(request, response);
+                        return;
+                    } else {
+                        if (Integer.parseInt(dayTo) < Integer.parseInt(dayFrom)) {
+                            request.setAttribute("error", "Undefined Statistics, Day To lower Day From");
+                            request.getRequestDispatcher("/user/statistical-category.jsp").forward(request, response);
+                            return;
+                        }
+                    }
                     Calendar calendarFrom = Calendar.getInstance();
                     calendarFrom.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dayFrom));
                     calendarFrom.set(Calendar.MONTH, Integer.parseInt(monthFrom) - 1);
@@ -123,6 +135,7 @@ public class Statistical_category extends HttpServlet {
                     calendarTo.set(Calendar.MONTH, Integer.parseInt(monthTo) - 1);
                     calendarTo.set(Calendar.YEAR, Integer.parseInt(yearFrom));
                     dateTo = calendarTo.getTime();
+
                 }
                 List<Others.StatisticProductCategory> listStatisticDetails = new ArrayList<>();
                 String categoryListChart = "";
@@ -173,6 +186,7 @@ public class Statistical_category extends HttpServlet {
 //                request.setAttribute("totalQuantityProductChart", totalQuantityProductChart.substring(0, totalQuantityProductChart.length() - 1));
                 request.setAttribute("totalCurrentChart", totalCurrentChart.substring(0, totalCurrentChart.length() - 1));
                 request.setAttribute("totalQuantitySoldProductChart", totalQuantitySoldProductChart.substring(0, totalQuantitySoldProductChart.length() - 1));
+
                 request.getRequestDispatcher("/user/statistical-category.jsp").forward(request, response);
                 break;
 
