@@ -31,6 +31,8 @@ public interface ProductFacadeLocal {
 
     int count();
     
+    public List<Product> getListManageProduct();
+    
     public BigDecimal getHighestProductPrice();
     
     public List<Product> getListExistingProduct();

@@ -102,18 +102,18 @@ function clearErrorTexts() {
 }
 
 
-setTimeout(function (){
+setTimeout(function () {
     for (var i = 0; i < $(".front-stars").length; i++) {
         var frontStars = $(".front-stars")[i];
         var valueElement = $(".totalRating")[i];
         var stars = parseFloat($(valueElement).html());
         var percentage = 100 / 5 * stars;
         frontStars.style.width = percentage + "%";
-        
+
         var rating = document.getElementsByClassName("star-rating")[i];
         rating.title = +(stars.toFixed(2)) + " out of " + 5;
     }
-},100);
+}, 100);
 
 /* 
  * ************************************ADMIN*************************************
@@ -153,6 +153,15 @@ function searchProductAndReloadPage_admin() {
             $("#listProductContent_admin").html(data);
         }
     });
+}
+
+function validateNote() {
+    var txtNote = $("input[name=alertNote]").text();
+    var trimmedNote = $.trim(txtNote);
+    if (trimmedNote.length < 10 || trimmedNote.length > 200) {
+        document.getElementById("errNote").innerHTML = "Must input at least 10 characters.Max is 200 characters";
+        return false;
+    }
 }
 
 

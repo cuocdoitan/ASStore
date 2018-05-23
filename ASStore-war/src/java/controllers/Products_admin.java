@@ -80,7 +80,7 @@ public class Products_admin extends HttpServlet {
         //<editor-fold defaultstate="collapsed" desc="show list products">
         String search = request.getParameter("search");
         if (search == null) {
-            request.setAttribute("listProduct", productFacade.findAll());
+            request.setAttribute("listProduct", productFacade.getListManageProduct());
             request.getRequestDispatcher("/admin/products-list.jsp").forward(request, response);
         } else {
             String searchBy = request.getParameter("SearchBy");
@@ -176,7 +176,7 @@ public class Products_admin extends HttpServlet {
         //<editor-fold defaultstate="collapsed" desc="action deny product">
         int productId = Integer.parseInt(request.getParameter("productId"));
         Product product = productFacade.find(productId);
-        product.setAlertNote(request.getParameter("alertNote"));
+        product.setAlertNote(request.getParameter("alertNote").trim());
         product.setStatus(Short.parseShort("2"));
         try {
             productFacade.edit(product);

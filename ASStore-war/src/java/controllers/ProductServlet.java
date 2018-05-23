@@ -74,6 +74,9 @@ public class ProductServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
         String clientRequest = request.getPathInfo();
         HttpSession session = request.getSession();
         switch (clientRequest) {
@@ -259,6 +262,10 @@ public class ProductServlet extends HttpServlet {
         Product product = productFacade.find(productId_detail);
         request.setAttribute("product", product);
         request.setAttribute("images", mediaFacade.getImagesFromProduct(product));
+        List<Product> similarProducts = productFacade.getRandomProductSameAnime(product);
+        if(similarProducts.isEmpty()){
+            request.setAttribute("noOthersProducts", "No Other Products");
+        }
         request.setAttribute("similarProducts", productFacade.getRandomProductSameAnime(product));
         Integer sessionUserId = (Integer) request.getSession().getAttribute("userid");
         if (sessionUserId != null) {
@@ -665,7 +672,7 @@ public class ProductServlet extends HttpServlet {
         productRating.setRating(rating);
         try {
             productRatingFacade.edit(productRating);
-
+            
             Product editedProduct = productRating.getProductId();
             for (ProductRating pr : editedProduct.getProductRatingCollection()) {
                 if (pr.getId() == productRating.getId()) {
