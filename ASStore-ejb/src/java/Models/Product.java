@@ -72,6 +72,7 @@ public class Product implements Serializable {
     @Column(name = "Id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id ;
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 100)

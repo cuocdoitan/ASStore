@@ -32,4 +32,6 @@ public interface FeedbackCommentFacadeLocal {
     int count();
     
     public List<FeedbackComment> getList();
+    
+    public List<FeedbackComment> getListComment(int feedbackIdCmt);
 }

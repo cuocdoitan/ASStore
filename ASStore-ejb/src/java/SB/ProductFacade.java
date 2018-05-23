@@ -6,8 +6,11 @@
 package SB;
 
 import Models.Product;
+
+import Models.Users;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import javax.ejb.Stateless;
@@ -33,7 +36,16 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
     public ProductFacade() {
         super(Product.class);
     }
+
+
+//    @Override
+//    public List<Product> getListApprovingProduct() {
+//        List<Product> listApprovinProduct = new ArrayList<>();
+//        for (Product product : this.findAll()) {
+//            if (product.getStatus() == 0) {
+//            }
     
+    @Override
     public int createNewProduct(Product newProduct){
         em.persist(newProduct);
         em.flush();
@@ -51,8 +63,38 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 ORDER BY p.id DESC", Product.class).setMaxResults(10);
         query.setParameter(1, true);
         return query.getResultList();
-
     }
+
+    
+    @Override
+    public List<Product> getProductbyCategoryStatictiscal(int proCateId,Date fromDate, Date toDate) {
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.categoryId.id = ?1 and p.enabled = ?2 and p.status = ?3 and p.createAt between ?4 and ?5", Product.class);
+        query.setParameter(1, proCateId);
+        query.setParameter(2, true);
+        query.setParameter(3, 1);
+        query.setParameter(4, fromDate);
+        query.setParameter(5, toDate);
+        List<Product> list = query.getResultList();
+        return list;
+    }
+    
+    
+
+    @Override
+    public List<Product> getProductbyCate(int proCateId) {
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.categoryId.id = ?1 and p.enabled = ?2", Product.class);
+        query.setParameter(1, proCateId);
+        query.setParameter(2, true);
+        List<Product> list = query.getResultList();
+        if(list.isEmpty()){
+            return null;
+        }
+        else{
+            return list;
+        }
+        
+    }
+
     
     public List<Product> getListExistingProduct(){
         TypedQuery query = em.createNamedQuery("Product.findByEnabled", Product.class);
