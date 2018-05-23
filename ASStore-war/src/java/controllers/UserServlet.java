@@ -86,10 +86,7 @@ public class UserServlet extends HttpServlet {
             case "/updatepass":
                 updatePassPage(request, response);
                 break;
-            case "/logout":
-                sess.invalidate();
-                response.sendRedirect(request.getContextPath() + "/User/login");
-                break;
+
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
@@ -158,7 +155,6 @@ public class UserServlet extends HttpServlet {
         //</editor-fold>
     }
 
-    
     /**
      * Handles the HTTP <code>POST</code> method.
      *
@@ -189,12 +185,16 @@ public class UserServlet extends HttpServlet {
             case "/Updateuserpass":
                 Updateuserpass(request, response);
                 break;
+            case "/logout":
+                sess.invalidate();
+                response.sendRedirect(request.getContextPath() + "/index");
+                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
         }
     }
-    
+
     protected void registerNewUser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="action terminate rating product">
@@ -368,8 +368,6 @@ public class UserServlet extends HttpServlet {
         }
         //</editor-fold> 
     }
-
-    
 
     protected void Updateuser(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
