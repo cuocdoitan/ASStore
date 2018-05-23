@@ -7,26 +7,55 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <t:layout>
-        PhoneNumber: <input type="number" name="phone" value="${user.phoneNumber}"/> <br/>
-        Password: <input type="password" name="pass" value="${user.password}" readonly/> <br/>
-        FirstName: <input type="text" name="firstname" value="${user.firstName}" /> <br/> 
-        LastName: <input type="text" name="lastname"  value="${user.lastName}"/> <br/> 
-        Address: <input type="text" name="address" value="${user.address}"> <br/> 
-        Email: <input type="email" name="email" value="${user.email}"/> <br/>  
-        <div class="w-size25">
-            <!-- Button -->
-            <a href="<c:url value='/User/update'/>" class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
-                Update infomation
-            </a>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-6 m-l-r-auto m-t-40">
+                <p style="font-size: 26px; font-weight: bold">User Information:  ${user.lastName}</p>
+                <p style="color: red">${error}</p> <br/>
+                <label>Phone Number:</label>
+                <div class="bo4 of-hidden size15 m-b-20">
+                    <input class="sizefull s-text7 p-l-22 p-r-22" type="number" name="phone" value="${user.phoneNumber}" readonly="true">
+                </div>
+                
+                <label>Password:</label>
+                <div class="bo4 of-hidden size15 m-b-20">
+                    <input class="sizefull s-text7 p-l-22 p-r-22" type="password" name="pass" value="${user.password}" readonly="true">
+                </div>
+                <label>First Name:</label>
+                <div class="bo4 of-hidden size15 m-b-20">
+                    <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="firstname" value="${user.firstName}" readonly="true">
+                </div>
+                <label>Last Name:</label>
+                <div class="bo4 of-hidden size15 m-b-20">
+                    <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="lastname"  value="${user.lastName}" readonly="true">
+                </div>
+                <label>Address:</label>
+                <div class="bo4 of-hidden size15 m-b-20">
+                    <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="address" value="${user.address}" readonly="true">
+                </div>
+                <label>Email:</label>
+                <div class="bo4 of-hidden size15 m-b-20">
+                    <input class="sizefull s-text7 p-l-22 p-r-22" type="email" name="email" value="${user.email}" readonly="true">
+                </div>
+            </div>
         </div>
-        <div class="w-size25">
-            <!-- Button -->
-            <form action="<c:url value='/User/logout'/>" method="post">
+    </div>
+    <br/>
+    <div class="w-size25" style="margin: 0 auto; width: 200px">
+        <!-- Button -->
+        <a href="<c:url value='/User/update'/>" class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4">
+            Update information
+        </a>
+    </div>
+    <!--    <div class="w-size25">
+             Button 
+            <form action="#" method="post">
                 <input type="submit" value="Log Out"/>
             </form>
-        </div>
-     
-    <h3>Selling Products</h3>
+        </div>-->
+    <br/>
+    <h3 style="text-align: center">Selling Products</h3>
     <table border="1" style="width: 100%" class="anime-list">
         <thead>
             <tr>
@@ -47,8 +76,9 @@
             </c:forEach>
         </tbody> 
     </table>
-    <h3>Checking Products</h3>
-<table border="1" style="width: 100%" class="anime-list">
+    <br/>
+    <h3 style="text-align: center">Checking Products</h3>
+    <table border="1" style="width: 100%" class="anime-list">
         <thead>
             <tr>
                 <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Name</th>
@@ -68,8 +98,9 @@
             </c:forEach>
         </tbody> 
     </table>
-    <h3>Unavailable Products</h3>
-<table border="1" style="width: 100%" class="anime-list">
+    <br/>
+    <h3 style="text-align: center">Unavailable Products</h3>
+    <table border="1" style="width: 100%" class="anime-list">
         <thead>
             <tr>
                 <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Name</th>
