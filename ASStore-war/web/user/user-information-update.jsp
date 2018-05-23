@@ -13,16 +13,14 @@
                 <div class="col-6 m-l-r-auto m-t-40">
 
                     <p style="color: red">${error}</p> <br/>
-                    <label>Phone Number:</label>
+                    <label>Phone Number: <a href="<c:url value='/User/updatephone'/>">Change Phone Number</a></label>
                     <div class="bo4 of-hidden size15 m-b-20">
                         <input class="sizefull s-text7 p-l-22 p-r-22" type="number" name="phone" value="${user.phoneNumber}" readonly="true">
                     </div>
-                    <a href="<c:url value='/User/updatephone'/>">Change Phone Number</a> <br/>
-                    <label>Password:</label>
+                    <label>Password: <a href="<c:url value='/User/updatepass'/>">Change Password</a></label>
                     <div class="bo4 of-hidden size15 m-b-20">
                         <input class="sizefull s-text7 p-l-22 p-r-22" type="password" name="pass" value="${user.password}" readonly="true">
                     </div>
-                    <a href="<c:url value='/User/updatepass'/>">Change Password</a><br/>
                     <label>First Name:</label>
                     <div class="bo4 of-hidden size15 m-b-20">
                         <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="firstname" value="${user.firstName}">

@@ -29,6 +29,7 @@
                     <jsp:include page="components/categoryItem.jsp">
                         <jsp:param name="image" value="${category.picture}"/>
                         <jsp:param name="name" value="${category.name}"/>
+                        <jsp:param name="id" value="${category.id}"/>
                     </jsp:include>
                 </c:forEach>
 

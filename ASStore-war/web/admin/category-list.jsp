@@ -12,16 +12,8 @@
     <div class="row">
         <div class="col-12 m-l-r-auto">
             <h1 class="text-center m-t-20 m-b-20">Category list</h1>
-            <form class="m-b-20 m-t-20" method="get" action="#">
-                <div class="search-product pos-relative bo4 m-t-5 m-b-5 m-r-10" style="width: 100%">
-                    <input class="s-text7 size6 p-l-23 p-r-50" type="text" name="cateogry" placeholder="Search category by name...">
-
-                    <button class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4" type="submit">
-                        <i class="fs-12 fa fa-search" aria-hidden="true"></i>
-                    </button>
-                </div>
-            </form>    
-
+            <p style="color: red">${error}</p>
+            <br/>
         </div>
         <div class="col-sm-8 col-md-8 col-lg-8 m-l-r-auto m-b-20">
             <a href="<c:url value="/admin/category/create"/>" class="bo4 s-text2 p-t-10 p-l-20 p-r-20 p-b-10 hov1 trans-0-4">New Category</a>
@@ -47,15 +39,26 @@
                         <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
                             <a href="<c:url value="/admin/category/edit?id=${category.id}"/>" style="color: #3498db">Edit</a>
                             ||
+                            <form method="post" action="<c:url value='/admin/category/delete?id=${category.id}'/>" id="formDeleteCategory">
                             <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
-                            <a href="<c:url value='/admin/category/delete?id=${category.id}' />" style="color: #e74c3c"  onclick="return confirm('Are you sure ?')">Delete</a>
+                            <p style="color: #e74c3c"  onclick="lastCheck(this)">Delete</p>
+                            </form>
                         </td>
                     </tr>
                 </c:forEach>
             </data>
         </table>
     </div>
-</div>
+<script>
+    function lastCheck(e){
+        if(confirm('Are you sure ?')){
+            console.log(e)
+            e.parentElement.submit();
+        }else{
+            return false;
+        }
+    }
+</script>
 </t:adminLayout>
 
 
