@@ -2,11 +2,6 @@
  * ************************************USER*************************************
  */
 
-
-$("#formInsertProduct").submit(function (e) {
-
-});
-
 $(function () {
     $('#categoryRadioField input[type=radio]').change(function () {
         $("input[name=category]").val($(this).val());
@@ -45,7 +40,7 @@ $(function () {
             }
         });
     });
-    
+
     $('#cancelRating').click(function () {
         $.ajax({
             url: $("#urlProject").val() + '/products/cancelRating',
@@ -106,25 +101,23 @@ function clearErrorTexts() {
     $("#errImage").text("");
 }
 
-function validateProductSearch_user() {
 
-}
+setTimeout(function (){
+    for (var i = 0; i < $(".front-stars").length; i++) {
+        var frontStars = $(".front-stars")[i];
+        var valueElement = $(".totalRating")[i];
+        var stars = parseFloat($(valueElement).html());
+        var percentage = 100 / 5 * stars;
+        frontStars.style.width = percentage + "%";
+        
+        var rating = document.getElementsByClassName("star-rating")[i];
+        rating.title = +(stars.toFixed(2)) + " out of " + 5;
+    }
+},100);
+
 /* 
  * ************************************ADMIN*************************************
  */
-function checkIfAnimeIsExist() {
-    $.get($("#urlProject").val() + "/checkIfAnimeExist",
-            {
-                animeName: $("#anime_name").val()
-            },
-            function (result) {
-                var exist = result.exist;
-                if (exist === 'false') {
-                    alert('');
-                }
-            }
-    );
-}
 
 $("#input_searchProduct_admin").keydown(function (e) {
     var key = e.which;

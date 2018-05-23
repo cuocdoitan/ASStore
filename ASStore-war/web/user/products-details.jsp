@@ -19,13 +19,13 @@
 
                     <!--Images -->
                     <div class="slick3">
-                        <c:forEach items="${product.mediaCollection}" var="media">
-                            <div class="item-slick3" data-thumb="<c:url value='/assets/img/products/${media.urlImage}'/>">
+                        <c:forEach items="${images}" var="image">
+                            <div class="item-slick3" data-thumb="<c:url value='/assets/img/products/${image}'/>">
                                 <div class="wrap-pic-w">
-                                    <img src="<c:url value='/assets/img/products/${media.urlImage}'/>" alt="IMG-PRODUCT">
+                                    <img src="<c:url value='/assets/img/products/${image}'/>" alt="IMG-PRODUCT">
                                 </div>
                             </div>
-                        </c:forEach> 
+                        </c:forEach>
                     </div>
 
 
@@ -79,7 +79,7 @@
         </c:if>
         <!-- Rating -->
         <div id="RatingProductListContent_User">
-            <jsp:include page="/user/components/productDetails/rating.jsp"/>
+            <jsp:include page="/user/components/productDetails/rating.jsp" />
         </div>
 
         <div class="p-l-10"></div>
@@ -114,6 +114,6 @@
             </div>
         </div>          
     </div>
-            <input name="addCartURL" value="<c:url value="/cart/addToCart" />" />
+            <input name="addCartURL" value="<c:url value="/cart/addToCart" />" type="hidden" />
     <link href="<c:url value="/assets/css/star.css"/>" rel="stylesheet" type="text/css"/>
 </t:layout>
