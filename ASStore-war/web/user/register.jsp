@@ -19,7 +19,7 @@
             </h4>
             <p style="color: red">${error}</p>
             <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" value="${phone}" type="phone" name="phone" placeholder="Phone number">
+              <input class="sizefull s-text7 p-l-22 p-r-22"  type="phone" value="${phone}" name="phone" placeholder="Phone number">
             </div>
             
             
@@ -36,7 +36,7 @@
             </div>
 
             <div class="bo4 of-hidden size15 m-b-20">
-              <input class="sizefull s-text7 p-l-22 p-r-22" type="password"  name="confirm_password" placeholder="Confirm password">
+                <input class="sizefull s-text7 p-l-22 p-r-22" type="password" value="${inputConfirmpass}"  name="confirm_password" placeholder="Confirm password">
             </div>
 
             
@@ -54,9 +54,8 @@
                 Sign up
               </button>
             </div>
-            <p style="color: red">${error4}</p>
             <div class="m-t-20">
-              <a href="#">Already have an account? Login now!</a>
+              <a href="<c:url value="/User/login"/>">Already have an account? Login now!</a>
             </div>
           </form>
         </div>

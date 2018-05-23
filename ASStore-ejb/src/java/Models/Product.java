@@ -294,6 +294,16 @@ public class Product implements Serializable {
   public void setCouponsList(List<Coupons> couponsList) {
     this.couponsList = couponsList;
   }
+  public double averageStars(){
+    double average = 0;
+    for(ProductRating productRating : this.getProductRatingCollection()){
+      average = average + productRating.getRating()/this.getProductRatingCollection().size();
+    }
+    DecimalFormat priceFormatter = new DecimalFormat("#0.00");
+    String formatedAverage = priceFormatter.format(average);
+    double result = Double.parseDouble(formatedAverage);
+    return result;
+  }
 
   public Date getCreateAt() {
     return createAt;
@@ -310,14 +320,5 @@ public class Product implements Serializable {
   public void setUpdateAt(Date updateAt) {
     this.updateAt = updateAt;
   }
-    public double averageStars(){
-        double average = 0;
-        for(ProductRating productRating : this.getProductRatingCollection()){
-            average = average + productRating.getRating()/this.getProductRatingCollection().size();
-        }
-        DecimalFormat priceFormatter = new DecimalFormat("#0.00");
-        String formatedAverage = priceFormatter.format(average);
-        double result = Double.parseDouble(formatedAverage);
-        return result;
-    }
+  
 }

@@ -7,7 +7,7 @@ package SB;
 
 import Models.Cart;
 import Models.CartDetail;
-import java.util.ArrayList;
+import Models.Product;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -36,6 +36,21 @@ public class CartDetailFacade extends AbstractFacade<CartDetail> implements Cart
     public List<CartDetail> findByCartId(int id) {
       Query query = em.createNamedQuery("CartDetail.findByCartId");
       query.setParameter("id", new Cart(id));
-      return query.getResultList();
+      try {
+        return query.getResultList();
+      } catch (Exception e) {
+        return null;
+      }
+    }
+    
+    public CartDetail findByCartIdAndProductId(int cartId, int pId) {
+      Query query = em.createNamedQuery("CartDetail.findByCartIdAndProductId");
+      query.setParameter("cid", new Cart(cartId));
+      query.setParameter("pid", new Product(pId));
+      try {
+        return (CartDetail)query.getSingleResult();
+      } catch (Exception e) {
+        return null;
+      }
     }
 }

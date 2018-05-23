@@ -5,20 +5,31 @@
  */
 package controllers;
 
+import Models.Roles;
+import Models.Users;
+import SB.RolesFacadeLocal;
+import SB.UsersFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
  * @author leminhtung
  */
-@WebServlet(name = "Loginadmin", urlPatterns = {"/Loginadmin"})
-public class Loginadmin extends HttpServlet {
+@WebServlet(name = "permissionServlet", urlPatterns = {"/admin/permissionServlet/*"})
+public class permissionServlet extends HttpServlet {
+
+    @EJB
+    private UsersFacadeLocal usersFacade;
+    @EJB
+    private RolesFacadeLocal rolesFacade;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +48,10 @@ public class Loginadmin extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet Loginadmin</title>");            
+            out.println("<title>Servlet permissionServlet</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet Loginadmin at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet permissionServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,7 +69,24 @@ public class Loginadmin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        HttpSession sess = request.getSession();
+        String clientRequest = request.getPathInfo();
+        Roles role = (Roles)sess.getAttribute("role");
+        if (!role.getName().equals("admin")) {
+            request.getRequestDispatcher("/admin/no-permission.jsp").forward(request, response);
+            return;
+        }
+        switch (clientRequest) {
+             case "/list":
+                java.util.List<Models.Users> listaccount = usersFacade.getList();
+                request.setAttribute("userlist", listaccount);
+                listaccount.remove(usersFacade.find(1));
+                request.getRequestDispatcher("/admin/Permission.jsp").forward(request, response);
+                break;
+            default:
+                response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                break;
+        }
     }
 
     /**
@@ -72,7 +100,14 @@ public class Loginadmin extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        //processRequest(request, response);
+        int userId = Integer.parseInt(request.getParameter("userid"));
+        int roleId = Integer.parseInt(request.getParameter("roleid"));
+        
+        Users user = usersFacade.find(userId);
+        Roles role = rolesFacade.find(roleId);
+        user.setRolesId(role);       
+        usersFacade.edit(user);
     }
 
     /**

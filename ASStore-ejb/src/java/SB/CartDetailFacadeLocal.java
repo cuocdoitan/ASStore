@@ -29,6 +29,8 @@ public interface CartDetailFacadeLocal {
     List<CartDetail> findRange(int[] range);
     
     List<CartDetail> findByCartId(int id);
+    
+    CartDetail findByCartIdAndProductId(int cartId, int pId);
 
     int count();
     

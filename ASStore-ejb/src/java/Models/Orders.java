@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
   , @NamedQuery(name = "Orders.findByCreateAt", query = "SELECT o FROM Orders o WHERE o.createAt = :createAt")
   , @NamedQuery(name = "Orders.findByEnabled", query = "SELECT o FROM Orders o WHERE o.enabled = :enabled")
   , @NamedQuery(name = "Orders.findByStatus", query = "SELECT o FROM Orders o WHERE o.status = :status")
+  , @NamedQuery(name = "Orders.findByUser", query = "SELECT o FROM Orders o WHERE o.usersId = :user")
   , @NamedQuery(name = "Orders.findByAddress", query = "SELECT o FROM Orders o WHERE o.address = :address")
   , @NamedQuery(name = "Orders.findByPhone", query = "SELECT o FROM Orders o WHERE o.phone = :phone")})
 public class Orders implements Serializable {
@@ -43,6 +44,7 @@ public class Orders implements Serializable {
   @Id
   @Basic(optional = false)
   @NotNull
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   @Column(name = "Id")
   private Integer id;
   @Basic(optional = false)

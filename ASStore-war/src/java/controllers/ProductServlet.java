@@ -270,7 +270,7 @@ public class ProductServlet extends HttpServlet {
         Integer sessionUserId = (Integer) request.getSession().getAttribute("userid");
         if (sessionUserId != null) {
             for (ProductRating productRating : product.getProductRatingCollection()) {
-                if (productRating.getUsersId().getId() == sessionUserId) {
+                if (productRating.getUsersId().getId().equals(sessionUserId)) {
                     request.setAttribute("ratedStars", productRating);
                     break;
                 }
@@ -675,7 +675,7 @@ public class ProductServlet extends HttpServlet {
             
             Product editedProduct = productRating.getProductId();
             for (ProductRating pr : editedProduct.getProductRatingCollection()) {
-                if (pr.getId() == productRating.getId()) {
+                if (pr.getId().equals(productRating.getId())) {
                     pr = productRating;
                     break;
                 }

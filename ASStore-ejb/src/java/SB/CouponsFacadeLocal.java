@@ -6,6 +6,7 @@
 package SB;
 
 import Models.Coupons;
+import Models.Product;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -25,6 +26,12 @@ public interface CouponsFacadeLocal {
   Coupons find(Object id);
   
   Coupons findByCoupon(String coupon);
+  
+  Coupons findByProduct(Product product);
+  
+  List<Coupons> findEnableCoupons();
+  
+  List<Coupons> findEnableCouponsOfUser(int user);
 
   List<Coupons> findAll();
 
