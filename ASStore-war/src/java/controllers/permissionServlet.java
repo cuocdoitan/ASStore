@@ -71,7 +71,7 @@ public class permissionServlet extends HttpServlet {
             throws ServletException, IOException {
         HttpSession sess = request.getSession();
         String clientRequest = request.getPathInfo();
-         Roles role = (Roles)sess.getAttribute("role");
+        Roles role = (Roles)sess.getAttribute("role");
         if (!role.getName().equals("admin")) {
             request.getRequestDispatcher("/admin/no-permission.jsp").forward(request, response);
             return;

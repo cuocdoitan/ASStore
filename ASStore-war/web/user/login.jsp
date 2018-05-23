@@ -35,7 +35,7 @@
                             </div>
 
                             <div class="m-t-20">
-                                <a href="#">Don't have an account? Create one now!</a>
+                                <a href="<c:url value="/User/register" />">Don't have an account? Create one now!</a>
                             </div>
                         </form>
                     </div>

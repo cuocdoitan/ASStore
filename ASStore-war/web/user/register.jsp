@@ -55,7 +55,7 @@
               </button>
             </div>
             <div class="m-t-20">
-              <a href="#">Already have an account? Login now!</a>
+              <a href="<c:url value="/User/login"/>">Already have an account? Login now!</a>
             </div>
           </form>
         </div>

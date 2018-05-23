@@ -73,11 +73,7 @@ public class Anime_admin extends HttpServlet {
             throws ServletException, IOException {
         String clientRequest = request.getPathInfo();
         HttpSession sess = request.getSession();
-        Roles role = (Roles) sess.getAttribute("role");
-        if (!role.getName().equals("admin")) {
-            request.getRequestDispatcher("/admin/no-permission.jsp").forward(request, response);
-            return;
-        }
+        
         switch (clientRequest) {
             case "/list":
                 List<Anime> listAnime = animeFacade.findAll();
