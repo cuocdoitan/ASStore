@@ -114,10 +114,9 @@ public class Anime_admin extends HttpServlet {
                 request.getRequestDispatcher("/Anime_Edit").forward(request, response);
                 break;
             case "/delete":
-                Models.Anime anime = animeFacade.find(Integer.parseInt(request.getParameter("anime")));
-                
+                Models.Anime anime = animeFacade.find(Integer.parseInt(request.getParameter("anime")));            
                 animeFacade.remove(anime);
-                response.sendRedirect("list");
+                response.sendRedirect(request.getContextPath() + "/admin/anime/list");
                 break;
 
             default:
