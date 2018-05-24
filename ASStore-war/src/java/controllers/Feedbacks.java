@@ -5,6 +5,7 @@
  */
 package controllers;
 
+import BusinessLogic.PaginationHandler;
 import Models.Feedback;
 import Models.FeedbackComment;
 import Models.Roles;
@@ -124,7 +125,7 @@ public class Feedbacks extends HttpServlet {
             request.setAttribute("content", content);
             feedback.setContents(content);
         }
-        
+
         if (error) {
             request.setAttribute("error", errorMess);
             request.getRequestDispatcher("/user/feedback-create.jsp").forward(request, response);
@@ -192,7 +193,27 @@ public class Feedbacks extends HttpServlet {
         switch (clientRequest) {
             case "/list":
                 List<Feedback> listFeedback = feedbackFacade.getList();
-                request.setAttribute("listFeedback", listFeedback);
+                String page = request.getParameter("page");
+                PaginationHandler pagination = new PaginationHandler();
+                int selectedPage = pagination.getSelectedPage(page);
+                int maxPage = pagination.countNumberOfPages(listFeedback.size(), 5);
+                if (selectedPage < 0 || selectedPage > maxPage) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+                int[] range = pagination.getObjectPositionInSelectedPage(listFeedback.size(), 5, selectedPage);
+                List<Feedback> listFeedbacksInPage = listFeedback.subList(range[0], range[1]);
+                request.setAttribute("listFeedback", listFeedbacksInPage);
+//                request.setAttribute("listFeedback", listFeedback);
+                request.setAttribute("numberOfPage", maxPage);
+                request.setAttribute("selectedPage", selectedPage);
+                String queryString = request.getQueryString();
+                if (page != null) {
+                    int indexOfPage = request.getQueryString().indexOf("&page=");
+                    String queryStringWithoutPage = request.getQueryString().substring(0, indexOfPage);
+                    queryString = queryStringWithoutPage;
+                }
+                request.setAttribute("queryString", queryString);
                 request.getRequestDispatcher("/user/feedback.jsp").forward(request, response);
                 break;
             case "/create":
@@ -218,7 +239,27 @@ public class Feedbacks extends HttpServlet {
         switch (clientRequest) {
             case "/list":
                 List<Feedback> listFeedback = feedbackFacade.getList();
-                request.setAttribute("listFeedback", listFeedback);
+                String page = request.getParameter("page");
+                PaginationHandler pagination = new PaginationHandler();
+                int selectedPage = pagination.getSelectedPage(page);
+                int maxPage = pagination.countNumberOfPages(listFeedback.size(), 5);
+                if (selectedPage < 0 || selectedPage > maxPage) {
+                    response.sendError(HttpServletResponse.SC_NOT_FOUND);
+                    return;
+                }
+                int[] range = pagination.getObjectPositionInSelectedPage(listFeedback.size(), 5, selectedPage);
+                List<Feedback> listFeedbacksInPage = listFeedback.subList(range[0], range[1]);
+                request.setAttribute("listFeedback", listFeedbacksInPage);
+//                request.setAttribute("listFeedback", listFeedback);
+                request.setAttribute("numberOfPage", maxPage);
+                request.setAttribute("selectedPage", selectedPage);
+                String queryString = request.getQueryString();
+                if (page != null) {
+                    int indexOfPage = request.getQueryString().indexOf("&page=");
+                    String queryStringWithoutPage = request.getQueryString().substring(0, indexOfPage);
+                    queryString = queryStringWithoutPage;
+                }
+                request.setAttribute("queryString", queryString); 
                 request.getRequestDispatcher("/user/feedback.jsp").forward(request, response);
                 break;
             case "/create":

@@ -140,6 +140,11 @@ public class Orders extends HttpServlet {
           int orderId = Integer.parseInt(request.getParameter("order"));
           String pass = request.getParameter("pass");
           Models.Orders order = orderFacade.find(orderId);
+          if (!order.isDelivering()) {
+            request.setAttribute("error", "Order isn't delivering yet!");
+            request.getRequestDispatcher("/user/orders-checkcode.jsp").forward(request, response);
+            return;
+          }
           if (order.getPassCode().equals(pass)) {
             if (request.getParameter("validate") != null && request.getParameter("validate").equals("true")) {
               orderFacade.validate(orderId);

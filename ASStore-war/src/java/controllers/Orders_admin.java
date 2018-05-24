@@ -121,6 +121,13 @@ public class Orders_admin extends HttpServlet {
         request.setAttribute("users", users);
         request.getRequestDispatcher("/admin/orders.jsp").forward(request, response);
         break;
+      case "/accept":
+        int orderId = Integer.parseInt(request.getParameter("order"));
+        Models.Orders order = orderFacade.find(orderId);
+        order.setDelivering(true);
+        orderFacade.edit(order);
+        response.sendRedirect(request.getContextPath() + "/admin/orders/list");
+        break;
     }
   }
 
