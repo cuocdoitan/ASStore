@@ -247,7 +247,7 @@ public class ProductServlet extends HttpServlet {
     protected void createProductPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to create product page">
-        request.setAttribute("categories", categoryFacade.findAll());
+        request.setAttribute("categories", categoryFacade.getList());
         request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
         //</editor-fold>
     }
@@ -298,7 +298,7 @@ public class ProductServlet extends HttpServlet {
         }
 
         request.setAttribute("product", product_edit);
-        request.setAttribute("categories", categoryFacade.findAll());
+        request.setAttribute("categories", categoryFacade.getList());
         String[] arrImage_edit = {"", "", "", ""};
         int i = 0;
         for (String image : mediaFacade.getImagesFromProduct(product_edit)) {
@@ -328,7 +328,7 @@ public class ProductServlet extends HttpServlet {
             return;
         }
         request.setAttribute("product", productFacade.find(productId_repair));
-        request.setAttribute("categories", categoryFacade.findAll());
+        request.setAttribute("categories", categoryFacade.getList());
         String[] arrImage = {"", "", "", ""};
         int j = 0;
         for (String image : mediaFacade.getImagesFromProduct(product_repair)) {

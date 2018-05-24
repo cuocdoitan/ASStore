@@ -53,6 +53,8 @@ public interface ProductFacadeLocal {
     public List<Product> getProductbyCategoryStatictiscal(int proCateId,Date fromDate, Date toDate);
 
     public List<Product> getProductbyCate(int proCateId);
+    
+    public List<Product> getProductbyAnime(int animeId);
 
     public List<Product> getListProductSortedDesc();
 
