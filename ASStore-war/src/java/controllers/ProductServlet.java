@@ -205,7 +205,7 @@ public class ProductServlet extends HttpServlet {
                 request.setAttribute("noResult", "No Result Found");
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             } else {
-                listProduct = productFacade.searchProduct(sProductName.trim(), sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);
+                listProduct = productFacade.searchProduct(sProductName, sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             }
         }
