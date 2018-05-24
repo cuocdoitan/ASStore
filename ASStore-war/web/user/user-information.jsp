@@ -10,6 +10,13 @@
 
   <div class="container">
     <div class="row">
+      <div class="col-12 m-l-r-auto m-t-30 text-right">
+        <div class="w-size25 float-right">
+          <form action="<c:url value='/User/logout'/>" method="post">
+              <input type="submit" class="flex-c-m size2 bg1 bo-rad-23 hov1 m-text3 trans-0-4" value="Log Out"/>
+          </form>
+        </div>
+      </div>
       <div class="col-6 m-l-r-auto m-t-40">
         <p style="font-size: 26px; font-weight: bold">User Information:  ${user.lastName}</p>
         <p style="color: red">${error}</p> <br/>
@@ -48,12 +55,6 @@
       Update information
     </a>
   </div>
-<!--      <div class="w-size25">
-           Button 
-          <form action="#" method="post">
-              <input type="submit" value="Log Out"/>
-          </form>
-      </div>-->
   <br/>
   <hr>
   <h3 style="text-align: center" class="m-b-20">Selling Products</h3>
