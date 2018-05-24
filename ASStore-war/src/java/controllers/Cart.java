@@ -134,6 +134,7 @@ public class Cart extends HttpServlet {
         request.setAttribute("details", details);
         request.setAttribute("userId", sess.getAttribute("userId") != null ? sess.getAttribute("userId").toString() : "guest");
         request.setAttribute("address", sess.getAttribute("userId") != null ? user.getAddress() : "");
+        request.setAttribute("phone", sess.getAttribute("userId") != null ? user.getPhoneNumber(): "");
         request.getRequestDispatcher("/user/cart.jsp").forward(request, response);
         break;
       case "/getPrice":

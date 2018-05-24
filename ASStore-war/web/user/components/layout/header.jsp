@@ -36,11 +36,16 @@
             <li>
               <a href="<c:url value="/anime/list"/>">Anime</a>
             </li>
-
+            <c:if test="${sessionScope.userid != null}">
             <li>
               <a href="<c:url value="/coupon/list"/>">Coupons</a>
             </li>
-
+            </c:if>
+            <c:if test="${sessionScope.userid != null}">
+            <li>
+              <a href="<c:url value="/orders/list"/>">Orders</a>
+            </li>
+            </c:if>
             <li>
               <a href="<c:url value="/feedbacks/list"/>">Feedback</a>
             </li>

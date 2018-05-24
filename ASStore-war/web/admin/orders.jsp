@@ -41,9 +41,24 @@
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.phone}</td>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.address}</td>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.createAt}</td>
-                  <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">${order.status ? 'delivered' : 'delivering'}</td>
+                  <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">
+                    <c:choose>
+                      <c:when test="${order.delivering == true && order.status == true}">
+                        delivered
+                      </c:when>
+                      <c:when test="${order.delivering == true && order.status == false}">
+                        delivering
+                      </c:when>
+                      <c:when test="${order.delivering == false && order.status == false}">
+                        pending
+                      </c:when>
+                    </c:choose>
+                  </td>
                   <td class="text-center p-t-10 p-l-20 p-r-20 p-b-10">
                     <a href="<c:url value="/orders/details?order=${order.id}" />" style="color: #007bff">Details</a>
+                    <c:if test="${order.delivering == false}">
+                    || <a href="<c:url value="/admin/orders/accept?order=${order.id}" />" style="color: #c82333">Accept order</a>
+                    </c:if>
                   </td>
                 </tr>
               </c:if>
