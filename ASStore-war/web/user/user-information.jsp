@@ -48,7 +48,7 @@
       Update information
     </a>
   </div>
-  <!--    <div class="w-size25">
+<!--      <div class="w-size25">
            Button 
           <form action="#" method="post">
               <input type="submit" value="Log Out"/>
