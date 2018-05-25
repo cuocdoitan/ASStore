@@ -48,4 +48,10 @@ public class AnimeFacade extends AbstractFacade<Anime> implements AnimeFacadeLoc
             return list.get(0);
         }
     }
+    
+    public List<Anime> findAllAvailableAnime(){
+        TypedQuery query = em.createQuery("SELECT a FROM Anime a WHERE a.enabled = ?1", Anime.class);
+        query.setParameter(1, true);
+        return query.getResultList();
+    }
 }

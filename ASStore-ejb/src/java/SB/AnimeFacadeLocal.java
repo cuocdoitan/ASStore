@@ -32,6 +32,8 @@ public interface AnimeFacadeLocal {
     
     public List<Anime> getAll();
     
+    public List<Anime> findAllAvailableAnime();
+    
     public Anime findAnimeByName(String name);
     
 }

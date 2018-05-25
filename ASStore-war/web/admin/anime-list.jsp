@@ -15,6 +15,7 @@
         <a href="<c:url value="/admin/anime/create"/>">
             <button>ADD NEW</button>
         </a>
+            ${error}
         <table border="1" style="width: 100%" class="anime-list">
           <thead>
             <tr>

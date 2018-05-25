@@ -299,7 +299,7 @@ public class Cart extends HttpServlet {
           int cartPos = -1;
           for (int i = 0; i < cart.size(); i++) {
             CartDetail det = cart.get(i);
-            if (det.getProductId().getId() == productId) {
+            if (det.getProductId().getId().equals(productId)) {
               isInCart = true;
               de = det;
               cartPos = i;
@@ -327,7 +327,7 @@ public class Cart extends HttpServlet {
           
           for (int i = 0; i < ca.getCartDetails().size(); i++) {
             CartDetail det = ca.getCartDetails().get(i);
-            if (det.getProductId().getId() == productId) {
+            if (det.getProductId().getId().equals(productId)) {
               isInCart = true;
               de = det;
               cartPos = i;

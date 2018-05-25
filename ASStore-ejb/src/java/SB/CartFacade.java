@@ -7,10 +7,12 @@ package SB;
 
 import Models.Cart;
 import Models.Users;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -32,13 +34,14 @@ public class CartFacade extends AbstractFacade<Cart> implements CartFacadeLocal 
     }
     
     public Cart findByUserId(int id) {
-      Query query = em.createNamedQuery("Cart.findByUserId");
-      query.setParameter("id", new Users(id));
-      try {
-        return (Cart)query.getSingleResult();
-      } catch (Exception e) {
-        e.printStackTrace();
-        return null;
-      }
+      TypedQuery query = em.createQuery("select c from Cart c where c.usersId.id = ?1 and c.usersId.enabled = ?2", Cart.class);
+      query.setParameter(1, id);
+      query.setParameter(2, true);
+      List<Cart> list = query.getResultList();
+      if(list.isEmpty()){
+            return null;
+        }else{
+            return list.get(0);
+        }
     }
 }

@@ -149,7 +149,7 @@
                         <tr>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Category</th>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Post Product</th>
-                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Product</th>
+<!--                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Product</th>-->
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Current Quantity Product</th>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Sold Product</th>             
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Date</th>
@@ -163,9 +163,6 @@
                                 </td>
                                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
                                     ${statistic.totalProduct}
-                                </td>
-                                <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                                    ${statistic.totalQuantityProduct}
                                 </td>
                                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
                                     ${statistic.currentQuantityProducts}

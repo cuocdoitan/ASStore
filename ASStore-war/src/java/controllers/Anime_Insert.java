@@ -56,7 +56,7 @@ public class Anime_Insert extends HttpServlet {
         final String path = getServletContext().getRealPath("assets/img/anime/");
         final Part filePart = request.getPart("pic");
         final String fileName = getFileName(filePart);
-
+        
         OutputStream out = null;
         InputStream filecontent = null;
 
@@ -111,7 +111,7 @@ public class Anime_Insert extends HttpServlet {
                 request.setAttribute("description", description);
                 anime.setDescription(description);
             }
-            if (pic.trim().equals("")) {
+            if (pic.equals("")) {
                 errorMess = errorMess.equals("") ? " Picture can't be blank" : errorMess;
                 error = true;
             } else {

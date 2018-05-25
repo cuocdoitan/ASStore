@@ -24,11 +24,6 @@
         <div class="bo4 of-hidden size15 m-b-20">
           <input class="sizefull s-text7 p-l-22 p-r-22" type="number" name="phone" value="${user.phoneNumber}" readonly="true">
         </div>
-
-        <label>Password:</label>
-        <div class="bo4 of-hidden size15 m-b-20">
-          <input class="sizefull s-text7 p-l-22 p-r-22" type="password" name="pass" value="${user.password}" readonly="true">
-        </div>
         <label>First Name:</label>
         <div class="bo4 of-hidden size15 m-b-20">
           <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="firstname" value="${user.firstName}" readonly="true">

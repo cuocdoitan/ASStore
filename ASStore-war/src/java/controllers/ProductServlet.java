@@ -146,7 +146,7 @@ public class ProductServlet extends HttpServlet {
                     }
                 }
             }
-            
+
             //category
             if (category != null) {
                 if (!category.equals("")) {
@@ -202,12 +202,14 @@ public class ProductServlet extends HttpServlet {
 
             if (error == true) {
                 listProduct = new ArrayList<>();
-                request.setAttribute("noResult", "No Result Found");
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             } else {
                 listProduct = productFacade.searchProduct(sProductName, sAnimeId, sCategoryId, sMinPrice, sMaxPrice, sSorting);
                 request.setAttribute("images", mediaFacade.getFirstImageFromListProduct(listProduct));
             }
+        }
+        if (listProduct.isEmpty()) {
+            request.setAttribute("noResult", "No Result Found");
         }
         String page = request.getParameter("page");
         PaginationHandler pagination = new PaginationHandler();
@@ -245,11 +247,11 @@ public class ProductServlet extends HttpServlet {
     protected void createProductPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to create product page">
-        request.setAttribute("categories", categoryFacade.findAll());
+        request.setAttribute("categories", categoryFacade.getList());
         request.getRequestDispatcher("/user/products-insert.jsp").forward(request, response);
         //</editor-fold>
     }
-    
+
     protected void detailsPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to details page">
@@ -257,6 +259,10 @@ public class ProductServlet extends HttpServlet {
         Product product = productFacade.find(productId_detail);
         request.setAttribute("product", product);
         request.setAttribute("images", mediaFacade.getImagesFromProduct(product));
+        List<Product> similarProducts = productFacade.getRandomProductSameAnime(product);
+        if(similarProducts.isEmpty()){
+            request.setAttribute("noOthersProducts", "No Other Products");
+        }
         request.setAttribute("similarProducts", productFacade.getRandomProductSameAnime(product));
         Integer sessionUserId = (Integer) request.getSession().getAttribute("userid");
         if (sessionUserId != null) {
@@ -292,7 +298,7 @@ public class ProductServlet extends HttpServlet {
         }
 
         request.setAttribute("product", product_edit);
-        request.setAttribute("categories", categoryFacade.findAll());
+        request.setAttribute("categories", categoryFacade.getList());
         String[] arrImage_edit = {"", "", "", ""};
         int i = 0;
         for (String image : mediaFacade.getImagesFromProduct(product_edit)) {
@@ -322,7 +328,7 @@ public class ProductServlet extends HttpServlet {
             return;
         }
         request.setAttribute("product", productFacade.find(productId_repair));
-        request.setAttribute("categories", categoryFacade.findAll());
+        request.setAttribute("categories", categoryFacade.getList());
         String[] arrImage = {"", "", "", ""};
         int j = 0;
         for (String image : mediaFacade.getImagesFromProduct(product_repair)) {
@@ -448,6 +454,8 @@ public class ProductServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+        response.setHeader("Pragma", "no-cache");
+        response.setDateHeader("Expires", 0);
         HttpSession session = request.getSession();
         if (session.getAttribute("role") == null) {
             response.sendRedirect(request.getContextPath() + "/User/login");
@@ -661,7 +669,7 @@ public class ProductServlet extends HttpServlet {
         productRating.setRating(rating);
         try {
             productRatingFacade.edit(productRating);
-
+            
             Product editedProduct = productRating.getProductId();
             for (ProductRating pr : editedProduct.getProductRatingCollection()) {
                 if (pr.getId().equals(productRating.getId())) {
