@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 m-t-30">
-                <h1 class="m-b-30 text-center">Statistical Total Post, Total Quantity, Current Quantity, Total Quantity Sold Product Of Category</h1>
+                <h1 class="m-b-30 text-center">Statistical Total Post, Current Quantity, Total Quantity Sold Product Of Category</h1>
                 <div class="flex-sb-m flex-w p-b-35 p-t-20">
                     <form method="post" action="<c:url value='/statisticals/listcate'/>">
                         <div class="flex-w">
