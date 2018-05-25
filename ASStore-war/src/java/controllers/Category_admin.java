@@ -125,15 +125,15 @@ public class Category_admin extends HttpServlet {
                 List<Models.Product> cateProduct = productFacade.getProductbyCate(idcate);
                 if (cateProduct == null) {
                     Models.Category category1 = categoryFacade.find(idcate);
-//                    category1.setEnabled(false);
-                    categoryFacade.remove(category1);
+                    category1.setEnabled(false);
+                    categoryFacade.edit(category1);
                     response.sendRedirect(request.getContextPath() + "/admin/category/list");
-                } else {
-                    request.setAttribute("error", "Category can not be deleted. Category existing products...!");
-//                    response.sendRedirect(request.getContextPath() + "/admin/category/list");
-                    response.sendRedirect(request.getContextPath() + "/admin/category/list");
-                    
+                    return;
                 }
+                request.setAttribute("error", "<script>alert('Category can not be deleted. Category existing products...!')</script>");
+                List<Category> listCategory = categoryFacade.getList();
+                request.setAttribute("listCategory", listCategory);
+                request.getRequestDispatcher("/admin/category-list.jsp").forward(request, response);
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);

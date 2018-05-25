@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
   , @NamedQuery(name = "Orders.findByCreateAt", query = "SELECT o FROM Orders o WHERE o.createAt = :createAt")
   , @NamedQuery(name = "Orders.findByEnabled", query = "SELECT o FROM Orders o WHERE o.enabled = :enabled")
   , @NamedQuery(name = "Orders.findByStatus", query = "SELECT o FROM Orders o WHERE o.status = :status")
-  , @NamedQuery(name = "Orders.findByUser", query = "SELECT o FROM Orders o WHERE o.usersId = :user")
+  , @NamedQuery(name = "Orders.findByUser", query = "SELECT o FROM Orders o WHERE o.usersId = :user ORDER BY o.id DESC")
   , @NamedQuery(name = "Orders.findByAddress", query = "SELECT o FROM Orders o WHERE o.address = :address")
   , @NamedQuery(name = "Orders.findByPhone", query = "SELECT o FROM Orders o WHERE o.phone = :phone")})
 public class Orders implements Serializable {
@@ -65,6 +65,10 @@ public class Orders implements Serializable {
   @NotNull
   @Column(name = "Status")
   private boolean status;
+  @Basic(optional = false)
+  @NotNull
+  @Column(name = "Delivering")
+  private boolean delivering;
   @Size(max = 600)
   @Column(name = "Address")
   private String address;
@@ -180,4 +184,13 @@ public class Orders implements Serializable {
     return "Models.Orders[ id=" + id + " ]";
   }
 
+  public boolean isDelivering() {
+    return delivering;
+  }
+
+  public void setDelivering(boolean delivering) {
+    this.delivering = delivering;
+  }
+
+  
 }

@@ -118,13 +118,8 @@ public class Statistical_category extends HttpServlet {
                         request.setAttribute("error", "Undefined Statistics, Month To lower Month From");
                         request.getRequestDispatcher("/user/statistical-category.jsp").forward(request, response);
                         return;
-                    } else {
-                        if (Integer.parseInt(dayTo) < Integer.parseInt(dayFrom)) {
-                            request.setAttribute("error", "Undefined Statistics, Day To lower Day From");
-                            request.getRequestDispatcher("/user/statistical-category.jsp").forward(request, response);
-                            return;
-                        }
                     }
+
                     Calendar calendarFrom = Calendar.getInstance();
                     calendarFrom.set(Calendar.DAY_OF_MONTH, Integer.parseInt(dayFrom));
                     calendarFrom.set(Calendar.MONTH, Integer.parseInt(monthFrom) - 1);
@@ -142,7 +137,7 @@ public class Statistical_category extends HttpServlet {
 //                String totalQuantityProductChart = "";
                 String totalCurrentChart = "";
                 String totalQuantitySoldProductChart = "";
-                for (Models.Category category : categoryFacade.findAll()) {
+                for (Models.Category category : categoryFacade.getList()) {
                     categoryListChart += "'" + category.getName() + "',";
                     List<Product> list = productFacade.getProductbyCategoryStatictiscal(category.getId(), dateFrom, dateTo);
                     StatisticProductCategory statisitic = new StatisticProductCategory();
