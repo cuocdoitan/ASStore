@@ -34,5 +34,7 @@ public interface CategoryFacadeLocal {
     
     public List<Category> getList();
     
+    
+    
     public Category getCateByName(String cateName);
 }

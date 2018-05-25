@@ -74,8 +74,7 @@
         <!-- Actions-->
         <br/>
         <c:if test="${product.usersId.id == sessionScope.userid}">
-            <a href="<c:url value="/products/edit?id=${product.id}" />">Edit</a>  ||
-            <a href="<c:url value="/products/repair-product?id=${product.id}"/>">Repair</a>
+            <a href="<c:url value="/products/edit?id=${product.id}" />">Edit</a>
         </c:if>
         <!-- Rating -->
         <div id="RatingProductListContent_User">
@@ -99,20 +98,28 @@
         <hr/>
         <!-- Another products -->
         <h3>Products with the same anime</h3>
-        <div class="container">
-            <div class="row p-t-20">
-                <c:forEach items="${similarProducts}" var="similarProduct">
-                    <div class="col-3 m-t-20">
-                        <a href="<c:url value='/products/details?id=${similarProduct.id}'/>">
-                            <img src="<c:url value='/assets/img/products/${similarProduct.mediaCollection.toArray()[0].urlImage}'/>" width="200px" height='150px'/>
-                            <p class="m-t-10 m-b-20">
-                                ${similarProduct.name}
-                            </p>
-                        </a>
+        <c:choose>
+            <c:when test="${noOthersProducts == null}">
+                <div class="container">
+                    <div class="row p-t-20">
+                        <c:forEach items="${similarProducts}" var="similarProduct">
+                            <div class="col-3 m-t-20">
+                                <a href="<c:url value='/products/details?id=${similarProduct.id}'/>">
+                                    <img src="<c:url value='/assets/img/products/${similarProduct.mediaCollection.toArray()[0].urlImage}'/>" width="200px" height='150px'/>
+                                    <p class="m-t-10 m-b-20">
+                                        ${similarProduct.name}
+                                    </p>
+                                </a>
+                            </div>
+                        </c:forEach>
                     </div>
-                </c:forEach>
-            </div>
-        </div>          
+                </div>     
+            </c:when>
+            <c:otherwise>
+                <h2 style="color: #cccccc;text-align: center;padding-top: 20px">No Other Products With This Anime</h2>
+            </c:otherwise>
+        </c:choose>
+
     </div>
             <input name="addCartURL" value="<c:url value="/cart/addToCart" />" type="hidden" />
     <link href="<c:url value="/assets/css/star.css"/>" rel="stylesheet" type="text/css"/>

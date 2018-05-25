@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import Models.Anime;
 import Models.Roles;
+import SB.ProductFacadeLocal;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -41,6 +42,9 @@ import javax.validation.ConstraintViolationException;
         maxFileSize = 1024 * 1024 * 10, // 10MB
         maxRequestSize = 1024 * 1024 * 50)   // 50MB
 public class Anime_admin extends HttpServlet {
+
+    @EJB
+    private ProductFacadeLocal productFacade;
 
     @EJB
     private AnimeFacadeLocal animeFacade;
@@ -73,10 +77,10 @@ public class Anime_admin extends HttpServlet {
             throws ServletException, IOException {
         String clientRequest = request.getPathInfo();
         HttpSession sess = request.getSession();
-        
+
         switch (clientRequest) {
             case "/list":
-                List<Anime> listAnime = animeFacade.findAll();
+                List<Anime> listAnime = animeFacade.findAllAvailableAnime();
                 request.setAttribute("animeList", listAnime);
                 request.getRequestDispatcher("/admin/anime-list.jsp").forward(request, response);
                 break;
@@ -87,6 +91,21 @@ public class Anime_admin extends HttpServlet {
                 Models.Anime animee = animeFacade.find(Integer.parseInt(request.getParameter("anime")));
                 request.setAttribute("animes", animee);
                 request.getRequestDispatcher("/admin/anime-list-update.jsp").forward(request, response);
+                break;
+            case "/delete":
+                Models.Anime anime = animeFacade.find(Integer.parseInt(request.getParameter("anime")));
+                List<Models.Product> animeProduct = productFacade.getProductbyAnime(anime.getId());
+                if (animeProduct == null) {
+                    anime.setEnabled(false);
+                    animeFacade.edit(anime);
+                    response.sendRedirect(request.getContextPath() + "/admin/anime/list");
+                } else {
+                    request.setAttribute("error", "<script>alert('Category can not be deleted. Category existing products...!');</script>");
+                    List<Anime> lstAnime = animeFacade.findAllAvailableAnime();
+                    request.setAttribute("animeList", lstAnime);
+                    request.getRequestDispatcher("/admin/anime-list.jsp").forward(request, response);
+                }
+
                 break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
@@ -113,13 +132,6 @@ public class Anime_admin extends HttpServlet {
             case "/update":
                 request.getRequestDispatcher("/Anime_Edit").forward(request, response);
                 break;
-            case "/delete":
-                Models.Anime anime = animeFacade.find(Integer.parseInt(request.getParameter("anime")));
-                
-                animeFacade.remove(anime);
-                response.sendRedirect("list");
-                break;
-
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;

@@ -54,13 +54,17 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
     
     @Override
     public List<Product> getListApprovingProduct(){
-        List<Product> listApprovinProduct = new ArrayList<>();
-        for(Product product : this.getListExistingProduct()){
-            if(product.getStatus()==0){
-                listApprovinProduct.add(product);
-            }
-        }
-        return listApprovinProduct;
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.status = ?2", Product.class).setMaxResults(10);
+        query.setParameter(1, true);
+        query.setParameter(2, 0);
+        return query.getResultList();
+    }
+    
+    @Override
+    public List<Product> getListManageProduct(){
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 ORDER BY p.id DESC", Product.class).setMaxResults(10);
+        query.setParameter(1, true);
+        return query.getResultList();
     }
 
     
@@ -90,10 +94,25 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         else{
             return list;
         }
-        
+    }
+    
+    
+    @Override
+    public List<Product> getProductbyAnime(int animeId) {
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.animeId.id = ?1 and p.enabled = ?2", Product.class);
+        query.setParameter(1, animeId);
+        query.setParameter(2, true);
+        List<Product> list = query.getResultList();
+        if(list.isEmpty()){
+            return null;
+        }
+        else{
+            return list;
+        }
     }
 
     
+    @Override
     public List<Product> getListExistingProduct(){
         TypedQuery query = em.createNamedQuery("Product.findByEnabled", Product.class);
         query.setParameter("enabled", true);
@@ -101,13 +120,15 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
     }
     
     
+    @Override
     public List<Product> getListProductSortedDesc(){
-        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.status = ?2 ORDER BY p.id DESC", Product.class);
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.status = ?2 ORDER BY p.createAt DESC", Product.class);
         query.setParameter(1, true);
         query.setParameter(2, 1);
         return query.getResultList();
     }
     
+    @Override
     public List<Product> searchProductByName(String name){
         TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.name like ?2", Product.class);
         query.setParameter(1, true);
@@ -115,6 +136,7 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         return query.getResultList();
     }
     
+    @Override
     public List<Product> searchProductByUserPhoneNumber(String phoneNumber){
         TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.usersId.phoneNumber = ?2", Product.class);
         query.setParameter(1, true);
@@ -122,6 +144,7 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         return query.getResultList();
     }
     
+    @Override
     public List<Product> searchProduct(String productName, Models.Anime animeId, Models.Category categoryId, BigDecimal minPrice, BigDecimal maxPrice, String sorting){
         String condition = "";
         String and = " and ";
@@ -183,6 +206,7 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
         query.setParameter(1, true);
         query.setParameter(2, product.getAnimeId());
         List<Product> list = query.getResultList();
+        list.remove(product);
         if(list.size() < 5){
             return list;
         }else{
@@ -228,9 +252,14 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
 
     }
     
+    @Override
     public List<Product> getListProductOfUser(Models.Users user) {
-      TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.usersId = ?1", Models.Product.class);
+      TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.usersId = ?1 and p.enabled = ?2", Models.Product.class);
       query.setParameter(1, user);
+      query.setParameter(2, true);
       return query.getResultList();
     }
+    
+    
+    
 }

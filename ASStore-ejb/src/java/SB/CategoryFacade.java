@@ -31,6 +31,7 @@ public class CategoryFacade extends AbstractFacade<Category> implements Category
     public CategoryFacade() {
         super(Category.class);
     }
+    
 
     @Override
     public List<Category> getList() {

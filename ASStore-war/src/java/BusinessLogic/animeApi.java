@@ -48,7 +48,7 @@ public class animeApi extends HttpServlet {
           throws ServletException, IOException {
     response.setContentType("application/json");
     PrintWriter out = response.getWriter();
-    List<Anime> animes = animeFacade.findAll();
+    List<Anime> animes = animeFacade.findAllAvailableAnime();
 
     JSONArray animesJSON = new JSONArray();
 

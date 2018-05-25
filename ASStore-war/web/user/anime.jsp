@@ -41,7 +41,11 @@
                   <img src="<c:url value="/assets/img/anime/${anime.picture}" />" height="200px" alt="">
                 </td>
                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                    <a href="<c:url value=''/>" style="color: #3498db">related products</a>
+                    <form action="<c:url value="/products/list" />">
+                        <input type="hidden" name="anime_name" value="${anime.name}"/>
+                        <input type="submit" value="Related products"/>
+                    </form>
+
                   <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
                 </td> 
               </tr>

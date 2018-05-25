@@ -14,7 +14,7 @@
             <div class="alert alert-warning">
                 <strong>WARNING ! After edited, this product will be sent for checking and unavailable for a while</strong>
             </div>
-            <form action="<c:url value="/products/edit"/>"  method="post" id="formSubmitProduct">    
+            <form action="<c:url value="/products/edit"/>"  method="post" id="formSubmitProduct"  onsubmit="return lastCheck(event);">    
                 <h2>Edit your product</h2><br><br>
                 <input type="hidden" value="${sessionScope.userid}" name="userId"/>
                 <input type="hidden" name="productId" value="${product.id}"/>
@@ -90,8 +90,12 @@
 
     </section>
     <script>
-        function submitEditProductForm() {
-            document.getElementById("formEditProduct").submit();
+        function lastCheck(event) {
+            if(confirm("Last check !")){
+                return true;
+            }else{
+                return false;
+            }
         }
     </script>
 </t:layout>

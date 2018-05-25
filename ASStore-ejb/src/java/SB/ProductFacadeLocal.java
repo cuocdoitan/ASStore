@@ -35,7 +35,9 @@ public interface ProductFacadeLocal {
     List<Models.Product> findRange(int[] range);
 
     int count();
-
+    
+    public List<Product> getListManageProduct();
+    
     public BigDecimal getHighestProductPrice();
 
     public List<Product> getListExistingProduct();
@@ -51,6 +53,8 @@ public interface ProductFacadeLocal {
     public List<Product> getProductbyCategoryStatictiscal(int proCateId,Date fromDate, Date toDate);
 
     public List<Product> getProductbyCate(int proCateId);
+    
+    public List<Product> getProductbyAnime(int animeId);
 
     public List<Product> getListProductSortedDesc();
 

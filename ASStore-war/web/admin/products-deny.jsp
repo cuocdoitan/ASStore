@@ -11,7 +11,7 @@
 <t:adminLayout>
     <section class="bgwhite p-t-70 p-b-100">
         <div class="container">
-            <form method="POST" action="<c:url value='/admin/products/deny' />">
+            <form method="POST" action="<c:url value='/admin/products/deny'/>" onsubmit="return validateNote(event);">
                 <h2>Send Note for this Product</h2><br><br>
                 <input type="hidden" name="productId" value="${product.id}"/>
                 <label>Product name</label>
@@ -67,6 +67,7 @@
                 <div class="bo4 of-hidden m-b-20">
                     <textarea style="width: 100%; border: none; padding: 20px" rows="10" name="alertNote" placeholder="Note for product"></textarea>
                 </div>
+                <p id="errNote" style="padding: 5px;color: red"></p>
                 <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
                     Deny
                 </button>

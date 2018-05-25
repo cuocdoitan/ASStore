@@ -73,6 +73,10 @@ public class Orders extends HttpServlet {
     }
     switch (clientRequest) {
       case "/list":
+        if (sess.getAttribute("userId") == null) {
+          response.sendRedirect(request.getContextPath() + "/User/login");
+          return;
+        }
         List<Models.Orders> orders = orderFacade.findByUser(user);
         request.setAttribute("orders", orders);
         request.getRequestDispatcher("/user/orders.jsp").forward(request, response);
