@@ -9,6 +9,7 @@ import Models.Feedback;
 import Models.Product;
 import Others.StatisticProductCategory;
 import SB.CategoryFacadeLocal;
+import SB.OrdersFacadeLocal;
 import SB.ProductFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpSession;
@@ -36,10 +38,15 @@ import javax.servlet.http.HttpSession;
 public class Statistical_category extends HttpServlet {
 
     @EJB
+    private OrdersFacadeLocal ordersFacade;
+
+    @EJB
     private CategoryFacadeLocal categoryFacade;
 
     @EJB
     private ProductFacadeLocal productFacade;
+    
+    
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -149,10 +156,19 @@ public class Statistical_category extends HttpServlet {
                     for (Models.Product p : list) {
                         int currentQuantityProduct = p.getQuantity();
                         totalCurrent += currentQuantityProduct;
-
+                        
                         int soldQuantityProduct = 0;
-
-                        for (Models.OrdersDetail od : p.getOrdersDetailCollection()) {
+                        List<Models.Orders> listOrderInTime = ordersFacade.getOrderbyProductStatictiscal(dateFrom, dateTo);
+                        List<Models.OrdersDetail> listOrderDetailInTime = new ArrayList<>();
+                        for (Models.OrdersDetail od : p.getOrdersDetailCollection()){
+                            for(Models.Orders o : listOrderInTime){
+                                if(Objects.equals(od.getOrdersId().getId(), o.getId())){
+                                    listOrderDetailInTime.add(od);
+                                    break;
+                                }
+                            }
+                        }
+                        for (Models.OrdersDetail od : listOrderDetailInTime) {
                             soldQuantityProduct = od.getQuantity();
                             totalQuantitySoldProduct += soldQuantityProduct;
 

@@ -6,7 +6,9 @@
 package SB;
 
 import Models.Orders;
+import Models.Product;
 import Models.Users;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -38,5 +40,7 @@ public interface OrdersFacadeLocal {
     boolean isCancelAble(int id);
     
     int count();
+    
+    public List<Orders> getOrderbyProductStatictiscal(Date fromDate, Date toDate);
     
 }
