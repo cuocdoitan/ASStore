@@ -67,7 +67,7 @@ public class UserServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
         response.setHeader("Pragma", "no-cache");
         String clientRequest = request.getPathInfo();
-        
+
         switch (clientRequest) {
             case "/login":
                 loginPage(request, response);
@@ -345,29 +345,33 @@ public class UserServlet extends HttpServlet {
     }
 
     private void migrateSessionCart(HttpSession sess, Users user) {
-      Models.Cart cart = cartFacade.findByUserId(user.getId());
-      if (sess.getAttribute("cart") != null) {
-        java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
-        for (Models.CartDetail detail : cartDetailSess) {
-          detail.setCartId(cart);
-          cartDetailFacade.create(detail);
+        Models.Cart cart = cartFacade.findByUserId(user.getId());
+        if (sess.getAttribute("cart") != null) {
+            java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
+            for (Models.CartDetail detail : cartDetailSess) {
+                detail.setCartId(cart);
+                cartDetailFacade.create(detail);
+            }
         }
-      }
-      
+
     }
-    
+
     private void migrateCartToAccount(HttpSession sess, Users user) {
-      Models.Cart cart = new Models.Cart();
-      cart.setId(0);
-      cart.setUsersId(user);
-      cartFacade.create(cart);
-      if (((List<CartDetail>)sess.getAttribute("cart")).size() > 0) {
-        java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
-        for (Models.CartDetail detail : cartDetailSess) {
-          detail.setCartId(cart);
-          cartDetailFacade.create(detail);
+        Models.Cart cart = new Models.Cart();
+        cart.setId(0);
+        cart.setUsersId(user);
+        cartFacade.create(cart);
+        List<CartDetail> listCart = (List<CartDetail>) sess.getAttribute("cart");
+        if (listCart != null) {
+            if (listCart.size() > 0) {
+                java.util.List<Models.CartDetail> cartDetailSess = (java.util.List<Models.CartDetail>) sess.getAttribute("cart");
+                for (Models.CartDetail detail : cartDetailSess) {
+                    detail.setCartId(cart);
+                    cartDetailFacade.create(detail);
+                }
+            }
         }
-      }
+
     }
 
     protected void Updateuser(HttpServletRequest request, HttpServletResponse response)

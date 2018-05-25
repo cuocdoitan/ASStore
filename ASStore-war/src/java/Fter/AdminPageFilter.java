@@ -106,12 +106,11 @@ public class AdminPageFilter implements Filter {
         HttpServletResponse res = (HttpServletResponse) response;
         HttpSession session = req.getSession(false);
         String loginURL = req.getContextPath() + "/admin/user/loginadmin";
-        
-        boolean loggedIn = session != null && session.getAttribute("role") != null;
+        boolean loggedIn = session != null && ((Models.Roles) session.getAttribute("role")).getId() != 3;
         boolean loginRequest = loginURL.equals(req.getRequestURI());
         
         if (loggedIn || loginRequest) {
-            chain.doFilter(request, response);
+                chain.doFilter(request, response);
         } else {
             res.sendRedirect(loginURL);
         }

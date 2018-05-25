@@ -122,7 +122,7 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
     
     @Override
     public List<Product> getListProductSortedDesc(){
-        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.status = ?2 ORDER BY p.id DESC", Product.class);
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.status = ?2 ORDER BY p.createAt DESC", Product.class);
         query.setParameter(1, true);
         query.setParameter(2, 1);
         return query.getResultList();

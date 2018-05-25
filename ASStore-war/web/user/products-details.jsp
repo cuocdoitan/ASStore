@@ -74,8 +74,7 @@
         <!-- Actions-->
         <br/>
         <c:if test="${product.usersId.id == sessionScope.userid}">
-            <a href="<c:url value="/products/edit?id=${product.id}" />">Edit</a>  ||
-            <a href="<c:url value="/products/repair-product?id=${product.id}"/>">Repair</a>
+            <a href="<c:url value="/products/edit?id=${product.id}" />">Edit</a>
         </c:if>
         <!-- Rating -->
         <div id="RatingProductListContent_User">

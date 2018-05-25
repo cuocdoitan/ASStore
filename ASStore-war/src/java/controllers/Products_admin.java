@@ -207,6 +207,9 @@ public class Products_admin extends HttpServlet {
             Product product = productFacade.find(id);
             product.setEnabled(false);
             productFacade.edit(product);
+            Models.Users user = product.getUsersId();
+            user.setNumberOfNotification(user.getNumberOfNotification() + 1);
+            usersFacade.edit(user);
             response.sendRedirect(request.getContextPath() + "/admin/products/list");
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Problems during deleting product", e.getMessage());
