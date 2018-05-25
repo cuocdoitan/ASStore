@@ -7,6 +7,7 @@ package SB;
 
 import Models.Orders;
 import Models.Users;
+import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -15,6 +16,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -88,4 +90,16 @@ public class OrdersFacade extends AbstractFacade<Orders> implements OrdersFacade
       }
       
     }
+
+    @Override
+    public List<Orders> getOrderbyProductStatictiscal(Date fromDate, Date toDate) {
+        TypedQuery query = em.createQuery("SELECT o FROM Orders o WHERE o.enabled = ?1 and o.createAt between ?2 and ?3", Orders.class);
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        query.setParameter(1, true);
+        query.setParameter(2, df.format(fromDate));
+        query.setParameter(3, df.format(toDate));
+        List<Orders> listOrder = query.getResultList();
+        return listOrder;
+    }
+  
 }
