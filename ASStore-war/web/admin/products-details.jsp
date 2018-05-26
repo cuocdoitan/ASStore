@@ -34,7 +34,7 @@
             <p style="font-weight: bold">Image</p>
             <div>
                 <c:forEach items="${product.mediaCollection}" var="media">
-                    <img src="<c:url value="/assets/img/products/${media.urlImage}"/>" height="50px" width="50px"/>
+                    <img src="<c:url value="/assets/img/products/${media.urlImage}"/>" height="200px" width="200px"/>
                 </c:forEach>
             </div>
         </div>

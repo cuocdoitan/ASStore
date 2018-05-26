@@ -59,8 +59,8 @@
       <div class="header-icons">
         <c:choose>
           <c:when test="${sessionScope.userid == null}">
-            <a href="<c:url value="/User/login"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
-              <button>LOG IN</button>   
+            <a href="<c:url value="/User/login"/>"  style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
+              <button>LOG IN</button>
             </a>
           </c:when>
           <c:otherwise>

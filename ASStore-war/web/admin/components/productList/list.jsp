@@ -1,6 +1,10 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<style type="text/css">
+        .thumbnail {position:relative}
+        .image {position:absolute;width:200px;height:200px}
+</style>
 <table border="1" style="width: 100%; border-color: #e6e6e6; border: 1px solid #e6e6e6">
     <thead>
         <tr style="text-align: center">
@@ -36,7 +40,7 @@
                 <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">${product.description}</td>
                 <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">
                     <c:forEach items="${product.mediaCollection}" var="media">
-                        <img src="<c:url value="/assets/img/products/${media.urlImage}"/>" height="50px" width="50px"/>
+                        <img class="thumbnail" src="<c:url value="/assets/img/products/${media.urlImage}"/>" height="50px" width="50px"/>
                     </c:forEach>
                 </td>
                 <td class="text-center p-t-20 p-l-20 p-r-20 p-b-20">

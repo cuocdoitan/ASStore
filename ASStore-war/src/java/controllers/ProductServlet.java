@@ -259,7 +259,7 @@ public class ProductServlet extends HttpServlet {
         int productId_detail = Integer.parseInt(request.getParameter("id"));
         Product product = productFacade.find(productId_detail);
         if(product.getStatus() != 1){
-            request.getHeader(HttpHeaders.REFERER);
+            response.sendRedirect(request.getContextPath() + "/products/list");
             return;
         }
         request.setAttribute("product", product);

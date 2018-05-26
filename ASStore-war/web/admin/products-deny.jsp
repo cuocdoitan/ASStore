@@ -59,9 +59,9 @@
                 <label>Product images</label>
                 <div>
                     <c:forEach items="${product.mediaCollection}" var="media">
-                        <img src="<c:url value="/assets/img/products/${media.urlImage}"/>" height="50px" width="50px"/>
+                        <img src="<c:url value="/assets/img/products/${media.urlImage}"/>" height="200px" width="200px"/>
                     </c:forEach>
-                </div>
+                </div>  
                 <hr>
                 <label style="color: red">**Note**</label>
                 <div class="bo4 of-hidden m-b-20">
