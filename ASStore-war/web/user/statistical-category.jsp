@@ -19,115 +19,43 @@
                             <div class="">
                                 <p>Year</p>
                                 <select class="m-r-10" name="yearFrom">
-                                    <option>2018</option>           
+                                    <c:forEach begin="2000" end="2018" var="y">
+                                        <option <c:if test="${y == yearFrom}">selected</c:if>>${y}</option> 
+                                    </c:forEach>
                                 </select>
                             </div>
                             <div class="m-r-20">
                                 <p>Month From</p>
                                 <select class="" name="monthFrom">
-                                    <option>1</option>
-                                    <option>2</option> 
-                                    <option>3</option> 
-                                    <option>4</option> 
-                                    <option>5</option> 
-                                    <option>6</option> 
-                                    <option>7</option> 
-                                    <option>8</option> 
-                                    <option>9</option> 
-                                    <option>10</option> 
-                                    <option>11</option> 
-                                    <option>12</option> 
+                                    <c:forEach begin="1" end="12" var="mf">
+                                        <option <c:if test="${mf == monthFrom}">selected</c:if>>${mf}</option> 
+                                    </c:forEach>  
                                 </select>
                             </div>
                             <div class="m-r-20">
                                 <p>Day From</p>
                                 <select class="" name="dayFrom">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                    <option>13</option>
-                                    <option>14</option>
-                                    <option>15</option>
-                                    <option>16</option>
-                                    <option>17</option>
-                                    <option>18</option>
-                                    <option>19</option>
-                                    <option>20</option>
-                                    <option>21</option>
-                                    <option>22</option>
-                                    <option>23</option>
-                                    <option>24</option>
-                                    <option>25</option>
-                                    <option>26</option>
-                                    <option>27</option>
-                                    <option>28</option>
-                                    <option>29</option>
-                                    <option>30</option>
-                                    <option>31</option>
+                                    <c:forEach begin="1" end="31" var="df">
+                                        <option <c:if test="${df == dayFrom}">selected</c:if>>${df}</option> 
+                                    </c:forEach> 
                                 </select>
                             </div>
-
+                            <br/>
                             <div class="m-r-20">
                                 <p>Month To</p>
                                 <select class="" name="monthTo">
-                                    <option>1</option>
-                                    <option>2</option> 
-                                    <option>3</option> 
-                                    <option>4</option> 
-                                    <option>5</option> 
-                                    <option>6</option> 
-                                    <option>7</option> 
-                                    <option>8</option> 
-                                    <option>9</option> 
-                                    <option>10</option> 
-                                    <option>11</option> 
-                                    <option>12</option> 
+                                    <c:forEach begin="1" end="12" var="mt">
+                                        <option <c:if test="${mt == monthTo}">selected</c:if>>${mt}</option> 
+                                    </c:forEach>
                                 </select>
                             </div>
 
                             <div class="">
                                 <p>Day To</p>
                                 <select class="m-r-20" name="dayTo">
-                                    <option>1</option>
-                                    <option>2</option>
-                                    <option>3</option>
-                                    <option>4</option>
-                                    <option>5</option>
-                                    <option>6</option>
-                                    <option>7</option>
-                                    <option>8</option>
-                                    <option>9</option>
-                                    <option>10</option>
-                                    <option>11</option>
-                                    <option>12</option>
-                                    <option>13</option>
-                                    <option>14</option>
-                                    <option>15</option>
-                                    <option>16</option>
-                                    <option>17</option>
-                                    <option>18</option>
-                                    <option>19</option>
-                                    <option>20</option>
-                                    <option>21</option>
-                                    <option>22</option>
-                                    <option>23</option>
-                                    <option>24</option>
-                                    <option>25</option>
-                                    <option>26</option>
-                                    <option>27</option>
-                                    <option>28</option>
-                                    <option>29</option>
-                                    <option>30</option>
-                                    <option>31</option>
+                                    <c:forEach begin="1" end="31" var="dt">
+                                        <option <c:if test="${dt == dayTo}">selected</c:if>>${dt}</option> 
+                                    </c:forEach>
                                 </select>
                             </div>
                         </div>
@@ -135,7 +63,12 @@
                         <button style="width: 200px;" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
                             Statistical
                         </button>
+                        <br/>
+
                     </form>
+                    <c:if test="${sessionScope.role == roleId}">
+                        <button style="width: 200px;" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4" id="buttonPrintReport">Print Report</button>
+                    </c:if>
                 </div>
                 <div class="flex-sb-m flex-w p-b-35 p-t-20">
 
@@ -149,7 +82,7 @@
                         <tr>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Category</th>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Post Product</th>
-<!--                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Product</th>-->
+                            <!--                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Product</th>-->
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Current Quantity Product</th>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Sold Product</th>             
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Date</th>
@@ -180,6 +113,7 @@
             </div>
         </div>
     </div>
+    <br/>
     <br/>
     <br/>
     <div id="Chart"></div>
