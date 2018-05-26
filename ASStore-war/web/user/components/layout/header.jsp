@@ -22,10 +22,6 @@
         <nav class="menu">
           <ul class="main_menu">
             <li>
-              <a href="<c:url value="/index"/>">Home</a>
-            </li>
-
-            <li>
               <a href="<c:url value="/products/list"/>">Products</a>
             </li>
 

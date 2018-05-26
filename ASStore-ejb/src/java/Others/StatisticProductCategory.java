@@ -15,9 +15,10 @@ import java.util.Date;
  */
 public class StatisticProductCategory {
     private String Name;
-    private int totalProduct, totalQuantityProduct, soldQuantity;
+    private int totalProduct, soldQuantity;
     private Date dateFrom, dateTo;
     private int currentQuantityProducts;
+//    private int totalQuantityProduct;
 
     public int getCurrentQuantityProducts() {
         return currentQuantityProducts;
@@ -67,13 +68,13 @@ public class StatisticProductCategory {
         this.totalProduct = totalProduct;
     }
 
-    public int getTotalQuantityProduct() {
-        return totalQuantityProduct;
-    }
-
-    public void setTotalQuantityProduct(int totalQuantityProduct) {
-        this.totalQuantityProduct = totalQuantityProduct;
-    }
+//    public int getTotalQuantityProduct() {
+//        return totalQuantityProduct;
+//    }
+//
+//    public void setTotalQuantityProduct(int totalQuantityProduct) {
+//        this.totalQuantityProduct = totalQuantityProduct;
+//    }
 
     public int getSoldQuantity() {
         return soldQuantity;

@@ -47,3 +47,4 @@
 <script src="<c:url value='/assets/js/permission.js'/>"></script>
 <script src="<c:url value='/assets/js/addToCart.js'/>"></script>
 <script src="<c:url value='/assets/js/coupon.js'/>"></script>
+<script src="<c:url value='/assets/js/report.js'/>"></script>
