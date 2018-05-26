@@ -149,7 +149,7 @@ public class Statistical_category extends HttpServlet {
                     List<Product> list = productFacade.getProductbyCategoryStatictiscal(category.getId(), dateFrom, dateTo);
                     StatisticProductCategory statisitic = new StatisticProductCategory();
 
-                    int totalQuantityProduct = 0;
+//                    int totalQuantityProduct = 0;
                     int totalQuantitySoldProduct = 0;
                     int totalCurrent = 0;
 
@@ -157,7 +157,7 @@ public class Statistical_category extends HttpServlet {
                         int currentQuantityProduct = p.getQuantity();
                         totalCurrent += currentQuantityProduct;
                         
-                        int soldQuantityProduct = 0;
+//                        int soldQuantityProduct = 0;
                         List<Models.Orders> listOrderInTime = ordersFacade.getOrderbyProductStatictiscal(dateFrom, dateTo);
                         List<Models.OrdersDetail> listOrderDetailInTime = new ArrayList<>();
                         for (Models.OrdersDetail od : p.getOrdersDetailCollection()){
@@ -169,23 +169,20 @@ public class Statistical_category extends HttpServlet {
                             }
                         }
                         for (Models.OrdersDetail od : listOrderDetailInTime) {
-                            soldQuantityProduct = od.getQuantity();
+                            int soldQuantityProduct = od.getQuantity();
                             totalQuantitySoldProduct += soldQuantityProduct;
 
                         }
-
-                        int initialQuantityProduct = currentQuantityProduct + soldQuantityProduct;
-                        totalQuantityProduct += initialQuantityProduct;
-
+//                        int initialQuantityProduct = currentQuantityProduct + soldQuantityProduct;
+//                        totalQuantityProduct += initialQuantityProduct;
                     }
 //                    totalQuantityProductChart += totalQuantityProduct + ",";
                     totalQuantitySoldProductChart += totalQuantitySoldProduct + ",";
                     totalCurrentChart += totalCurrent + ",";
                     statisitic.setName(category.getName());
                     statisitic.setTotalProduct(list.size());
-                    statisitic.setTotalQuantityProduct(totalQuantityProduct);
+//                    statisitic.setTotalQuantityProduct(totalQuantityProduct);
                     statisitic.setSoldQuantity(totalQuantitySoldProduct);
-                    //
                     statisitic.setDateFrom(dateFrom);
                     statisitic.setDateTo(dateTo);
                     statisitic.setCurrentQuantityProducts(totalCurrent);

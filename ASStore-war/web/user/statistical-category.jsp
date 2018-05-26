@@ -11,7 +11,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 m-t-30">
-                <h1 class="m-b-30 text-center">Statistical Total Post, Total Quantity, Current Quantity, Total Quantity Sold Product Of Category</h1>
+                <h1 class="m-b-30 text-center">Statistical Total Post, Current Quantity, Total Quantity Sold Product Of Category</h1>
                 <div class="flex-sb-m flex-w p-b-35 p-t-20">
                     <form method="post" action="<c:url value='/statisticals/listcate'/>">
                         <div class="flex-w">
@@ -149,7 +149,7 @@
                         <tr>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Category</th>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Post Product</th>
-                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Product</th>
+<!--                            <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Product</th>-->
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Current Quantity Product</th>
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Total Quantity Sold Product</th>             
                             <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Date</th>
@@ -163,9 +163,6 @@
                                 </td>
                                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
                                     ${statistic.totalProduct}
-                                </td>
-                                <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                                    ${statistic.totalQuantityProduct}
                                 </td>
                                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
                                     ${statistic.currentQuantityProducts}

@@ -93,7 +93,7 @@ public class OrdersFacade extends AbstractFacade<Orders> implements OrdersFacade
 
     @Override
     public List<Orders> getOrderbyProductStatictiscal(Date fromDate, Date toDate) {
-        TypedQuery query = em.createQuery("SELECT o FROM Orders o WHERE o.enabled = ?1 and o.createAt between ?2 and ?3", Orders.class);
+        TypedQuery query = em.createQuery("SELECT o FROM Orders o WHERE o.status = ?1 and o.createAt between ?2 and ?3", Orders.class);
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
         query.setParameter(1, true);
         query.setParameter(2, df.format(fromDate));
