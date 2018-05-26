@@ -118,8 +118,7 @@ public class User_admin extends HttpServlet {
     protected void userInfoPage(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //<editor-fold defaultstate="collapsed" desc="go to create product page">
-        HttpSession sess = request.getSession();
-        Models.Users userinfo = usersFacade.find(Integer.parseInt(sess.getAttribute("userid").toString()));
+        Models.Users userinfo = usersFacade.find(Integer.parseInt(request.getParameter("userid")));
         request.setAttribute("userid", userinfo);
         request.getRequestDispatcher("/admin/user-detail.jsp").forward(request, response);
         //</editor-fold>

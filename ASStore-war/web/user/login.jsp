@@ -33,7 +33,7 @@
                                     Login
                                 </button>
                             </div>
-
+                            <input type="hidden" name="fromPage" value="${fromPage}"/>
                             <div class="m-t-20">
                                 <a href="<c:url value="/User/register" />">Don't have an account? Create one now!</a>
                             </div>

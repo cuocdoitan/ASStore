@@ -17,6 +17,7 @@ import SB.MediaFacadeLocal;
 import SB.ProductFacadeLocal;
 import SB.ProductRatingFacadeLocal;
 import SB.UsersFacadeLocal;
+import com.google.common.net.HttpHeaders;
 import static com.sun.xml.ws.spi.db.BindingContextFactory.LOGGER;
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -257,6 +258,10 @@ public class ProductServlet extends HttpServlet {
         //<editor-fold defaultstate="collapsed" desc="go to details page">
         int productId_detail = Integer.parseInt(request.getParameter("id"));
         Product product = productFacade.find(productId_detail);
+        if(product.getStatus() != 1){
+            request.getHeader(HttpHeaders.REFERER);
+            return;
+        }
         request.setAttribute("product", product);
         request.setAttribute("images", mediaFacade.getImagesFromProduct(product));
         List<Product> similarProducts = productFacade.getRandomProductSameAnime(product);
@@ -673,7 +678,10 @@ public class ProductServlet extends HttpServlet {
             Product editedProduct = productRating.getProductId();
             for (ProductRating pr : editedProduct.getProductRatingCollection()) {
                 if (pr.getId().equals(productRating.getId())) {
-                    pr = productRating;
+                    List<ProductRating> currentStarList = editedProduct.getProductRatingCollection();
+                    int changedPosition = currentStarList.indexOf(pr);
+                    currentStarList.set(changedPosition, pr);
+                    editedProduct.setProductRatingCollection(currentStarList);
                     break;
                 }
             }

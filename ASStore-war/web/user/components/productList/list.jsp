@@ -37,168 +37,162 @@
             <a href="<c:url value="/products/details?id=${product.id}"/>">
                 <div class="block2">
                     <div class="block2-img wrap-pic-w of-hidden pos-relative">
-                        <c:choose>
-                            <c:when test="${product.quantity == 0}">
-                                <img src="<c:url value='/assets/img/products/outofstock.jpg'/>" alt="IMG-PRODUCT">
-                            </c:when>
-                            <c:otherwise>
-                                <c:forEach items="${images}" var="image">
-                                    <c:if test="${image.productId.id == product.id}">
-                                        <img src="<c:url value='/assets/img/products/${image.urlImage}'/>" alt="IMG-PRODUCT">
-                                    </c:if>
-                                </c:forEach>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                    <div class="block2-txt p-t-20">
-                        <div class="star-rating" title="75%">
-                            <div class="back-stars">
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
-                                <i class="fa fa-star" aria-hidden="true"></i>
+                        <c:forEach items="${images}" var="image">
+                            <c:if test="${image.productId.id == product.id}">
+                                <img src="<c:url value='/assets/img/products/${image.urlImage}'/>" alt="IMG-PRODUCT">
+                                <c:if test="${product.quantity == 0}"><img src="<c:url value='/assets/img/products/outofstock.jpg'/>" alt="IMG-PRODUCT"  style="max-height: 100px;max-width: 100px;position: absolute;top: 0;right: 0"></c:if>
+                            </c:if>
+                        </c:forEach>
+                        </div>
+                        <div class="block2-txt p-t-20">
+                            <div class="star-rating" title="75%">
+                                <div class="back-stars">
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <i class="fa fa-star" aria-hidden="true"></i>
 
-                                <div class="front-stars">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
+                                    <div class="front-stars">
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                        <i class="fa fa-star" aria-hidden="true"></i>
+                                    </div>
                                 </div>
                             </div>
+                            <p><span class="block2-price m-text6 p-r-5 totalRating">${product.averageStars()}</span>/5 stars</p>
+                            <span class="block2-price m-text6 p-r-5">${product.name}</span><br/>
+                            <span class="block2-price m-text6 p-r-5">${product.price} $</span>
                         </div>
-                        <p><span class="block2-price m-text6 p-r-5 totalRating">${product.averageStars()}</span>/5 stars</p>
-                        <span class="block2-price m-text6 p-r-5">${product.name}</span><br/>
-                        <span class="block2-price m-text6 p-r-5">${product.price} $</span>
                     </div>
-                </div>
-            </a>    
-        </div>
-    </c:forEach>
+                </a>    
+            </div>
+        </c:forEach>
 
-    <div style="width: 100%; display: flex">
-    <c:choose>
-        <c:when test="${selectedPage - 2 le 1}"><!--IN RANGE OF FIRST--><!--1 2 3 4 5-->
-
+        <div style="width: 100%; display: flex">
             <c:choose>
-                <c:when test="${selectedPage + 2 ge numberOfPage}"><!--IN RANGE OF LAST-->
-                    <ul class="pagination pagination-sm" style="float: right">
-                            <c:forEach begin="1" end="${numberOfPage}" var="page">
-                                <li <c:if test="${selectedPage == page}">class="active"</c:if>><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
+                <c:when test="${selectedPage - 2 le 1}"><!--IN RANGE OF FIRST--><!--1 2 3 4 5-->
+
+                    <c:choose>
+                        <c:when test="${selectedPage + 2 ge numberOfPage}"><!--IN RANGE OF LAST-->
+                            <ul class="pagination pagination-sm" style="float: right">
+                                <c:forEach begin="1" end="${numberOfPage}" var="page">
+                                    <li <c:if test="${selectedPage == page}">class="active"</c:if>><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
+                                    </c:forEach>
+                            </ul>
+                        </c:when>
+                        <c:otherwise><!--OUT RANGE OF LAST--><!--1 2 3 4 5 .....99-->
+                            <ul class="pagination pagination-sm" style="float: right">
+                                <c:forEach begin="1" end="${numberOfPage}" var="page">
+                                    <c:choose>
+                                        <c:when test="${page gt (selectedPage + 2)}"><!--part out of range last-->
+                                            <c:choose>
+                                                <c:when test="${page == numberOfPage}"><!--show last page-->
+                                                    <li><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:choose>
+                                                            <c:when test="${(page - 1) == (selectedPage + 2)}"><!--check if the previous page is range of first-->
+                                                            <li><a>...</a></li>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                            <!--do nothing-->    
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li <c:if test="${selectedPage == page}">class="active"</c:if>><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
+                                            </c:otherwise>
+                                        </c:choose>
+
                                 </c:forEach>
-                        </ul>
-                    </c:when>
-                    <c:otherwise><!--OUT RANGE OF LAST--><!--1 2 3 4 5 .....99-->
-                        <ul class="pagination pagination-sm" style="float: right">
-                            <c:forEach begin="1" end="${numberOfPage}" var="page">
-                                <c:choose>
-                                    <c:when test="${page gt (selectedPage + 2)}"><!--part out of range last-->
-                                        <c:choose>
-                                            <c:when test="${page == numberOfPage}"><!--show last page-->
-                                                <li><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <c:choose>
-                                                        <c:when test="${(page - 1) == (selectedPage + 2)}"><!--check if the previous page is range of first-->
-                                                        <li><a>...</a></li>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                        <!--do nothing-->    
-                                                    </c:otherwise>
-                                                </c:choose>
+                            </ul>
+                        </c:otherwise>
+                    </c:choose>
+
+                </c:when>
+                <c:otherwise><!--OUT RANGE OF FIRST--><!--1 .....95 96 97 98 99-->
+
+                    <c:choose>
+                        <c:when test="${selectedPage + 2 ge numberOfPage}"><!--IN RANGE OF LAST-->
+                            <ul class="pagination pagination-sm" style="float: right">
+                                <c:forEach begin="1" end="${numberOfPage}" var="page">
+                                    <c:choose>
+                                        <c:when test="${page lt (selectedPage - 2)}"><!--part out of range first-->
+                                            <c:choose>
+                                                <c:when test="${page == 1}"><!--show first page-->
+                                                    <li><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:choose>
+                                                            <c:when test="${(page + 1) == (selectedPage - 2)}"><!--check if the previous page is in part out of range first-->
+                                                            <li><a>...</a></li>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                            <!--do nothing-->
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li <c:if test="${selectedPage == page}">class="active"</c:if>><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
                                             </c:otherwise>
                                         </c:choose>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li <c:if test="${selectedPage == page}">class="active"</c:if>><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
-                                        </c:otherwise>
-                                    </c:choose>
-
-                            </c:forEach>
-                        </ul>
-                    </c:otherwise>
-                </c:choose>
-
-            </c:when>
-            <c:otherwise><!--OUT RANGE OF FIRST--><!--1 .....95 96 97 98 99-->
-
-                <c:choose>
-                    <c:when test="${selectedPage + 2 ge numberOfPage}"><!--IN RANGE OF LAST-->
-                        <ul class="pagination pagination-sm" style="float: right">
-                            <c:forEach begin="1" end="${numberOfPage}" var="page">
-                                <c:choose>
-                                    <c:when test="${page lt (selectedPage - 2)}"><!--part out of range first-->
-                                        <c:choose>
-                                            <c:when test="${page == 1}"><!--show first page-->
-                                                <li><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <c:choose>
-                                                        <c:when test="${(page + 1) == (selectedPage - 2)}"><!--check if the previous page is in part out of range first-->
-                                                        <li><a>...</a></li>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                        <!--do nothing-->
-                                                    </c:otherwise>
-                                                </c:choose>
+                                    </c:forEach>
+                            </ul>
+                        </c:when>
+                        <c:otherwise><!--OUT RANGE OF LAST--><!--1...25 26 27 28 29...99-->
+                            <ul class="pagination pagination-sm" style="float: right">
+                                <c:forEach begin="1" end="${numberOfPage}" var="page">
+                                    <c:choose>
+                                        <c:when test="${page lt (selectedPage - 2)}"><!--part out of range first-->
+                                            <c:choose>
+                                                <c:when test="${page == 1}"><!--show first page-->
+                                                    <li><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:choose>
+                                                            <c:when test="${(page + 1) == (selectedPage - 2)}"><!--check if the previous page is in part out of range first-->
+                                                            <li><a>...</a></li>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                            <!--do nothing-->
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:when test="${page gt (selectedPage + 2)}"><!--part out of range last-->
+                                            <c:choose>
+                                                <c:when test="${page == numberOfPage}"><!--show last page-->
+                                                    <li><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
+                                                    </c:when>
+                                                    <c:otherwise>
+                                                        <c:choose>
+                                                            <c:when test="${(page - 1) == (selectedPage + 2)}"><!--check if the previous page is range of first-->
+                                                            <li><a>...</a></li>
+                                                            </c:when>
+                                                            <c:otherwise>
+                                                            <!--do nothing-->    
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                </c:otherwise>
+                                            </c:choose>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <li <c:if test="${selectedPage == page}">class="active"</c:if>><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
                                             </c:otherwise>
                                         </c:choose>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li <c:if test="${selectedPage == page}">class="active"</c:if>><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                        </ul>
-                    </c:when>
-                    <c:otherwise><!--OUT RANGE OF LAST--><!--1...25 26 27 28 29...99-->
-                        <ul class="pagination pagination-sm" style="float: right">
-                            <c:forEach begin="1" end="${numberOfPage}" var="page">
-                                <c:choose>
-                                    <c:when test="${page lt (selectedPage - 2)}"><!--part out of range first-->
-                                        <c:choose>
-                                            <c:when test="${page == 1}"><!--show first page-->
-                                                <li><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <c:choose>
-                                                        <c:when test="${(page + 1) == (selectedPage - 2)}"><!--check if the previous page is in part out of range first-->
-                                                        <li><a>...</a></li>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                        <!--do nothing-->
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:when>
-                                    <c:when test="${page gt (selectedPage + 2)}"><!--part out of range last-->
-                                        <c:choose>
-                                            <c:when test="${page == numberOfPage}"><!--show last page-->
-                                                <li><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <c:choose>
-                                                        <c:when test="${(page - 1) == (selectedPage + 2)}"><!--check if the previous page is range of first-->
-                                                        <li><a>...</a></li>
-                                                        </c:when>
-                                                        <c:otherwise>
-                                                        <!--do nothing-->    
-                                                    </c:otherwise>
-                                                </c:choose>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <li <c:if test="${selectedPage == page}">class="active"</c:if>><a href="<c:url value="/products/list?${queryString}&page=${page}"/>">${page}</a></li>
-                                        </c:otherwise>
-                                    </c:choose>
-                                </c:forEach>
-                        </ul>
-                    </c:otherwise>
-                </c:choose>
+                                    </c:forEach>
+                            </ul>
+                        </c:otherwise>
+                    </c:choose>
 
-            </c:otherwise>            
-        </c:choose>
+                </c:otherwise>            
+            </c:choose>
         </div>

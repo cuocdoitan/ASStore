@@ -43,26 +43,36 @@
                 </span>
                 <!-- Quantity add to cart-->
                 <div class="p-t-10 p-b-10">
-                    <div class="w-size16 flex-w">
-                        <div class="flex-w bo5 of-hidden m-r-22 m-t-10 m-b-10">
-                            <button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
-                                <i class="fs-12 fa fa-minus" aria-hidden="true"></i>
-                            </button>
+                    <c:choose>
+                        <c:when test="${product.quantity == 0}">
+                            <div class="w-size16 flex-w">
+                                <p style="color: red;font-weight: bold">Out Of Stock</p>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="w-size16 flex-w">
+                                <div class="flex-w bo5 of-hidden m-r-22 m-t-10 m-b-10">
+                                    <button class="btn-num-product-down color1 flex-c-m size7 bg8 eff2">
+                                        <i class="fs-12 fa fa-minus" aria-hidden="true"></i>
+                                    </button>
 
-                            <input class="size8 m-text18 t-center num-product" type="number" name="num-product" value="1" min="1" max="${product.quantity}">
+                                    <input class="size8 m-text18 t-center num-product" type="number" name="num-product" value="1" min="1" max="${product.quantity}">
 
-                            <button class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
-                                <i class="fs-12 fa fa-plus" aria-hidden="true"></i>
-                            </button>
-                        </div>
+                                    <button class="btn-num-product-up color1 flex-c-m size7 bg8 eff2">
+                                        <i class="fs-12 fa fa-plus" aria-hidden="true"></i>
+                                    </button>
+                                </div>
 
-                        <div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
-                            <!-- Button -->
-                            <button class="flex-c-m sizefull bg1 bo-rad-23 hov0 s-text1 trans-0-4" onclick="addToCart(${product.id}, ${product.price})">
-                               Add to cart
-                            </button>
-                        </div>
-                    </div>
+                                <div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
+                                    <!-- Button -->
+                                    <button class="flex-c-m sizefull bg1 bo-rad-23 hov0 s-text1 trans-0-4" onclick="addToCart(${product.id}, ${product.price})">
+                                        Add to cart
+                                    </button>
+                                </div>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+
                 </div>
 
                 <!-- Description-->
@@ -76,7 +86,9 @@
         <c:if test="${product.usersId.id == sessionScope.userid}">
             <a href="<c:url value="/products/edit?id=${product.id}" />">Edit</a>
         </c:if>
+
         <!-- Rating -->
+
         <div id="RatingProductListContent_User">
             <jsp:include page="/user/components/productDetails/rating.jsp" />
         </div>
@@ -121,6 +133,6 @@
         </c:choose>
 
     </div>
-            <input name="addCartURL" value="<c:url value="/cart/addToCart" />" type="hidden" />
+    <input name="addCartURL" value="<c:url value="/cart/addToCart" />" type="hidden" />
     <link href="<c:url value="/assets/css/star.css"/>" rel="stylesheet" type="text/css"/>
 </t:layout>
