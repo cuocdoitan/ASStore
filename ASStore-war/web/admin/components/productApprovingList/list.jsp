@@ -50,3 +50,4 @@
     </data>    
 </tbody>
 </table>
+<script src="<c:url value='/assets/js/product.js'/>"></script>
