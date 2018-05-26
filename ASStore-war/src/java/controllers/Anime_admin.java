@@ -132,6 +132,11 @@ public class Anime_admin extends HttpServlet {
             case "/update":
                 request.getRequestDispatcher("/Anime_Edit").forward(request, response);
                 break;
+            case "/delete":
+                Models.Anime anime = animeFacade.find(Integer.parseInt(request.getParameter("anime")));            
+                animeFacade.remove(anime);
+                response.sendRedirect(request.getContextPath() + "/admin/anime/list");
+                break;
             default:
                 response.sendError(HttpServletResponse.SC_NOT_FOUND);
                 break;
