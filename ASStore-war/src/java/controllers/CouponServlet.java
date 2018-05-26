@@ -163,6 +163,13 @@ public class CouponServlet extends HttpServlet {
           return;
         }
         
+        if (coupon.trim().equals("")) {
+          request.setAttribute("coupon", "");
+          request.setAttribute("error", "Coupon code can't be blank");
+          request.getRequestDispatcher("/user/coupon-create.jsp").forward(request, response);
+          return;
+        }
+        
         if (couponsFacade.findByCoupon(coupon) != null && couponsFacade.findByCoupon(coupon).getEnabled() == true) {
           request.setAttribute("coupon", "");
           request.setAttribute("error", "That coupon has been used!");
@@ -231,6 +238,13 @@ public class CouponServlet extends HttpServlet {
         if (ecoupon.length() > 20 || ecoupon.length() < 3) {
           request.setAttribute("error", "Coupon code must less than 20 characters and at least 3 characters");
           request.getRequestDispatcher("/user/coupon-edit.jsp").forward(request, response);
+          return;
+        }
+        
+        if (ecoupon.trim().equals("")) {
+          request.setAttribute("coupon", "");
+          request.setAttribute("error", "Coupon code can't be blank");
+          request.getRequestDispatcher("/user/coupon-create.jsp").forward(request, response);
           return;
         }
 
