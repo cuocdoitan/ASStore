@@ -26,9 +26,9 @@
         </div>
 
         <div class="block2-txt p-t-20">
-          <a href="product-detail.html" class="block2-name dis-block s-text3 p-b-5">
+          <span class="block2-name dis-block s-text3 p-b-5">
             ${param.name}
-          </a>
+          </span>
 
           <span class="block2-price m-text6 p-r-5">
             $${param.price}

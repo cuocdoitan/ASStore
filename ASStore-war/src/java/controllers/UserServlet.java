@@ -102,6 +102,8 @@ public class UserServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/index");
             return;
         }
+        request.setAttribute("fromPage", request.getRequestURI());
+        System.out.println("request.getRequestURI() : ="+ request.getRequestURI());
         request.getRequestDispatcher("/user/login.jsp").forward(request, response);
         //</editor-fold>
     }
