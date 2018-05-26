@@ -82,7 +82,7 @@ function validateProductSubmit_user() {
                 $("#errDescription").text(result.errDescription);
                 $("#errImage").text(result.errImage);
                 if (result.errName === "" && result.errQuantity === "" && result.errPrice === "" && result.errAnime === "" && result.errDescription === "" && result.errImage === "") {
-                        $("#formSubmitProduct").submit();
+                    $("#formSubmitProduct").submit();
                 }
             }
 
@@ -112,6 +112,15 @@ setTimeout(function () {
         rating.title = +(stars.toFixed(2)) + " out of " + 5;
     }
 }, 100);
+
+
+$(".thumbnail").hover(function () {
+    $(this).after(("<img class='image' src='" + $(this).attr("src") + "'/>"));
+},
+        function () {
+            $(".image").remove();
+        }
+);
 
 /* 
  * ************************************ADMIN*************************************
@@ -159,7 +168,7 @@ function validateNote() {
     if (trimmedNote.length < 10 || trimmedNote.length > 200) {
         document.getElementById("errNote").innerHTML = "Must input at least 10 characters.Max is 200 characters";
         return false;
-    }else{
+    } else {
         return true;
     }
 }

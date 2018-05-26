@@ -83,7 +83,6 @@
           <thead>
             <tr>
               <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Name</th>
-              <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -91,9 +90,6 @@
               <tr>
                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
                   ${checkingProduct.name}
-                </td>
-                <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                  <a href="<c:url value='/products/details?id=${checkingProduct.id}'/>" style="color: #3498db">Details</a>
                 </td>
               </tr>
             </c:forEach>
