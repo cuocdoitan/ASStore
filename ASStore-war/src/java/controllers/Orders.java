@@ -84,8 +84,7 @@ public class Orders extends HttpServlet {
       case "/details":
         int orderId = Integer.parseInt(request.getParameter("order"));
         Models.Orders order = orderFacade.find(orderId);
-        if (!order.getUsersId().getId().equals(user.getId()) && !user.getRolesId().getName().trim().equals("admin")) {
-          System.out.println(user.getFirstName());
+        if (user.getFirstName().equals("guest") || (!order.getUsersId().getId().equals(user.getId()) && !(user.getRolesId().getId().equals(1) || user.getRolesId().getId().equals(2)))) {
           request.setAttribute("orderId", order.getId());
           request.getRequestDispatcher("/order-not-found.jsp").forward(request, response);
           return;

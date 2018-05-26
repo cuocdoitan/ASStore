@@ -291,8 +291,8 @@ public class UserServlet extends HttpServlet {
 
             if (error) {
                 request.setAttribute("error", errorMess);
-                request.getRequestDispatcher("/user/login.jsp").forward(request, response);
-                //return;
+                request.getRequestDispatcher("/user/register.jsp").forward(request, response);
+                return;
             }
             user.setCreateAt(new Date());
             user.setEnabled(true);
@@ -304,7 +304,7 @@ public class UserServlet extends HttpServlet {
             System.out.println("Exception : ");
             e.printStackTrace();
         }
-        response.sendRedirect(request.getContextPath() + "/User/create");
+        response.sendRedirect(request.getContextPath() + "/User/login");
         //</editor-fold> 
     }
 

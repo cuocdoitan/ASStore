@@ -83,7 +83,7 @@ public class Orders_admin extends HttpServlet {
     }
     switch (clientRequest) {
       case "/list":
-        if (!user.getRolesId().getName().trim().equals("admin")){
+        if (user.getRolesId().getId() == 3){
           request.getRequestDispatcher("/admin/login.jsp").forward(request, response);
           return;
         }

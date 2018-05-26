@@ -76,6 +76,9 @@ function addCoupon(url, detailId) {
         else if (data.status === "noapply") {
           swal("Error !", "Coupon: " + coupon + " can't apply for this product !", "error");
         }
+        else if (data.status === "sameowner") {
+          swal("Error !", "You can't use your own coupon !", "error");
+        }
         else {
           swal("Error !", "Coupon: " + coupon + " not found !", "error");
         }
