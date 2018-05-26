@@ -11,7 +11,7 @@ $('#comment').keydown(function (e) {
         $.post(url, {
             feedback_id: idFeedback,
             user_id: userId,
-            comment: comment
+            comment: comment.trim()
         }).done(function(data) {
             $("textarea[name=comment]").val("");
             $("#listcomment").html(data);
