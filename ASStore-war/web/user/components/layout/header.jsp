@@ -48,6 +48,9 @@
             <li>
                 <a href="<c:url value="/statisticals/listcate"/>">Statistical</a>
             </li>
+            <li>
+                <a href="<c:url value="/user/Statistical_user"/>">User Rating</a>
+            </li>
           </ul>
         </nav>
       </div>
