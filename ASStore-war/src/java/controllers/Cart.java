@@ -245,6 +245,7 @@ public class Cart extends HttpServlet {
         response.setContentType("application/json");
         
         if (sess.getAttribute("userId") != null) {
+          Models.Users user = userFacade.find(sess.getAttribute("userId"));
           CartDetail detail = cartDetailFacade.find(Integer.parseInt(detailId));
           if (coupon.trim().equals("")) {
             detail.setCoupon("");
@@ -264,6 +265,10 @@ public class Cart extends HttpServlet {
               }
               else {
                 if (detail.getProductId().getId().equals(couponDetail.getProductId().getId())) {
+                  if (user.getId().equals(couponDetail.getUserId())) {
+                    response.getWriter().print("{\"status\": \"sameowner\"}");
+                    return;
+                  }
                   detail.setCoupon(coupon);
                   cartDetailFacade.edit(detail);
                   response.getWriter().print("{ \"status\": \"success\", \"mess\":\"Used coupon!\", \"percentage\" : \"" + couponDetail.getPercentage() + " \" }");
