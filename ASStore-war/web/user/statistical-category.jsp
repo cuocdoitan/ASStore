@@ -63,7 +63,12 @@
                         <button style="width: 200px;" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">
                             Statistical
                         </button>
+                        <br/>
+
                     </form>
+                    <c:if test="${sessionScope.role == roleId}">
+                        <button style="width: 200px;" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4" id="buttonPrintReport">Print Report</button>
+                    </c:if>
                 </div>
                 <div class="flex-sb-m flex-w p-b-35 p-t-20">
 
@@ -110,9 +115,6 @@
     </div>
     <br/>
     <br/>
-    <c:if test="${sessionScope.role == roleId}">
-        <button id="buttonPrintReport">Print Report</button>
-    </c:if>
     <br/>
     <div id="Chart"></div>
 
