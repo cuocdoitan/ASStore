@@ -15,7 +15,6 @@
         <table border="1" style="width: 100%" class="anime-list">
           <thead>
             <tr>
-              <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">ID</th>
               <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Name</th>
               <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Description</th>
               <th class="text-center p-t-10 p-b-10 p-l-20 p-r-20">Picture</th>
@@ -25,9 +24,6 @@
           <tbody>
             <c:forEach items="${animeList}" var="anime" >
               <tr>
-                <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
-                  ${anime.id}
-                </td>
                 <td class="text-center p-t-10 p-b-10 p-l-20 p-r-20">
                   ${anime.name}
                 </td>
