@@ -111,13 +111,7 @@ public class Anime_Insert extends HttpServlet {
                 request.setAttribute("description", description);
                 anime.setDescription(description);
             }
-            if (pic.equals("")) {
-                errorMess = errorMess.equals("") ? " Picture can't be blank" : errorMess;
-                error = true;
-            } else {
-                request.setAttribute("pic", pic);
-                anime.setPicture(pic);
-            }
+            anime.setPicture(pic);
             if (error) {
                 request.setAttribute("error", errorMess);
                 request.getRequestDispatcher("/admin/anime-addnew.jsp").forward(request, response);
