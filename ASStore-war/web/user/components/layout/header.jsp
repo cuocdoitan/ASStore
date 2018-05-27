@@ -45,9 +45,11 @@
             <li>
               <a href="<c:url value="/feedbacks/list"/>">Feedback</a>
             </li>
+            <c:if test="${sessionScope.userid != null}">
             <li>
                 <a href="<c:url value="/statisticals/listcate"/>">Statistical</a>
             </li>
+            </c:if>
             <li>
                 <a href="<c:url value="/user/Statistical_user"/>">User Rating</a>
             </li>
