@@ -185,7 +185,7 @@ public class Products_admin extends HttpServlet {
         //<editor-fold defaultstate="collapsed" desc="action deny product">
         int productId = Integer.parseInt(request.getParameter("productId"));
         Product product = productFacade.find(productId);
-        product.setAlertNote(request.getParameter("alertNote").trim());
+        product.setAlertNote(request.getParameter("alertNote"));
         product.setStatus(Short.parseShort("2"));
         try {
             productFacade.edit(product);

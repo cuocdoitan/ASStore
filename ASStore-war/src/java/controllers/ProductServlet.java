@@ -506,7 +506,7 @@ public class ProductServlet extends HttpServlet {
         String name = request.getParameter("name").trim();
         int quantity = Integer.parseInt(request.getParameter("quantity").trim());
         BigDecimal price = new BigDecimal(request.getParameter("price").trim());
-        String description = request.getParameter("description").trim();
+        String description = request.getParameter("description");
         //User
         int userId = Integer.parseInt(request.getParameter("userId"));
         Models.Users user = usersFacade.find(userId);
@@ -529,6 +529,7 @@ public class ProductServlet extends HttpServlet {
             productFacade.edit(newProduct);
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Problems during insert product", e.getMessage());
+            System.out.println(e.toString());
         }
         //</editor-fold>
     }
@@ -575,7 +576,7 @@ public class ProductServlet extends HttpServlet {
         String name = request.getParameter("name").trim();
         int quantity = Integer.parseInt(request.getParameter("quantity").trim());
         BigDecimal price = new BigDecimal(request.getParameter("price").trim());
-        String description = request.getParameter("description").trim();
+        String description = request.getParameter("description");
         //Anime
         String animeName = request.getParameter("anime").trim();
         Models.Anime anime = animeFacade.findAnimeByName(animeName);

@@ -107,7 +107,7 @@ $("#imageUpload").dropzone({
         var hiddenTagName = "image" + imageIndex;
         console.log(hiddenTagName)
         $("input[name=" + hiddenTagName + "]").val('');
-
+        
         var imgs = $(".image");
         var links = [];
         for (var i = 0; i < imgs.length; i++) {
@@ -140,10 +140,11 @@ $("#imageUpload").dropzone({
         for (var i = 0; i < imgs.length; i++) {
             if (imgs[i].value) {
                 var thisDropzone = this;
-                var mockFile = {name: imgs[i].value.split('/').pop(), size: 12345, type: 'image/jpeg'};
+                var mockFile = {name: imgs[i].value.split('/').pop(), size: 12345, type: 'image/jpeg',accepted: true};
                 thisDropzone.emit("addedfile", mockFile);
                 thisDropzone.emit("complete", mockFile);
                 thisDropzone.emit("thumbnail", mockFile, urlImageProductResource + imgs[i].value);
+                thisDropzone.files.push(mockFile);
             }
         }
 
