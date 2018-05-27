@@ -59,6 +59,9 @@
       <div class="header-icons">
         <c:choose>
           <c:when test="${sessionScope.userid == null}">
+              <a href="<c:url value="/products/new-product"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
+              <button>NEW POST</button>   
+            </a>
             <a href="<c:url value="/User/login"/>"  style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
               <button>LOG IN</button>
             </a>
@@ -100,6 +103,10 @@
       <div class="header-icons-mobile">
         <c:choose>
           <c:when test="${sessionScope.userid == null}">
+            <a href="<c:url value="/products/new-product"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
+              <button>NEW POST</button>   
+            </a>
+            |
             <a href="<c:url value="/User/login"/>" style="margin-right: 20px;" onmouseover="this.style.color = 'red'">
               <button>LOG IN</button>   
             </a>
