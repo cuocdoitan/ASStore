@@ -13,6 +13,7 @@
                 <div class="col-12">
                     <h1 class="text-center m-t-20 m-b-20">Update anime</h1>
                     <input type="hidden" value="${animes.id}" name="anime"/>
+                    <p style="color: red">${error}</p>
                     <label>Anime name:</label>
                     <div class="bo4 of-hidden size15 m-b-20">
                         <input class="sizefull s-text7 p-l-22 p-r-22" type="text" name="name" value="${animes.name}">

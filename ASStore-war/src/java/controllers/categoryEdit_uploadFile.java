@@ -96,7 +96,7 @@ public class categoryEdit_uploadFile extends HttpServlet {
             category.setName(categoryFacade.find(id).getName());
         }
         if (cateByName != null) {
-            if (!category.getName().equals(name)) {
+            if (!category.getName().equalsIgnoreCase(name)) {
                 errorMess = errorMess.equals("") ? "Name Category exist" : errorMess;
                 error = true;
             }

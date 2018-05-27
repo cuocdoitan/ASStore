@@ -97,15 +97,15 @@ public class category_uploadFile extends HttpServlet {
                 errorMess = errorMess.equals("") ? "Name Category exist" : errorMess;
                 error = true;
             } else {
-                request.setAttribute("name", name);
+                
                 category.setName(name);
             }
         }
-
         request.setAttribute("image", image);
         category.setPicture(image);
 
         if (error) {
+            request.setAttribute("name", name);
             request.setAttribute("error", errorMess);
             request.getRequestDispatcher("/admin/category-create.jsp").forward(request, response);
             return;

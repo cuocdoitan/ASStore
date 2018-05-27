@@ -17,8 +17,10 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.logging.Level;
 import javax.ejb.EJB;
+import javax.ejb.EJBException;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -27,6 +29,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 /**
  *
@@ -90,19 +94,56 @@ public class Anime_Edit extends HttpServlet {
             }
         }
         //edit anime
-        String image = fileName;
+        String pic = fileName;
         String name = request.getParameter("name");
         String description = request.getParameter("description");
         String id = request.getParameter("anime");
-
         Models.Anime anime = animeFacade.find(Integer.parseInt(id));
-        anime.setName(name);
-        anime.setPicture(image);
-        anime.setDescription(description);
+        String errorMess = "";
+        
         try {
+            boolean error = false;
+            if (name.trim().equals("")) {
+                errorMess = errorMess.equals("") ? "Anime name can't be blank" : errorMess;
+                error = true;
+            }
+            Models.Anime foundAnime = animeFacade.findAnimeByName(name);
+            if(foundAnime != null){
+                if(!foundAnime.getName().equalsIgnoreCase(anime.getName())){
+                    errorMess = errorMess.equals("") ? " This anime already existed" : errorMess;
+                error = true;
+                }
+            }
+            if (description.trim().equals("")) {
+                errorMess = errorMess.equals("") ? " Description can't be blank" : errorMess;
+                error = true;
+            }
+            if(pic != null){
+                anime.setPicture(pic);
+            }
+            if (error) {
+                request.setAttribute("animes", anime);
+                request.setAttribute("error", errorMess);
+                request.getRequestDispatcher("/admin/anime-list-update.jsp").forward(request, response);
+                return;
+            }
+            anime.setName(name);
+            anime.setDescription(description);
+            anime.setPicture(pic);
             animeFacade.edit(anime);
-        } catch (Exception e) {
-            System.out.println(e.toString());
+
+        } catch (EJBException e) {
+            @SuppressWarnings("ThrowableResultIgnored")
+            Exception cause = e.getCausedByException();
+            if (cause instanceof ConstraintViolationException) {
+                @SuppressWarnings("ThrowableResultIgnored")
+                ConstraintViolationException cve = (ConstraintViolationException) e.getCausedByException();
+                for (Iterator<ConstraintViolation<?>> it = cve.getConstraintViolations().iterator(); it.hasNext();) {
+                    ConstraintViolation<? extends Object> v = it.next();
+                    System.err.println(v);
+                    System.err.println("==>>" + v.getMessage());
+                }
+            }
         }
         response.sendRedirect(request.getContextPath() + "/admin/anime/list");
     }

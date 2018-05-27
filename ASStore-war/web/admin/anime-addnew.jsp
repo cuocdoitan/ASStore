@@ -21,7 +21,7 @@
           </div>
           <label>Anime Description</label>
           <div class="bo4 of-hidden m-b-20">
-            <textarea style="width: 100%; border: none; padding: 20px" rows="10" name="description" placeholder="Product description">${anime.description}</textarea>
+            <textarea style="width: 100%; border: none; padding: 20px" rows="10" name="description" placeholder="Product description">${description}</textarea>
           </div>
           <label>Anime Picture</label>
           <div class="m-b-20">

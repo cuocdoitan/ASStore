@@ -56,7 +56,7 @@ public class Anime_Insert extends HttpServlet {
         final String path = getServletContext().getRealPath("assets/img/anime/");
         final Part filePart = request.getPart("pic");
         final String fileName = getFileName(filePart);
-        
+
         OutputStream out = null;
         InputStream filecontent = null;
 
@@ -89,35 +89,40 @@ public class Anime_Insert extends HttpServlet {
         String description = request.getParameter("description");
         String pic = fileName;
         String errorMess = "";
-//                if (name.trim().isEmpty()) {
-//                    request.setAttribute("error", "name can't be null");
-//                    request.getRequestDispatcher("/admin/anime-addnew.jsp").forward(request, response);
-//                }
+
         try {
             Models.Anime anime = new Models.Anime();
-            anime.setId(0);
             boolean error = false;
             if (name.trim().equals("")) {
                 errorMess = errorMess.equals("") ? "Anime name can't be blank" : errorMess;
                 error = true;
-            } else {
-                request.setAttribute("name", name);
-                anime.setName(name);
+            }
+            Models.Anime foundAnime = animeFacade.findAnimeByName(name);
+            if (foundAnime != null) {
+                if (!foundAnime.getName().equalsIgnoreCase(anime.getName())) {
+                    errorMess = errorMess.equals("") ? " This anime already existed" : errorMess;
+                    error = true;
+                }
             }
             if (description.trim().equals("")) {
                 errorMess = errorMess.equals("") ? " Description can't be blank" : errorMess;
                 error = true;
-            } else {
-                request.setAttribute("description", description);
-                anime.setDescription(description);
             }
-            anime.setPicture(pic);
+            if (pic == null) {
+                errorMess = errorMess.equals("") ? "Image is required" : errorMess;
+                error = true;
+            }
             if (error) {
+                request.setAttribute("name", name);
+                request.setAttribute("description", description);
                 request.setAttribute("error", errorMess);
                 request.getRequestDispatcher("/admin/anime-addnew.jsp").forward(request, response);
                 return;
             }
-
+            anime.setId(0);
+            anime.setName(name);
+            anime.setDescription(description);
+            anime.setPicture(pic);
             anime.setEnabled(true);
             animeFacade.create(anime);
 
