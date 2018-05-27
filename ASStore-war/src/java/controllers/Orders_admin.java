@@ -11,8 +11,10 @@ import SB.OrdersFacadeLocal;
 import SB.UsersFacadeLocal;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -121,11 +123,38 @@ public class Orders_admin extends HttpServlet {
         request.setAttribute("users", users);
         request.getRequestDispatcher("/admin/orders.jsp").forward(request, response);
         break;
-      case "/accept":
+      case "/details":
         int orderId = Integer.parseInt(request.getParameter("order"));
         Models.Orders order = orderFacade.find(orderId);
-        order.setDelivering(true);
-        orderFacade.edit(order);
+        if (user.getFirstName().equals("guest") || (!order.getUsersId().getId().equals(user.getId()) && !(user.getRolesId().getId().equals(1) || user.getRolesId().getId().equals(2)))) {
+          request.setAttribute("orderId", order.getId());
+          request.getRequestDispatcher("/order-not-found.jsp").forward(request, response);
+          return;
+        }
+        if (!order.getEnabled()) {
+          request.setAttribute("orderId", order.getId());
+          request.getRequestDispatcher("/order-not-found.jsp").forward(request, response);
+        }
+        else {
+          List<Models.OrdersDetail> details = orderDetailFacade.findByOrder(orderId);
+          HashMap images = new HashMap();
+          BigDecimal total = new BigDecimal(0);
+          for (Models.OrdersDetail detail : details) {
+            total = total.add(detail.getUnitPrice().multiply(new BigDecimal(detail.getQuantity())));
+            images.put(detail.getProductId().getId(), mediaFacade.getFirstImageFromProduct(detail.getProductId()));
+          }
+          request.setAttribute("orderTotal", total);
+          request.setAttribute("images", images);
+          request.setAttribute("details", details);
+          request.setAttribute("orderId", orderId);
+          request.getRequestDispatcher("/admin/orders-details.jsp").forward(request, response);
+        }
+        break;
+      case "/accept":
+        int orderIds = Integer.parseInt(request.getParameter("order"));
+        Models.Orders ordera = orderFacade.find(orderIds);
+        ordera.setDelivering(true);
+        orderFacade.edit(ordera);
         response.sendRedirect(request.getContextPath() + "/admin/orders/list");
         break;
     }
