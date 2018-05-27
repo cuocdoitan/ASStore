@@ -99,9 +99,10 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
     
     @Override
     public List<Product> getProductbyAnime(int animeId) {
-        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.animeId.id = ?1 and p.enabled = ?2", Product.class);
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.animeId.id = ?1 and p.enabled = ?2 and p.status = ?3", Product.class);
         query.setParameter(1, animeId);
         query.setParameter(2, true);
+        query.setParameter(3, 1);
         List<Product> list = query.getResultList();
         if(list.isEmpty()){
             return null;
@@ -195,16 +196,18 @@ public class ProductFacade extends AbstractFacade<Product> implements ProductFac
     
     @Override
     public BigDecimal getHighestProductPrice(){
-        TypedQuery query = em.createQuery("SELECT MAX(p.price) FROM Product p WHERE p.enabled = ?1", BigDecimal.class);
+        TypedQuery query = em.createQuery("SELECT MAX(p.price) FROM Product p WHERE p.enabled = ?1 and p.status = ?2", BigDecimal.class);
         query.setParameter(1, true);
+        query.setParameter(2, 1);
         return (BigDecimal) query.getSingleResult();
     }
     
     @Override
     public List<Product> getRandomProductSameAnime(Product product){
-        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.animeId = ?2", Product.class);
+        TypedQuery query = em.createQuery("SELECT p FROM Product p WHERE p.enabled = ?1 and p.animeId = ?2 and p.status =?3", Product.class);
         query.setParameter(1, true);
         query.setParameter(2, product.getAnimeId());
+        query.setParameter(3, 1);
         List<Product> list = query.getResultList();
         list.remove(product);
         if(list.size() < 5){

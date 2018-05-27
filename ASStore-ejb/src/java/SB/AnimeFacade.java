@@ -39,7 +39,7 @@ public class AnimeFacade extends AbstractFacade<Anime> implements AnimeFacadeLoc
     @Override
     public Anime findAnimeByName(String name){
         TypedQuery query = em.createQuery("SELECT a FROM Anime a WHERE a.name = ?1 and a.enabled = ?2", Anime.class);
-        query.setParameter(1, name);
+        query.setParameter(1, name.trim());
         query.setParameter(2, true);
         List<Anime> list = query.getResultList();
         if(list.isEmpty()){
