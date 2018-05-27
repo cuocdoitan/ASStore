@@ -2,8 +2,8 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <style type="text/css">
-        .thumbnail {position:relative}
-        .image {position:absolute;width:200px;height:200px}
+    .thumbnail {position:relative}
+    .image {position:absolute;width:200px;height:200px}
 </style>
 <table border="1" style="width: 100%; border-color: #e6e6e6; border: 1px solid #e6e6e6">
     <thead>
@@ -52,10 +52,26 @@
                     <a href="<c:url value="/admin/products/details?id=${product.id}"/>" style="color: #3498db">Details</a>
                     ||
                     <%-- TODOS: IF NOT LAZY ANYMORE, USE SWEETALERT --%>
-                    <a href="<c:url value="/admin/products/delete?id=${product.id}"/>" style="color: #e74c3c"  onclick="return confirm('This product will be no more available. Are you sure ?')">Delete</a>
+                    <form method="post" action="<c:url value="/admin/products/delete"/>">
+                        <input type="hidden" name="id" value="${product.id}"/>
+                            <p style="color: #e74c3c" onclick="lastCheck(this)">
+                                Delete 
+                            </p>
+                        </a>
+                    </form>
                 </td>
             </tr>
         </c:forEach>
     </data>    
 </tbody>
 </table>
+<script src="<c:url value='/assets/js/product.js'/>"></script>
+<script>
+        function lastCheck(e) {
+            if (confirm('This product will be no longer available. Are you sure ?')) {
+                e.parentElement.submit();
+            } else {
+                return false;
+            }
+        }
+    </script>
